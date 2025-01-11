@@ -13,18 +13,10 @@ import edu.wpi.first.wpilibj2.command.Command
  * to the various subsystems in this container to pass into to commands. The commands can just
  * directly reference the (single instance of the) object.
  */
-object RobotContainer
+object Autos
 {
-    init
-    {
-        configureBindings()
-    }
 
-    /** Use this method to define your `trigger->command` mappings. */
-    private fun configureBindings()
-    {
 
-    }
 
     fun getAutonomousCommand(): Command?
     {
