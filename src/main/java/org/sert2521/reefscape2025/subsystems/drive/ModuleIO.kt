@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import org.team9432.annotation.Logged
 
 interface ModuleIO {
+
     @Logged
     open class ModuleIOInputs{
         var driveConnected = false

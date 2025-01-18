@@ -7,9 +7,13 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 
 import com.revrobotics.spark.config.SparkMaxConfig
+import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Rotation2d
 import org.sert2521.reefscape2025.utils.SparkUtil
+import org.sert2521.reefscape2025.utils.SparkUtil.ifOk
+import org.sert2521.reefscape2025.utils.SparkUtil.sparkStickyFault
 import java.util.Queue
+import java.util.function.DoubleSupplier
 import kotlin.math.PI
 
 class ModuleIOSpark(module:Int):ModuleIO {
@@ -33,6 +37,9 @@ class ModuleIOSpark(module:Int):ModuleIO {
     val turnPositionQueue = SparkOdometryThread.getInstance().registerSignal(
         turnMotor, turnEncoder::getPosition
     )
+
+    val driveConnectedDebounce = Debouncer(0.5)
+    val turnConnectedDebounce = Debouncer(0.5)
 
 
     init {
@@ -63,7 +70,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
             .primaryEncoderPositionAlwaysOn(true)
             .primaryEncoderPositionPeriodMs(SwerveConstants.ODOMETRY_FREQUENCY)
             .primaryEncoderVelocityAlwaysOn(true)
-            .primaryEncoderVelocityPeriodMs(SwerveConstants.ODOMETRY_FREQUENCY)
+            .primaryEncoderVelocityPeriodMs(20)
             .appliedOutputPeriodMs(20)
             .busVoltagePeriodMs(20)
             .outputCurrentPeriodMs(20)
@@ -109,7 +116,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
             .primaryEncoderPositionAlwaysOn(true)
             .primaryEncoderPositionPeriodMs(SwerveConstants.ODOMETRY_FREQUENCY)
             .primaryEncoderVelocityAlwaysOn(true)
-            .primaryEncoderVelocityPeriodMs(SwerveConstants.ODOMETRY_FREQUENCY)
+            .primaryEncoderVelocityPeriodMs(20)
             .appliedOutputPeriodMs(20)
             .busVoltagePeriodMs(20)
             .outputCurrentPeriodMs(20)
@@ -123,8 +130,31 @@ class ModuleIOSpark(module:Int):ModuleIO {
         }
     }
 
+    //MIGHT WANT TO CHANGE THIS TO MAKE SENSE
+
     override fun updateInputs(inputs: ModuleIO.ModuleIOInputs) {
-        super.updateInputs(inputs)
+        sparkStickyFault = false
+        ifOk(driveMotor, driveEncoder::getPosition) {
+            inputs.drivePositionRad = it
+        }
+        ifOk(driveMotor, driveEncoder::getVelocity) {
+            inputs.driveVelocityRadPerSec = it
+        }
+        ifOk(driveMotor, driveEncoder::getPosition) {
+            inputs.drivePositionRad =
+        }
+        ifOk(driveMotor, arrayOf(DoubleSupplier{driveMotor.appliedOutput}, DoubleSupplier{driveMotor.busVoltage})) {
+            inputs.driveAppliedVolts = it[0]*it[1]
+        }
+        inputs.driveConnected = driveConnectedDebounce.calculate(!sparkStickyFault)
+
+        sparkStickyFault=false
+        ifOk(turnMotor, turnEncoder::getPosition) {
+            inputs.turnPosition=Rotation2d(it).minus(zeroRotation)
+        }
+        ifOk()
+
+
     }
 
 }
