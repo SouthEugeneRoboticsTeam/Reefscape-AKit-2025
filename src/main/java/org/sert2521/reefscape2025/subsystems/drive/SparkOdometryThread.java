@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.function.DoubleSupplier;
-import org.sert2521.reefscape2025.subsystems.drive.Drivetrain;
+
+//LMAOOO I am not translating this one
 
 /**
  * Provides an interface for asynchronously reading high-frequency measurements to a set of queues.
@@ -75,12 +76,12 @@ public class SparkOdometryThread {
   /** Registers a generic signal to be read from the thread. */
   public Queue<Double> registerSignal(DoubleSupplier signal) {
     Queue<Double> queue = new ArrayBlockingQueue<>(20);
-    Drive.odometryLock.lock();
+    Drivetrain.odometryLock.lock();
     try {
       genericSignals.add(signal);
       genericQueues.add(queue);
     } finally {
-      Drive.odometryLock.unlock();
+      Drivetrain.odometryLock.unlock();
     }
     return queue;
   }
@@ -99,7 +100,7 @@ public class SparkOdometryThread {
 
   private void run() {
     // Save new data to queues
-    Drive.odometryLock.lock();
+    Drivetrain.odometryLock.lock();
     try {
       // Get sample timestamp
       double timestamp = RobotController.getFPGATime() / 1e6;
@@ -127,7 +128,7 @@ public class SparkOdometryThread {
         }
       }
     } finally {
-      Drive.odometryLock.unlock();
+      Drivetrain.odometryLock.unlock();
     }
   }
 }

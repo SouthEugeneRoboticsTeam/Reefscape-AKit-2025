@@ -16,6 +16,8 @@ import java.util.Queue
 import java.util.function.DoubleSupplier
 import kotlin.math.PI
 
+//It was quite the fun exercise to translate this into kotlin
+
 class ModuleIOSpark(module:Int):ModuleIO {
     val zeroRotation = SwerveConstants.moduleZeroRotations[module]
 
@@ -141,7 +143,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
             inputs.driveVelocityRadPerSec = it
         }
         ifOk(driveMotor, driveEncoder::getPosition) {
-            inputs.drivePositionRad =
+            inputs.drivePositionRad = it
         }
         ifOk(driveMotor, arrayOf(DoubleSupplier{driveMotor.appliedOutput}, DoubleSupplier{driveMotor.busVoltage})) {
             inputs.driveAppliedVolts = it[0]*it[1]
@@ -152,7 +154,16 @@ class ModuleIOSpark(module:Int):ModuleIO {
         ifOk(turnMotor, turnEncoder::getPosition) {
             inputs.turnPosition=Rotation2d(it).minus(zeroRotation)
         }
-        ifOk()
+        ifOk(turnMotor, turnEncoder::getVelocity) {
+            inputs.turnVelocityRadPerSec = it
+        }
+        ifOk(turnMotor, arrayOf(DoubleSupplier(turnMotor::getAppliedOutput), DoubleSupplier(turnMotor::getBusVoltage))){
+            inputs.turnAppliedVolts = it[0]*it[1]
+        }
+        ifOk(turnMotor, turnMotor::getOutputCurrent){
+            inputs.turnCurrentAmps = it
+        }
+        inputs.turnConnected = turnConnectedDebounce.calculate(!sparkStickyFault)
 
 
     }

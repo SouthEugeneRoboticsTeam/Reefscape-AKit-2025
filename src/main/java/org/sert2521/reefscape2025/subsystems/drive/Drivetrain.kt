@@ -4,5 +4,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.concurrent.locks.ReentrantLock
 
 object Drivetrain : SubsystemBase() {
-    val odometryLock = ReentrantLock()
+    @JvmField
+    val odometryLock:ReentrantLock = ReentrantLock()
+
+
 }

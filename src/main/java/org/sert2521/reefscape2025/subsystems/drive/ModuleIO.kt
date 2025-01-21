@@ -3,6 +3,8 @@ package org.sert2521.reefscape2025.subsystems.drive
 import edu.wpi.first.math.geometry.Rotation2d
 import org.team9432.annotation.Logged
 
+//get translated idiot
+
 interface ModuleIO {
 
     @Logged
@@ -17,7 +19,7 @@ interface ModuleIO {
         var turnPosition = Rotation2d()
         var turnVelocityRadPerSec = 0.0
         var turnAppliedVolts = 0.0
-        var trunCurrentAmps = 0.0
+        var turnCurrentAmps = 0.0
 
         var odometryTimestamps = doubleArrayOf()
         var odometryDrivePositionsRad = doubleArrayOf()
