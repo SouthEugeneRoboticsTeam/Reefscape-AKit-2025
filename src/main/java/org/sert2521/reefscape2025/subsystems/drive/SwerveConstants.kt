@@ -1,6 +1,7 @@
 package org.sert2521.reefscape2025.subsystems.drive
 
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.geometry.Translation2d
 import kotlin.math.PI
 
 object SwerveConstants {
@@ -8,6 +9,7 @@ object SwerveConstants {
 
     val driveIDs = arrayOf(-1, -1, -1, -1)
     val turnIDs = arrayOf(-1, -1, -1, -1)
+    val encoderIDs = arrayOf(-1, -1, -1, -1)
 
     const val TURN_INVERTED = false
     const val TURN_REL_ENCODER_INVERTED = false
@@ -29,14 +31,26 @@ object SwerveConstants {
     const val DRIVE_D = 0.0
     const val DRIVE_FF = 0.0
 
+    const val DRIVE_KS = 0.0
+
     const val TURN_P = 0.0
     const val TURN_I = 0.0
     const val TURN_D = 0.0
     const val TURN_FF = 0.0
+    const val TURN_PID_MIN_INPUT = 0.0
+    const val TURN_PID_MAX_INPUT = 2 * PI
+
+    const val TURN_ABS_ENCODER_CONVERSION_POSITION = 2 * PI
 
     const val ODOMETRY_PERIOD = 20
     const val ODOMETRY_FREQUENCY = 1000/20
 
-    var oil = 0.0
+    const val WHEEL_RADIUS_METERS = 0.0508
 
+    val moduleTranslations = arrayOf(
+        Translation2d(),
+        Translation2d(),
+        Translation2d(),
+        Translation2d()
+    )
 }

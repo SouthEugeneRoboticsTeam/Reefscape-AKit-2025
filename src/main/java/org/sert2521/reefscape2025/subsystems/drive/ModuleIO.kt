@@ -35,4 +35,6 @@ interface ModuleIO {
     fun setDriveVelocity(velocityRadPerSec:Double){}
 
     fun setTurnPosition(rotation:Rotation2d){}
+
+    fun updateTurnEncoder(){}
 }

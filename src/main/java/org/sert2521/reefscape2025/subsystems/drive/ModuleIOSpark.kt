@@ -1,12 +1,15 @@
 package org.sert2521.reefscape2025.subsystems.drive
 
+import com.ctre.phoenix6.hardware.CANcoder
+import com.revrobotics.spark.ClosedLoopSlot
 import com.revrobotics.spark.SparkBase
+import com.revrobotics.spark.SparkClosedLoopController.ArbFFUnits
 import com.revrobotics.spark.SparkLowLevel.MotorType
 import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
-
 import com.revrobotics.spark.config.SparkMaxConfig
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Rotation2d
 import org.sert2521.reefscape2025.utils.SparkUtil
@@ -14,6 +17,7 @@ import org.sert2521.reefscape2025.utils.SparkUtil.ifOk
 import org.sert2521.reefscape2025.utils.SparkUtil.sparkStickyFault
 import java.util.function.DoubleSupplier
 import kotlin.math.PI
+import kotlin.math.sign
 
 //It was quite the fun exercise to translate this into kotlin
 
@@ -25,6 +29,8 @@ class ModuleIOSpark(module:Int):ModuleIO {
 
     val driveEncoder = driveMotor.encoder
     val turnEncoder = turnMotor.encoder
+
+    val absEncoder = CANcoder(SwerveConstants.encoderIDs[module])
 
     val driveController = driveMotor.closedLoopController
     val turnController = turnMotor.closedLoopController
@@ -64,7 +70,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
                 SwerveConstants.DRIVE_P,
                 SwerveConstants.DRIVE_I,
                 SwerveConstants.DRIVE_D,
-                SwerveConstants.DRIVE_FF
+                0.0,
             )
 
         driveConfig.signals
@@ -110,7 +116,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
                 SwerveConstants.TURN_P,
                 SwerveConstants.TURN_I,
                 SwerveConstants.TURN_D,
-                SwerveConstants.TURN_FF
+                0.0
             )
 
         turnConfig.signals
@@ -163,8 +169,47 @@ class ModuleIOSpark(module:Int):ModuleIO {
             inputs.turnCurrentAmps = it
         }
         inputs.turnConnected = turnConnectedDebounce.calculate(!sparkStickyFault)
+    }
 
+    override fun setDriveOpenLoop(output: Double) {
+        driveMotor.setVoltage(output)
+    }
 
+    override fun setTurnOpenLoop(output: Double) {
+        turnMotor.setVoltage(output)
+    }
+
+    override fun setDriveVelocity(velocityRadPerSec: Double) {
+        val ffVolts = SwerveConstants.DRIVE_KS*velocityRadPerSec.sign + SwerveConstants.DRIVE_FF*velocityRadPerSec
+        driveController.setReference(
+            velocityRadPerSec,
+            SparkBase.ControlType.kVelocity,
+            ClosedLoopSlot.kSlot0,
+            ffVolts,
+            ArbFFUnits.kVoltage
+        )
+    }
+
+    override fun setTurnPosition(rotation: Rotation2d) {
+        val setpoint = MathUtil.inputModulus(
+            rotation.plus(zeroRotation).radians,
+            SwerveConstants.TURN_PID_MIN_INPUT,
+            SwerveConstants.TURN_PID_MAX_INPUT
+        )
+
+        turnController.setReference(setpoint, SparkBase.ControlType.kPosition)
+    }
+
+    override fun updateTurnEncoder() {
+        if (SwerveConstants.TURN_INVERTED) {
+            turnEncoder.setPosition(
+                SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
+            )
+        } else {
+            turnEncoder.setPosition(
+                -SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION*absEncoder.absolutePosition.valueAsDouble
+            )
+        }
     }
 
 }
