@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Rotation2d
 import org.sert2521.reefscape2025.utils.SparkUtil
 import org.sert2521.reefscape2025.utils.SparkUtil.ifOk
 import org.sert2521.reefscape2025.utils.SparkUtil.sparkStickyFault
-import java.util.Queue
 import java.util.function.DoubleSupplier
 import kotlin.math.PI
 
@@ -70,7 +69,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
 
         driveConfig.signals
             .primaryEncoderPositionAlwaysOn(true)
-            .primaryEncoderPositionPeriodMs(SwerveConstants.ODOMETRY_FREQUENCY)
+            .primaryEncoderPositionPeriodMs(SwerveConstants.ODOMETRY_PERIOD)
             .primaryEncoderVelocityAlwaysOn(true)
             .primaryEncoderVelocityPeriodMs(20)
             .appliedOutputPeriodMs(20)
@@ -116,7 +115,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
 
         turnConfig.signals
             .primaryEncoderPositionAlwaysOn(true)
-            .primaryEncoderPositionPeriodMs(SwerveConstants.ODOMETRY_FREQUENCY)
+            .primaryEncoderPositionPeriodMs(SwerveConstants.ODOMETRY_PERIOD)
             .primaryEncoderVelocityAlwaysOn(true)
             .primaryEncoderVelocityPeriodMs(20)
             .appliedOutputPeriodMs(20)

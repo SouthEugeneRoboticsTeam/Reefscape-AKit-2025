@@ -9,7 +9,7 @@ interface GyroIO {
         var connected = false
         var yawPosition = Rotation2d()
         var yawVelocityRadPerSec = 0.0
-        var odometryYawTimestamps = arrayOf<Double>()
+        var odometryYawTimestamps = doubleArrayOf()
         var odometryYawPositions = arrayOf<Rotation2d>()
     }
 

@@ -7,5 +7,11 @@ object Drivetrain : SubsystemBase() {
     @JvmField
     val odometryLock:ReentrantLock = ReentrantLock()
 
+    val gyroIoInputs = LoggedGyroIOInputs()
+    val gyroIO = GyroIONavX()
+
+    //val modules =
+
+
 
 }

@@ -1,6 +1,5 @@
 package org.sert2521.reefscape2025.subsystems.drive
 
-import com.pathplanner.lib.config.PIDConstants
 import edu.wpi.first.math.geometry.Rotation2d
 import kotlin.math.PI
 
@@ -35,7 +34,8 @@ object SwerveConstants {
     const val TURN_D = 0.0
     const val TURN_FF = 0.0
 
-    const val ODOMETRY_FREQUENCY = 20
+    const val ODOMETRY_PERIOD = 20
+    const val ODOMETRY_FREQUENCY = 1000/20
 
     var oil = 0.0
 
