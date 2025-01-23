@@ -1,4 +1,4 @@
-package org.sert2521.reefscape2025.subsystems.drive
+package org.sert2521.reefscape2025.subsystems.drivetrain
 
 import edu.wpi.first.hal.FRCNetComm
 import edu.wpi.first.hal.HAL

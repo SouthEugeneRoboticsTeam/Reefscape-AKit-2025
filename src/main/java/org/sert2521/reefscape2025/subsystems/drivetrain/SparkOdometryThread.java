@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package org.sert2521.reefscape2025.subsystems.drive;
+package org.sert2521.reefscape2025.subsystems.drivetrain;
 
 import com.revrobotics.REVLibError;
 import com.revrobotics.spark.SparkBase;

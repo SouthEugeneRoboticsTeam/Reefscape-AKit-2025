@@ -1,4 +1,4 @@
-package org.sert2521.reefscape2025.subsystems.drive
+package org.sert2521.reefscape2025.subsystems.drivetrain
 
 import com.ctre.phoenix6.hardware.CANcoder
 import com.revrobotics.spark.ClosedLoopSlot
