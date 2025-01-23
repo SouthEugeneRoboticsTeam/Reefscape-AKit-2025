@@ -1,6 +1,5 @@
 package org.sert2521.reefscape2025.subsystems.drive
 
-import edu.wpi.first.epilogue.Logged
 import edu.wpi.first.hal.FRCNetComm
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.Matrix
@@ -14,8 +13,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.units.Units.Volts
-import edu.wpi.first.units.VoltageUnit
-import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
@@ -31,44 +28,31 @@ object Drivetrain : SubsystemBase() {
     val odometryLock:ReentrantLock = ReentrantLock()
 
 
-    val gyroInputs = LoggedGyroIOInputs()
-    val gyroIO = GyroIONavX()
+    private val gyroInputs = LoggedGyroIOInputs()
+    private val gyroIO = GyroIONavX()
 
-    val modules = arrayOf(Module(0), Module(1), Module(2), Module(3))
+    private val modules = arrayOf(Module(0), Module(1), Module(2), Module(3))
 
-    val sysId =
+    private val sysId =
         SysIdRoutine(
-            SysIdRoutine.Config(
-                null,
-                null,
-                null,
-                { Logger.recordOutput("Drive/SysIdState", it.toString())},
-            ),
+            SysIdRoutine.Config(null, null, null) {
+                Logger.recordOutput("Drive/SysIdState", it.toString())
+            },
             SysIdRoutine.Mechanism(
                 { runCharacterization(it.`in`(Volts)) }, null, this
             )
         )
 
-    val gyroDisconnectedAlert =
+    private val gyroDisconnectedAlert =
         Alert("Disconnected Gyro, resorting to kinematics", Alert.AlertType.kError)
 
-    val kinematics = SwerveDriveKinematics(
-        SwerveConstants.moduleTranslations[0],
-        SwerveConstants.moduleTranslations[1],
-        SwerveConstants.moduleTranslations[2],
-        SwerveConstants.moduleTranslations[3]
-    )
+    private val kinematics = SwerveDriveKinematics(*SwerveConstants.moduleTranslations)
 
-    val lastModulePositions = arrayOf(
-        SwerveModulePosition(),
-        SwerveModulePosition(),
-        SwerveModulePosition(),
-        SwerveModulePosition()
-    )
+    private val lastModulePositions = Array(4){SwerveModulePosition()}
 
-    var rawGyroRotation = Rotation2d()
+    private var rawGyroRotation = Rotation2d()
 
-    val poseEstimator = SwerveDrivePoseEstimator(
+    private val poseEstimator = SwerveDrivePoseEstimator(
         kinematics,
         rawGyroRotation,
         lastModulePositions,
@@ -185,16 +169,19 @@ object Drivetrain : SubsystemBase() {
     }
 
     @AutoLogOutput(key = "SwerveStates/Measured")
-    fun getModuleStates():Array<SwerveModuleState>{
+    private fun getModuleStates():Array<SwerveModuleState>{
         return Array(4){modules[it].getState()}
     }
 
-    fun getModulePositions():Array<SwerveModulePosition>{
+    private fun getModulePositions():Array<SwerveModulePosition>{
         return Array(4){modules[it].getPosition()}
     }
 
     @AutoLogOutput(key = "SwerveStates/Measured")
-    fun getChassisSpeeds():ChassisSpeeds{
+    private fun getChassisSpeeds():ChassisSpeeds{
+        //THE IDE IS LYING I SWEAR THIS WORKS
+        //I'VE ALREADY SPENT HOURS OF MY LIFE TRYING TO STOP THIS FROM HAPPENING
+        //THIS IS THE ONLY WAY TO GET IT TO WORK DISREGARD EVERYTHING THE IDE TELLS YOU
         return kinematics.toChassisSpeeds(*getModuleStates())
     }
 
