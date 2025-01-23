@@ -1,4 +1,4 @@
-package org.sert2521.reefscape2025.commands
+package org.sert2521.reefscape2025.commands.dispenser
 
 import edu.wpi.first.wpilibj2.command.Command
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser

@@ -117,6 +117,8 @@ object Drivetrain : SubsystemBase() {
         }
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
+
+
     }
 
     fun runVelocity(speeds: ChassisSpeeds){

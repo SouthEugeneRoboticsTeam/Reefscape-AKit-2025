@@ -1,24 +1,25 @@
-package org.sert2521.reefscape2025.commands
+package org.sert2521.reefscape2025.commands.dispenser
 
 import edu.wpi.first.wpilibj2.command.Command
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 
-class DispenserIntake : Command() {
+class DispenserReverse : Command() {
 
 
     init {
         // each subsystem used by the command must be passed into the addRequirements() method
-        addRequirements(Dispenser)
+        addRequirements()
     }
 
     override fun initialize() {
-        Dispenser.setMotor(0.4)
+        Dispenser.setMotor(-0.4)
     }
 
     override fun execute() {}
 
     override fun isFinished(): Boolean {
-        return Dispenser.getBeambreakBlocked()
+        // TODO: Make this return true when this Command no longer needs to run execute()
+        return false
     }
 
     override fun end(interrupted: Boolean) {
