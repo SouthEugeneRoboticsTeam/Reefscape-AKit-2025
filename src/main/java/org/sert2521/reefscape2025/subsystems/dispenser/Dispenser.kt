@@ -1,12 +1,11 @@
 package org.sert2521.reefscape2025.subsystems.dispenser
 
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.sert2521.reefscape2025.BeamState
+import edu.wpi.first.wpilibj2.command.SubsystemBase
 
 object Dispenser : SubsystemBase() {
-    val io = DispenserIOSpark()
-    val ioInputs = LoggedDispenserIOInputs()
+    private val io = DispenserIOSpark()
+    private val ioInputs = LoggedDispenserIOInputs()
 
     override fun periodic() {
         io.updateInputs(ioInputs)
@@ -34,11 +33,13 @@ object Dispenser : SubsystemBase() {
 
     //DOES NOT have beambreak stuff just practice
     fun voltageCommand(voltage:Double): Command {
-        return runEnd({
+        return runEnd(
+            {
                 setVoltage(voltage)
             },
             {
                 stop()
-            })
+            }
+        )
     }
 }
