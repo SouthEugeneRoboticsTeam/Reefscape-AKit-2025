@@ -42,10 +42,13 @@ object SwerveConstants {
 
     const val TURN_ABS_ENCODER_CONVERSION_POSITION = 2 * PI
 
-    const val ODOMETRY_PERIOD = 20
-    const val ODOMETRY_FREQUENCY = 1000/20
+    const val ODOMETRY_FREQUENCY = 50
+    const val ODOMETRY_PERIOD = 1000 / ODOMETRY_FREQUENCY
+
 
     const val WHEEL_RADIUS_METERS = 0.0508
+
+    const val MAX_SPEED_MPS = 0.0
 
     val moduleTranslations = arrayOf(
         Translation2d(),

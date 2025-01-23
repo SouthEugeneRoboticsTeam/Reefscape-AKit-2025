@@ -25,7 +25,7 @@ class Module(val index:Int) {
         Alert.AlertType.kError
     )
 
-    var odometryPositions = arrayOf<SwerveModulePosition>()
+    private var odometryPositions = arrayOf<SwerveModulePosition>()
 
     fun periodic(){
         io.updateInputs(inputs)

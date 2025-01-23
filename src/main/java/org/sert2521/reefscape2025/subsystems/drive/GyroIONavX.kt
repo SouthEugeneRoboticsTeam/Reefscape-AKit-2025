@@ -17,7 +17,7 @@ class GyroIONavX:GyroIO {
         inputs.odometryYawTimestamps=
             yawTimestampQueue.stream().mapToDouble{it}.toArray()
         inputs.odometryYawPositions=
-            yawPositionQueue.stream().map<Rotation2d>{Rotation2d.fromDegrees(-it)}
+            yawPositionQueue.stream().map{Rotation2d.fromDegrees(-it)}
                 .toArray().filterIsInstance<Rotation2d>().toTypedArray()
         yawTimestampQueue.clear()
         yawPositionQueue.clear()

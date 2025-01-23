@@ -1,22 +1,37 @@
 package org.sert2521.reefscape2025.subsystems.drive
 
-import edu.wpi.first.math.estimator.PoseEstimator
+import edu.wpi.first.epilogue.Logged
+import edu.wpi.first.hal.FRCNetComm
+import edu.wpi.first.hal.HAL
+import edu.wpi.first.math.Matrix
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.kinematics.SwerveModulePosition
+import edu.wpi.first.math.kinematics.SwerveModuleState
+import edu.wpi.first.math.numbers.N1
+import edu.wpi.first.math.numbers.N3
+import edu.wpi.first.units.Units.Volts
+import edu.wpi.first.units.VoltageUnit
+import edu.wpi.first.units.measure.Voltage
 import edu.wpi.first.wpilibj.Alert
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
+import org.sert2521.reefscape2025.MetaConstants
 import java.util.concurrent.locks.ReentrantLock
 
 object Drivetrain : SubsystemBase() {
     @JvmField
     val odometryLock:ReentrantLock = ReentrantLock()
 
-    val gyroIoInputs = LoggedGyroIOInputs()
+
+    val gyroInputs = LoggedGyroIOInputs()
     val gyroIO = GyroIONavX()
 
     val modules = arrayOf(Module(0), Module(1), Module(2), Module(3))
@@ -30,7 +45,7 @@ object Drivetrain : SubsystemBase() {
                 { Logger.recordOutput("Drive/SysIdState", it.toString())},
             ),
             SysIdRoutine.Mechanism(
-                { runCharacterization(it) }, null, this
+                { runCharacterization(it.`in`(Volts)) }, null, this
             )
         )
 
@@ -51,7 +66,7 @@ object Drivetrain : SubsystemBase() {
         SwerveModulePosition()
     )
 
-    val rawGyroRotation = Rotation2d()
+    var rawGyroRotation = Rotation2d()
 
     val poseEstimator = SwerveDrivePoseEstimator(
         kinematics,
@@ -60,7 +75,164 @@ object Drivetrain : SubsystemBase() {
         Pose2d()
     )
 
+    init{
+        //while it's TECHNICALLY not just copy pasted, I'll still report this as swerve template whatevers
+        //because I would NOT know how to program this on my own
+        HAL.report(FRCNetComm.tResourceType.kResourceType_RobotDrive, FRCNetComm.tInstances.kRobotDriveSwerve_AdvantageKit)
+
+        SparkOdometryThread.getInstance().start()
+
+        //I'm putting the auto builder somewhere else because this is ridiculous
+    }
+
+    override fun periodic() {
+        odometryLock.lock()
+
+        gyroIO.updateInputs(gyroInputs)
+        Logger.processInputs("Drive/Gyro", gyroInputs)
+
+        for (module in modules){
+            module.periodic()
+        }
+
+        odometryLock.unlock()
 
 
+        if (DriverStation.isDisabled()){
+            Logger.recordOutput("SwerveStates/Setpoints", *Array(4){SwerveModuleState()})
+            Logger.recordOutput("SwerveStates/Optimized Setpoints", *Array(4){SwerveModuleState()})
+        }
 
+        val sampleTimestamps = modules[0].getOdometryTimestamps()
+        val sampleCount = sampleTimestamps.size
+        for (i in 0..<sampleCount){
+            val modulePositions = Array(4){SwerveModulePosition()}
+            val moduleDeltas = Array(4){SwerveModulePosition()}
+            for (moduleIndex in 0..<4){
+                modulePositions[moduleIndex] = modules[moduleIndex].getOdometryPositions()[i]
+                moduleDeltas[moduleIndex] =
+                    SwerveModulePosition(
+                        modulePositions[moduleIndex].distanceMeters- lastModulePositions[moduleIndex].distanceMeters,
+                        modulePositions[moduleIndex].angle
+                    )
+                lastModulePositions[moduleIndex] = modulePositions[moduleIndex]
+            }
+
+            if(gyroInputs.connected){
+                rawGyroRotation = gyroInputs.odometryYawPositions[i]
+            } else {
+                val twist = kinematics.toTwist2d(moduleDeltas[0], moduleDeltas[1], moduleDeltas[2], moduleDeltas[3])
+                rawGyroRotation = rawGyroRotation.plus(Rotation2d(twist.dtheta))
+            }
+
+            poseEstimator.updateWithTime(
+                sampleTimestamps[i],
+                rawGyroRotation,
+                modulePositions
+            )
+        }
+
+        gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
+    }
+
+    fun runVelocity(speeds: ChassisSpeeds){
+        val discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02)
+
+        val setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds)
+        SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveConstants.MAX_SPEED_MPS)
+
+        Logger.recordOutput("SwerveModules/Setpoints",*setpointStates)
+        Logger.recordOutput("SwerveChassisSpeeds/Setpoints",discreteSpeeds)
+
+        for (i in 0..<4){
+            modules[i].runSetpoint(setpointStates[i])
+        }
+
+
+        Logger.recordOutput("SwerveStates/SetpointsOptimized",*setpointStates)
+    }
+
+    fun runCharacterization(output:Double){
+        for (i in 0..<4){
+            modules[i].runCharacterization(output)
+        }
+    }
+
+    fun stop(){
+        runVelocity(ChassisSpeeds())
+    }
+
+    fun stopWithX(){
+        val headings = Array(4){
+            SwerveConstants.moduleTranslations[it].angle
+        }
+        kinematics.resetHeadings(*headings)
+        stop()
+    }
+
+    fun sysIdQuasistatic(direction:SysIdRoutine.Direction): Command {
+        return run{
+            runCharacterization(0.0)
+        }.withTimeout(1.0)
+            .andThen(sysId.quasistatic(direction))
+    }
+
+    fun sysIdDynamic(direction:SysIdRoutine.Direction): Command {
+        return run{
+            runCharacterization(0.0)
+        }.withTimeout(1.0)
+            .andThen(sysId.dynamic(direction))
+    }
+
+    @AutoLogOutput(key = "SwerveStates/Measured")
+    fun getModuleStates():Array<SwerveModuleState>{
+        return Array(4){modules[it].getState()}
+    }
+
+    fun getModulePositions():Array<SwerveModulePosition>{
+        return Array(4){modules[it].getPosition()}
+    }
+
+    @AutoLogOutput(key = "SwerveStates/Measured")
+    fun getChassisSpeeds():ChassisSpeeds{
+        return kinematics.toChassisSpeeds(*getModuleStates())
+    }
+
+    fun wheelRadiusCharacterizationPositions():DoubleArray{
+        return DoubleArray(4){modules[it].getWheelRadiusCharacterizationPosition()}
+    }
+
+    fun getFFCharacterizationVelocity():Double{
+        var output = 0.0
+        for (i in 0..<4){
+            output += modules[i].getFFCharacterizationVelocity() / 4.0
+        }
+        return output
+    }
+
+    @AutoLogOutput(key = "Odometry/Robot")
+    fun getPose():Pose2d{
+        return poseEstimator.estimatedPosition
+    }
+
+    fun getRotation():Rotation2d{
+        return getPose().rotation
+    }
+
+    fun setPose(pose:Pose2d){
+        poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose)
+    }
+
+    fun addVisionMeasurement(visionEstimationMeters:Pose2d, timestampSeconds:Double,
+                             visionMeasurementsStDev: Matrix<N3, N1>){
+        poseEstimator.addVisionMeasurement(
+            visionEstimationMeters,
+            timestampSeconds,
+            visionMeasurementsStDev
+        )
+    }
+
+    fun getMaxSpeedMPS():Double{
+        return SwerveConstants.MAX_SPEED_MPS
+    }
 }
