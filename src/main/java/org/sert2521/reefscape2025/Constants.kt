@@ -21,4 +21,12 @@ object MetaConstants{
 object ElectronicIDs{
     const val DISPENSER_MOTOR_ID = -1
     const val BEAMBREAK_ID = -1
+
+    const val ELEVATOR_LEFT_ID = -1
+    const val ELEVATOR_RIGHT_ID = -1
+}
+
+object TuningConstants{
+    const val ELEVATOR_P = 0.0
+    const val ELEVATOR_D = 0.0
 }
