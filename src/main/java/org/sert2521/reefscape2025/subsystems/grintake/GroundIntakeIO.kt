@@ -1,6 +1,6 @@
 package org.sert2521.reefscape2025.subsystems.grintake
 
-import org.sert2521.reefscape2025.subsystems.dispenser.DispenserIO.DispenserIOInputs
+
 import org.team9432.annotation.Logged
 
 interface GroundIntakeIO {
@@ -11,7 +11,7 @@ interface GroundIntakeIO {
         var velocityRPM = 0.0
     }
 
-    fun updateInputs(inputs: DispenserIOInputs){}
+    fun updateInputs(inputs: GroundIntakeIOInputs){}
 
     fun setMotor(speed:Double){}
 
