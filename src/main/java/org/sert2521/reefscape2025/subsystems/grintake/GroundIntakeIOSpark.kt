@@ -15,7 +15,8 @@ class GroundIntakeIOSpark {
         config.idleMode(IdleMode.kBrake)
         config.smartCurrentLimit(30)
     }
-     fun updateInputs(inputs: GroundIntakeIO.GroundIntakeIOInputs) {
+
+    fun updateInputs(inputs: GroundIntakeIO.GroundIntakeIOInputs) {
         inputs.currentAmps = motor.outputCurrent
         inputs.appliedVolts = motor.busVoltage * motor.appliedOutput
         inputs.velocityRPM = motor.encoder.velocity
