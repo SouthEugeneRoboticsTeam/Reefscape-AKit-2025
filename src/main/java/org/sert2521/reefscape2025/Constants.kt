@@ -24,6 +24,8 @@ object ElectronicIDs{
 
     const val ELEVATOR_LEFT_ID = -1
     const val ELEVATOR_RIGHT_ID = -1
+
+    const val GROUNDINTAKE_MOTOR_ID = -1
 }
 
 object TuningConstants{
