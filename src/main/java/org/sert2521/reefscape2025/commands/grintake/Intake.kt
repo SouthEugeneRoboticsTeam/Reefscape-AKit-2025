@@ -12,14 +12,19 @@ class Intake : Command() {
         addRequirements(groundIntake)
     }
 
-    override fun initialize() {}
+    override fun initialize() {
+        groundIntake.setIntakeMotor(0.4)
+    }
 
-    override fun execute() {}
+    override fun execute() {
+
+    }
 
     override fun isFinished(): Boolean {
-        // TODO: Make this return true when this Command no longer needs to run execute()
         return false
     }
 
-    override fun end(interrupted: Boolean) {}
+    override fun end(interrupted: Boolean) {
+        GroundIntake.stopIntake()
+    }
 }
