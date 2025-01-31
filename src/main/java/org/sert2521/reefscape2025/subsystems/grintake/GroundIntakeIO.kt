@@ -6,14 +6,22 @@ import org.team9432.annotation.Logged
 interface GroundIntakeIO {
     @Logged
     open class GroundIntakeIOInputs {
-        var appliedVolts = 0.0
-        var currentAmps = 0.0
-        var velocityRPM = 0.0
+        var intakeAppliedVolts = 0.0
+        var intakeCurrentAmps = 0.0
+        var intakeVelocityRPM = 0.0
+
+        var wristAppliedVolts = 0.0
+        var wristCurrentAmps = 0.0
+        var wristVelocityRPM = 0.0
     }
 
-    fun updateInputs(inputs: GroundIntakeIOInputs){}
+    fun updateInputs(inputs: GroundIntakeIOInputs) {}
 
-    fun setMotor(speed:Double){}
+    fun setIntakeMotor(speed: Double) {}
 
-    fun setVoltage(voltage:Double){}
+    fun setIntakeVoltage(voltage: Double) {}
+
+    fun setWristMotor(speed: Double) {}
+
+    fun setWristVoltage(voltage: Double) {}
 }
