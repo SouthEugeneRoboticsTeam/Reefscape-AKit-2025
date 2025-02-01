@@ -54,7 +54,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
 
         driveConfig
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(SwerveConstants.DRIVE_CURRENT_LIMIT)
+            .smartCurrentLimit(SwerveConstants.DRIVE_CURRENT_LIMIT_TELE)
             .voltageCompensation(12.0)
 
         driveConfig.encoder
@@ -98,7 +98,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
         turnConfig
             .inverted(SwerveConstants.TURN_INVERTED)
             .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(SwerveConstants.TURN_CURRENT_LIMIT)
+            .smartCurrentLimit(SwerveConstants.TURN_CURRENT_LIMIT_TELE)
             .voltageCompensation(12.0)
 
         turnConfig.encoder

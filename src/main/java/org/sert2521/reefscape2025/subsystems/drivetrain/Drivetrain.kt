@@ -180,7 +180,7 @@ object Drivetrain : SubsystemBase() {
     }
 
     @AutoLogOutput(key = "SwerveStates/Measured")
-    private fun getChassisSpeeds():ChassisSpeeds{
+    fun getChassisSpeeds():ChassisSpeeds{
         //THE IDE IS LYING I SWEAR THIS WORKS
         //I'VE ALREADY SPENT HOURS OF MY LIFE TRYING TO STOP THIS FROM HAPPENING
         //THIS IS THE ONLY WAY TO GET IT TO WORK DISREGARD EVERYTHING THE IDE TELLS YOU

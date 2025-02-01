@@ -1,7 +1,9 @@
 package org.sert2521.reefscape2025.subsystems.drivetrain
 
+import com.pathplanner.lib.config.PIDConstants
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
+import edu.wpi.first.math.system.plant.DCMotor
 import kotlin.math.PI
 
 object SwerveConstants {
@@ -11,11 +13,17 @@ object SwerveConstants {
     val turnIDs = arrayOf(-1, -1, -1, -1)
     val encoderIDs = arrayOf(-1, -1, -1, -1)
 
+    val driveGearRatio = 6.75
+    val turnGearRatio = 21.4285714
+
     const val TURN_INVERTED = false
     const val TURN_REL_ENCODER_INVERTED = false
 
-    const val DRIVE_CURRENT_LIMIT = 0
-    const val TURN_CURRENT_LIMIT = 0
+    const val DRIVE_CURRENT_LIMIT_TELE = 0
+    const val TURN_CURRENT_LIMIT_TELE = 0
+
+    const val DRIVE_CURRENT_LIMIT_AUTO = 0
+    const val TURN_CURRENT_LIMIT_AUTO = 0
 
 
 
@@ -60,4 +68,11 @@ object SwerveConstants {
         Translation2d(),
         Translation2d()
     )
+
+    val autoTranslationPID = PIDConstants(0.0, 0.0, 0.0)
+    val autoRotationPID = PIDConstants(0.0, 0.0, 0.0)
+
+    const val WHEEL_COF = 1.54
+
+    val driveMotorGearbox = DCMotor.getNEO(1).withReduction(6.75)
 }

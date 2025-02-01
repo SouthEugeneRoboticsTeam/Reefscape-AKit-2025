@@ -1,5 +1,11 @@
 package org.sert2521.reefscape2025
 
+import edu.wpi.first.units.BaseUnits.MassUnit
+import edu.wpi.first.units.MassUnit
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.Units.Pounds
+import edu.wpi.first.units.measure.Mass
+import edu.wpi.first.units.measure.MomentOfInertia
 import edu.wpi.first.wpilibj.RobotBase
 
 enum class BeamState{
@@ -40,6 +46,10 @@ object TuningConstants{
 object PhysicalConstants {
     const val WRIST_ENCODER_MULTIPLIER = 1.0
     const val WRIST_ENCODER_TRANSFORM = 0.1
+
+    val robotMass = Pounds.of(115.0)
+    val momentOfInertia = Units.KilogramSquareMeters.of(0.0)
+
 }
 
 object MetaConstants{

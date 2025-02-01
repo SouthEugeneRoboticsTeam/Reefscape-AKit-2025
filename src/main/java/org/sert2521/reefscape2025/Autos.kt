@@ -1,6 +1,14 @@
 package org.sert2521.reefscape2025
 
+import com.pathplanner.lib.auto.AutoBuilder
+import com.pathplanner.lib.config.ModuleConfig
+import com.pathplanner.lib.config.RobotConfig
+import com.pathplanner.lib.controllers.PPHolonomicDriveController
+import com.pathplanner.lib.controllers.PathFollowingController
+import edu.wpi.first.math.controller.HolonomicDriveController
 import edu.wpi.first.wpilibj2.command.Command
+import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
+import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,6 +24,32 @@ import edu.wpi.first.wpilibj2.command.Command
 object Autos
 {
 
+    init{
+        AutoBuilder.configure(
+            Drivetrain::getPose,
+            Drivetrain::setPose,
+            Drivetrain::getChassisSpeeds,
+            Drivetrain::driveRobotOriented,
+            PPHolonomicDriveController(
+                SwerveConstants.autoTranslationPID,
+                SwerveConstants.autoRotationPID
+            ),
+            RobotConfig(
+                PhysicalConstants.robotMass,
+                PhysicalConstants.momentOfInertia,
+                ModuleConfig(
+                    SwerveConstants.WHEEL_RADIUS_METERS,
+                    SwerveConstants.MAX_SPEED_MPS,
+                    SwerveConstants.WHEEL_COF,
+                    SwerveConstants.driveMotorGearbox,
+                    SwerveConstants.DRIVE_CURRENT_LIMIT_AUTO.toDouble(),
+                    1
+                )
+            ),
+            {false}
+        )
+
+    }
 
 
     fun getAutonomousCommand(): Command?
