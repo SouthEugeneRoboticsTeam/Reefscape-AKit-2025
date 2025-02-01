@@ -13,8 +13,8 @@ object SwerveConstants {
     val turnIDs = arrayOf(-1, -1, -1, -1)
     val encoderIDs = arrayOf(-1, -1, -1, -1)
 
-    val driveGearRatio = 6.75
-    val turnGearRatio = 21.4285714
+    const val DRIVE_GEAR_RATIO = 6.75
+    const val TURN_GEAR_RATIO = 21.4285714
 
     const val TURN_INVERTED = false
     const val TURN_REL_ENCODER_INVERTED = false
@@ -27,10 +27,10 @@ object SwerveConstants {
 
 
 
-    const val DRIVE_CONVERSION_POSITION = PI * 0.1016 / 6.75
+    const val DRIVE_CONVERSION_POSITION = PI * 0.1016 / DRIVE_GEAR_RATIO
     const val DRIVE_CONVERSION_VELOCITY = DRIVE_CONVERSION_POSITION / 60.0
 
-    const val TURN_REL_CONVERSION_POSITION = (2*PI)/21.4285714
+    const val TURN_REL_CONVERSION_POSITION = (2*PI) / TURN_GEAR_RATIO
     const val TURN_REL_CONVERSION_VELOCITY = TURN_REL_CONVERSION_POSITION
 
     //FF is the same as V for SVA controller
@@ -74,5 +74,5 @@ object SwerveConstants {
 
     const val WHEEL_COF = 1.54
 
-    val driveMotorGearbox = DCMotor.getNEO(1).withReduction(6.75)
+    val driveMotorGearbox: DCMotor = DCMotor.getNEO(1).withReduction(DRIVE_GEAR_RATIO)
 }
