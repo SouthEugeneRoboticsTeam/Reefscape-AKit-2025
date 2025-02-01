@@ -6,11 +6,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
-import org.sert2521.bunnybots2024.ConfigConstants
-import org.sert2521.bunnybots2024.Input
-import org.sert2521.bunnybots2024.subsystems.Drivetrain
 import org.sert2521.reefscape2025.Input
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
+import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 import java.text.Normalizer
 import kotlin.math.*
 import kotlin.time.times
@@ -20,7 +18,7 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : Command() {
     val joystickY = Input::getJoystickY
     val joystickZ = Input::getJoystickZ
 
-    val inputRotOffset = Input::getRotOffset
+    val inputRotOffset = Input::getRotationOffset
 
 
 
@@ -70,9 +68,9 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : Command() {
         else if (fieldOriented) {
             Drivetrain.driveRobotOriented(
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                    newY * ConfigConstants.DRIVE_SPEED,
-                    newX * ConfigConstants.DRIVE_SPEED,
-                    joystickZ().pow(3) * ConfigConstants.ROT_SPEED,
+                    newY * SwerveConstants.DRIVE_SPEED,
+                    newX * SwerveConstants.DRIVE_SPEED,
+                    joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
                     Drivetrain.getPose().rotation.minus(inputRotOffset())
                 )
             )
@@ -80,9 +78,9 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : Command() {
         else {
             Drivetrain.driveRobotOriented(
                 ChassisSpeeds(
-                    newY * ConfigConstants.DRIVE_SPEED,
-                    newX * ConfigConstants.DRIVE_SPEED,
-                    joystickZ().pow(3) * ConfigConstants.ROT_SPEED
+                    newY * SwerveConstants.DRIVE_SPEED,
+                    newX * SwerveConstants.DRIVE_SPEED,
+                    joystickZ().pow(3) * SwerveConstants.ROT_SPEED
                 )
             )
         }

@@ -121,7 +121,7 @@ object Drivetrain : SubsystemBase() {
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
     }
 
-    fun runVelocity(speeds: ChassisSpeeds){
+    fun driveRobotOriented(speeds: ChassisSpeeds){
         val discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02)
 
         val setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds)
@@ -145,7 +145,7 @@ object Drivetrain : SubsystemBase() {
     }
 
     fun stop(){
-        runVelocity(ChassisSpeeds())
+        driveRobotOriented(ChassisSpeeds())
     }
 
     fun stopWithX(){

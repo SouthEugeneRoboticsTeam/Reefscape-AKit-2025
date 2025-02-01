@@ -48,7 +48,11 @@ object SwerveConstants {
 
     const val WHEEL_RADIUS_METERS = 0.0508
 
-    const val MAX_SPEED_MPS = 0.0
+    const val MAX_SPEED_MPS = 4.571
+
+    const val DRIVE_SPEED = 3.0
+    const val ROT_SPEED = 4.0
+
 
     val moduleTranslations = arrayOf(
         Translation2d(),

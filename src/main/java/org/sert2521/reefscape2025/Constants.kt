@@ -7,16 +7,6 @@ enum class BeamState{
     BLOCKED
 }
 
-object MetaConstants{
-    enum class Mode{
-        REAL,
-        SIM,
-        REPLAY
-    }
-
-    val simMode = Mode.REPLAY
-    val currentMode = if (RobotBase.isReal()) Mode.REAL else simMode
-}
 
 object ElectronicIDs{
     const val DISPENSER_MOTOR_ID = -1
@@ -50,4 +40,15 @@ object TuningConstants{
 object PhysicalConstants {
     const val WRIST_ENCODER_MULTIPLIER = 1.0
     const val WRIST_ENCODER_TRANSFORM = 0.1
+}
+
+object MetaConstants{
+    enum class Mode{
+        REAL,
+        SIM,
+        REPLAY
+    }
+
+    val simMode = Mode.REPLAY
+    val currentMode = if (RobotBase.isReal()) Mode.REAL else simMode
 }
