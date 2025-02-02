@@ -122,6 +122,9 @@ object Drivetrain : SubsystemBase() {
         }
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
+        Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds())
+        Logger.recordOutput("SwerveModuleStates/Measured", *getModuleStates())
+        Logger.recordOutput("Odometry/Robot Pose", getPose())
     }
 
     fun driveRobotOriented(speeds: ChassisSpeeds){
@@ -130,7 +133,7 @@ object Drivetrain : SubsystemBase() {
         val setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds)
         SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveConstants.MAX_SPEED_MPS)
 
-        Logger.recordOutput("SwerveModules/Setpoints",*setpointStates)
+        Logger.recordOutput("SwerveModuleStates/Setpoints",*setpointStates)
         Logger.recordOutput("SwerveChassisSpeeds/Setpoints",discreteSpeeds)
 
         for (i in 0..<4){
@@ -173,7 +176,6 @@ object Drivetrain : SubsystemBase() {
             .andThen(sysId.dynamic(direction))
     }
 
-    @AutoLogOutput(key = "SwerveStates/Measured")
     private fun getModuleStates():Array<SwerveModuleState>{
         return Array(4){modules[it].getState()}
     }
@@ -182,7 +184,6 @@ object Drivetrain : SubsystemBase() {
         return Array(4){modules[it].getPosition()}
     }
 
-    @AutoLogOutput(key = "SwerveStates/Measured")
     fun getChassisSpeeds():ChassisSpeeds{
         //THE IDE IS LYING I SWEAR THIS WORKS
         //I'VE ALREADY SPENT HOURS OF MY LIFE TRYING TO STOP THIS FROM HAPPENING
@@ -206,7 +207,6 @@ object Drivetrain : SubsystemBase() {
         return Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec)
     }
 
-    @AutoLogOutput(key = "Odometry/Robot")
     fun getPose():Pose2d{
         return poseEstimator.estimatedPosition
     }

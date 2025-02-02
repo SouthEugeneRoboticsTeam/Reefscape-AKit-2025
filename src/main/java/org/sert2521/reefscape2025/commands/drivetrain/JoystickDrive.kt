@@ -6,6 +6,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.InstantCommand
+import org.sert2521.reefscape2025.ConfigConstants
 import org.sert2521.reefscape2025.Input
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
@@ -32,35 +33,37 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : Command() {
     }
 
     override fun execute() {
-        val x = joystickX()
-        val y = joystickY()
+        var x = joystickX()
+        var y = joystickY()
 
 
 
-        var magnitude = Translation2d(x, y).norm
         val angle = atan2(y, x)
 
 
         //this math works just trust
         //it normalizes the magnitude from a square output range to a circular one
         //new magnitude is true to actual distance from the center
-        val mult: Double =
-            if (x == 0.0 || y == 0.0){
-                1.0
-            }else if (abs(x)>=abs(y)){
-                abs(cos(angle))
-            } else {
-                abs(sin(angle))
-            }
 
-        magnitude *= mult
+
+        val sqrMagnitude = x.pow(2) + y.pow(2)
+        if (sqrMagnitude > 1) {
+            val magnitude = sqrt(sqrMagnitude)
+            x /= magnitude
+            y /= magnitude
+        } else if (sqrMagnitude <= ConfigConstants.POWER_DEADBAND.pow(2)) {
+            x = 0.0
+            y = 0.0
+        }
+        var newMagnitude = Translation2d(x, y).norm
 
         //Do joystick curve
-        magnitude = magnitude.pow(3)
+
+        newMagnitude = newMagnitude.pow(3)
 
         //reconstructs the x and y components from polar coordinates
-        val newX = cos(angle)*magnitude
-        val newY = sin(angle)*magnitude
+        val newX = cos(angle)*newMagnitude
+        val newY = sin(angle)*newMagnitude
 
         if (joystickX() == 0.0 && joystickY() == 0.0 && joystickZ() == 0.0){
             Drivetrain.stop()

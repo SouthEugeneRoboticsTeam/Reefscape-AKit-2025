@@ -1,17 +1,23 @@
 package org.sert2521.reefscape2025.subsystems.drivetrain
 
 import com.pathplanner.lib.config.PIDConstants
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.system.plant.DCMotor
 import kotlin.math.PI
 
 object SwerveConstants {
+
+    //set value to IdleMode.kBrake when actually running drivetrain
+    //set value to IdleMode.kCoast when testing, makes modules easier to turn by hand
+    val moduleIdleMode = IdleMode.kCoast
+
     val moduleZeroRotations = arrayOf(
-        Rotation2d(),
-        Rotation2d(),
-        Rotation2d(),
-        Rotation2d()
+        Rotation2d(-0.829),
+        Rotation2d(-3.049),
+        Rotation2d(2.772),
+        Rotation2d(2.8855)
     )
 
     val indexToCorner = mapOf(
@@ -28,7 +34,7 @@ object SwerveConstants {
     const val DRIVE_GEAR_RATIO = 5.903
     const val TURN_GEAR_RATIO = 21.4285714
 
-    const val TURN_INVERTED = false
+    const val TURN_INVERTED = true
     const val TURN_REL_ENCODER_INVERTED = false
 
     const val DRIVE_CURRENT_LIMIT_TELE = 0
@@ -38,8 +44,10 @@ object SwerveConstants {
     const val TURN_CURRENT_LIMIT_AUTO = 0
 
 
+    const val WHEEL_RADIUS_METERS = 0.0508
 
-    const val DRIVE_CONVERSION_POSITION = PI * 0.1016 / DRIVE_GEAR_RATIO
+    //Drive positions in radians
+    const val DRIVE_CONVERSION_POSITION = 2 * PI / DRIVE_GEAR_RATIO
     const val DRIVE_CONVERSION_VELOCITY = DRIVE_CONVERSION_POSITION / 60.0
 
     const val TURN_REL_CONVERSION_POSITION = (2*PI) / TURN_GEAR_RATIO
@@ -53,9 +61,9 @@ object SwerveConstants {
 
     const val DRIVE_KS = 0.0
 
-    const val TURN_P = 0.16
+    const val TURN_P = 1.0
     const val TURN_I = 0.0
-    const val TURN_D = 0.0
+    const val TURN_D = 0.2
     const val TURN_FF = 0.0
     const val TURN_PID_MIN_INPUT = 0.0
     const val TURN_PID_MAX_INPUT = 2 * PI
@@ -66,7 +74,6 @@ object SwerveConstants {
     const val ODOMETRY_PERIOD = 1000 / ODOMETRY_FREQUENCY
 
 
-    const val WHEEL_RADIUS_METERS = 0.0508
 
     const val MAX_SPEED_MPS = 4.571
 

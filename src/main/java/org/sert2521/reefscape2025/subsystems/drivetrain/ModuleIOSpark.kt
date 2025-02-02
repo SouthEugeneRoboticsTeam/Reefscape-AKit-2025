@@ -53,7 +53,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
         val driveConfig = SparkMaxConfig()
 
         driveConfig
-            .idleMode(IdleMode.kBrake)
+            .idleMode(SwerveConstants.moduleIdleMode)
             .smartCurrentLimit(SwerveConstants.DRIVE_CURRENT_LIMIT_TELE)
             .voltageCompensation(12.0)
 
@@ -97,7 +97,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
         val turnConfig = SparkMaxConfig()
         turnConfig
             .inverted(SwerveConstants.TURN_INVERTED)
-            .idleMode(IdleMode.kBrake)
+            .idleMode(SwerveConstants.moduleIdleMode)
             .smartCurrentLimit(SwerveConstants.TURN_CURRENT_LIMIT_TELE)
             .voltageCompensation(12.0)
 
@@ -201,14 +201,18 @@ class ModuleIOSpark(module:Int):ModuleIO {
     }
 
     override fun updateTurnEncoder() {
-        if (SwerveConstants.TURN_INVERTED) {
-            turnEncoder.setPosition(
-                SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
-            )
-        } else {
-            turnEncoder.setPosition(
-                -SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION*absEncoder.absolutePosition.valueAsDouble
-            )
-        }
+//        if (SwerveConstants.TURN_INVERTED) {
+//            turnEncoder.setPosition(
+//                SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
+//            )
+//        } else {
+//            turnEncoder.setPosition(
+//                -SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
+//            )
+//        }
+
+        turnEncoder.setPosition(
+            SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
+        )
     }
 }

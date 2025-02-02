@@ -13,6 +13,9 @@ enum class BeamState{
     BLOCKED
 }
 
+object ConfigConstants{
+    val POWER_DEADBAND = 0.0
+}
 
 object ElectronicIDs{
     const val DISPENSER_MOTOR_ID = -1
