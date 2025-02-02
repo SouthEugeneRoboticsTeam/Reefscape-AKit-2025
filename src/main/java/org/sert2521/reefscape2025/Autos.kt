@@ -57,7 +57,8 @@ object Autos
                     SwerveConstants.driveMotorGearbox,
                     SwerveConstants.DRIVE_CURRENT_LIMIT_AUTO.toDouble(),
                     1
-                )
+                ),
+                *SwerveConstants.moduleTranslations
             ),
             {false}
         )

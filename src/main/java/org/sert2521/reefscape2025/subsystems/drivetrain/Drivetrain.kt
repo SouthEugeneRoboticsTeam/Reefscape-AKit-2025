@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.MetaConstants
+import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
 import java.util.concurrent.locks.ReentrantLock
 
 
@@ -67,6 +68,8 @@ object Drivetrain : SubsystemBase() {
         HAL.report(FRCNetComm.tResourceType.kResourceType_RobotDrive, FRCNetComm.tInstances.kRobotDriveSwerve_AdvantageKit)
 
         SparkOdometryThread.getInstance().start()
+
+        this.defaultCommand = JoystickDrive()
 
         //I'm putting the auto builder somewhere else because this is ridiculous
     }

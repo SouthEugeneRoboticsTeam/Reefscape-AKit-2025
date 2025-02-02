@@ -7,13 +7,25 @@ import edu.wpi.first.math.system.plant.DCMotor
 import kotlin.math.PI
 
 object SwerveConstants {
-    val moduleZeroRotations = arrayOf(Rotation2d(), Rotation2d(), Rotation2d(), Rotation2d())
+    val moduleZeroRotations = arrayOf(
+        Rotation2d(),
+        Rotation2d(),
+        Rotation2d(),
+        Rotation2d()
+    )
 
-    val driveIDs = arrayOf(-1, -1, -1, -1)
-    val turnIDs = arrayOf(-1, -1, -1, -1)
-    val encoderIDs = arrayOf(-1, -1, -1, -1)
+    val indexToCorner = mapOf(
+        0 to "FL",
+        1 to "FR",
+        2 to "BL",
+        3 to "BR"
+    )
 
-    const val DRIVE_GEAR_RATIO = 6.75
+    val driveIDs = arrayOf(16, 3, 5, 1)
+    val turnIDs = arrayOf(15, 12, 7, 2)
+    val encoderIDs = arrayOf(14, 13, 16, 15)
+
+    const val DRIVE_GEAR_RATIO = 5.903
     const val TURN_GEAR_RATIO = 21.4285714
 
     const val TURN_INVERTED = false
@@ -41,7 +53,7 @@ object SwerveConstants {
 
     const val DRIVE_KS = 0.0
 
-    const val TURN_P = 0.0
+    const val TURN_P = 0.16
     const val TURN_I = 0.0
     const val TURN_D = 0.0
     const val TURN_FF = 0.0
@@ -63,10 +75,10 @@ object SwerveConstants {
 
 
     val moduleTranslations = arrayOf(
-        Translation2d(),
-        Translation2d(),
-        Translation2d(),
-        Translation2d()
+        Translation2d(11.35, 11.35),
+        Translation2d(11.35, -11.35),
+        Translation2d(-11.35, 11.35),
+        Translation2d(-11.35, -11.35)
     )
 
     val autoTranslationPID = PIDConstants(0.0, 0.0, 0.0)

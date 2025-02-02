@@ -11,11 +11,11 @@ import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 
 object Input {
     val driverController = XboxController(0)
-    val gunnerController = Joystick(1)
+    //val gunnerController = Joystick(1)
 
-    var rotationOffset = Rotation2d()
+    private var rotationOffset = Rotation2d()
 
-    val rotationReset = JoystickButton(driverController, -1)
+    val rotationReset = JoystickButton(driverController, 1)
 
     init {
         rotationReset.onTrue(runOnce({ rotationOffset= Drivetrain.getPose().rotation}))

@@ -102,7 +102,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
             .voltageCompensation(12.0)
 
         turnConfig.encoder
-            .inverted(SwerveConstants.TURN_REL_ENCODER_INVERTED)
+            //.inverted(SwerveConstants.TURN_REL_ENCODER_INVERTED)
             .positionConversionFactor(SwerveConstants.TURN_REL_CONVERSION_POSITION)
             .velocityConversionFactor(SwerveConstants.TURN_REL_CONVERSION_VELOCITY)
             .uvwMeasurementPeriod(20)
