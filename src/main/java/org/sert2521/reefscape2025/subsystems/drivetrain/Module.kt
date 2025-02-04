@@ -40,12 +40,18 @@ class Module(val index:Int) {
         io.updateTurnEncoder()
     }
 
-    fun runSetpoint(state:SwerveModuleState){
+    fun runSetpoint(state:SwerveModuleState):SwerveModuleState{
+        /**
+         * Returns the optimized swerve module state for logging purposes
+         **/
+
         state.optimize(getAngle())
         state.cosineScale(getAngle())
 
         io.setDriveVelocity(state.speedMetersPerSecond/SwerveConstants.WHEEL_RADIUS_METERS)
         io.setTurnPosition(state.angle)
+
+        return state
     }
 
     fun runCharacterization(output:Double){

@@ -88,8 +88,8 @@ object Drivetrain : SubsystemBase() {
 
 
         if (DriverStation.isDisabled()){
-            Logger.recordOutput("SwerveStates/Setpoints", *Array(4){SwerveModuleState()})
-            Logger.recordOutput("SwerveStates/Optimized Setpoints", *Array(4){SwerveModuleState()})
+            Logger.recordOutput("SwerveModuleStates/Setpoints", *Array(4){SwerveModuleState()})
+            Logger.recordOutput("SwerveModuleStates/Optimized Setpoints", *Array(4){SwerveModuleState()})
         }
 
         val sampleTimestamps = modules[0].getOdometryTimestamps()
@@ -136,12 +136,15 @@ object Drivetrain : SubsystemBase() {
         Logger.recordOutput("SwerveModuleStates/Setpoints",*setpointStates)
         Logger.recordOutput("SwerveChassisSpeeds/Setpoints",discreteSpeeds)
 
+        val optimizedStates = Array(4) { SwerveModuleState() }
+
         for (i in 0..<4){
-            modules[i].runSetpoint(setpointStates[i])
+            optimizedStates[i] = modules[i].runSetpoint(setpointStates[i])
         }
 
+        Logger.recordOutput("SwerveModuleStates/Optimized Setpoints", *optimizedStates)
 
-        Logger.recordOutput("SwerveStates/SetpointsOptimized",*setpointStates)
+
     }
 
     fun runCharacterization(output:Double){

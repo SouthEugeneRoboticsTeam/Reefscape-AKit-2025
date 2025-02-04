@@ -7,9 +7,9 @@ import com.revrobotics.spark.SparkClosedLoopController.ArbFFUnits
 import com.revrobotics.spark.SparkLowLevel.MotorType
 import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkMaxConfig
 import edu.wpi.first.math.MathUtil
+import edu.wpi.first.math.controller.SimpleMotorFeedforward
 import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Rotation2d
 import org.sert2521.reefscape2025.utils.SparkUtil
@@ -29,6 +29,14 @@ class ModuleIOSpark(module:Int):ModuleIO {
 
     val driveEncoder = driveMotor.encoder
     val turnEncoder = turnMotor.encoder
+
+    val driveFeedforward = SimpleMotorFeedforward(
+        SwerveConstants.DRIVE_KS,
+        SwerveConstants.DRIVE_KV,
+        SwerveConstants.DRIVE_KA
+    )
+
+    var lastVelocity = 0.0
 
     val absEncoder = CANcoder(SwerveConstants.encoderIDs[module])
 
@@ -180,7 +188,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
     }
 
     override fun setDriveVelocity(velocityRadPerSec: Double) {
-        val ffVolts = SwerveConstants.DRIVE_KS*velocityRadPerSec.sign + SwerveConstants.DRIVE_FF*velocityRadPerSec
+        val ffVolts = driveFeedforward.calculate(velocityRadPerSec)
         driveController.setReference(
             velocityRadPerSec,
             SparkBase.ControlType.kVelocity,

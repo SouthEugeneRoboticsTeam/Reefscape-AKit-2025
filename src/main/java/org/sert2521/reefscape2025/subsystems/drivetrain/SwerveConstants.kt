@@ -57,9 +57,10 @@ object SwerveConstants {
     const val DRIVE_P = 0.0
     const val DRIVE_I = 0.0
     const val DRIVE_D = 0.0
-    const val DRIVE_FF = 0.0
 
     const val DRIVE_KS = 0.0
+    const val DRIVE_KV = 0.0
+    const val DRIVE_KA = 0.0
 
     const val TURN_P = 1.0
     const val TURN_I = 0.0
