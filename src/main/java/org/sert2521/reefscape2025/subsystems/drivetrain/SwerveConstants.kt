@@ -31,7 +31,7 @@ object SwerveConstants {
     val turnIDs = arrayOf(15, 12, 7, 2)
     val encoderIDs = arrayOf(14, 13, 16, 15)
 
-    const val DRIVE_GEAR_RATIO = 5.903
+    const val DRIVE_GEAR_RATIO = 6.75
     const val TURN_GEAR_RATIO = 21.4285714
 
     const val TURN_INVERTED = true
