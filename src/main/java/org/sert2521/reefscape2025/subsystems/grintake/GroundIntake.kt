@@ -10,6 +10,7 @@ object GroundIntake : SubsystemBase() {
     private val io = GroundIntakeIOSpark()
     private val ioInputs = LoggedGroundIntakeIOInputs()
     val trueEncoder = DutyCycleEncoder(ElectronicIDs.WRIST_TRUE_ENCODER)
+    var wristSetPoint = 0.0
 
     //Updates inputs ig
     override fun periodic() {

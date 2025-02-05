@@ -8,6 +8,8 @@ import org.sert2521.reefscape2025.subsystems.grintake.GroundIntake
 
 class RunWrist : Command() {
     private val groundIntake = GroundIntake
+
+    //Smooth motion stuff
     private val motorPID = PIDController(TuningConstants.WRIST_P, TuningConstants.WRIST_I, TuningConstants.WRIST_D)
     private val feedforward = ArmFeedforward(TuningConstants.WRIST_S, TuningConstants.WRIST_G,
         TuningConstants.WRIST_V, TuningConstants.WRIST_A)
@@ -22,7 +24,11 @@ class RunWrist : Command() {
 
     }
 
-    override fun execute() {}
+    override fun execute() {
+        wristAngle = groundIntake.getWristRadians()
+
+        groundIntake.setWristVoltage(motorPID.calculate(wristAngle, groundIntake.wristSetPoint) + feedforward.calculate(wristAngle, 0.0))
+    }
 
     override fun isFinished(): Boolean {
         // TODO: Make this return true when this Command no longer needs to run execute()
