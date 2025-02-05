@@ -18,6 +18,7 @@ class RunWrist : Command() {
     init {
         // each subsystem used by the command must be passed into the addRequirements() method
         addRequirements(groundIntake)
+
     }
 
     override fun initialize() {

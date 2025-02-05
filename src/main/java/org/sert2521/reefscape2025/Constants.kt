@@ -1,5 +1,6 @@
 package org.sert2521.reefscape2025
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.units.BaseUnits.MassUnit
 import edu.wpi.first.units.MassUnit
 import edu.wpi.first.units.Units
@@ -30,7 +31,14 @@ object ElectronicIDs{
 
 object TuningConstants{
     const val ELEVATOR_P = 0.0
+    const val ELEVATOR_I = 0.0
     const val ELEVATOR_D = 0.0
+    val ELEVATOR_PROFILE = TrapezoidProfile.Constraints(0.0, 0.0)
+
+    const val ELEVATOR_S = 0.0
+    const val ELEVATOR_V = 0.0
+    const val ELEVATOR_G = 0.0
+    const val ELEVATOR_A = 0.0
 
     //Wrist Values
     const val WRIST_CURRENT_LIMIT = 30

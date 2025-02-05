@@ -16,4 +16,6 @@ interface ElevatorIO {
     fun updateInputs(inputs:ElevatorIOInputs) {}
 
     fun setVoltage(voltage:Double){}
+
+
 }

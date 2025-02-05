@@ -14,8 +14,11 @@ object Elevator : SubsystemBase() {
         io.setVoltage(voltage)
     }
 
-
     fun getVelocity():Double {
         return ioInputs.laserVelocity
+    }
+
+    fun getPosition():Double{
+        return ioInputs.laserPosition
     }
 }
