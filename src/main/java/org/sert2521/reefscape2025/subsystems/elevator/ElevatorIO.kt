@@ -8,15 +8,12 @@ interface ElevatorIO {
     open class ElevatorIOInputs{
         var appliedVolts = 0.0
         var currentAmps = 0.0
-        var velocityRPM = 0.0
 
         var laserPosition = 0.0
         var laserVelocity = 0.0
     }
 
-    fun updateInputs(inputs:ElevatorIOInputs){}
-
-    fun setReference(positionMeters:Double){}
+    fun updateInputs(inputs:ElevatorIOInputs) {}
 
     fun setVoltage(voltage:Double){}
 }

@@ -24,6 +24,8 @@ object ElectronicIDs{
     const val GROUNDINTAKE_MOTOR_ID = -1
     const val WRIST_MOTOR_ID = -1
     const val WRIST_TRUE_ENCODER = -1
+
+    const val LASER_ID = -1
 }
 
 object TuningConstants{
