@@ -94,6 +94,7 @@ object Drivetrain : SubsystemBase() {
 
         val sampleTimestamps = modules[0].getOdometryTimestamps()
         val sampleCount = sampleTimestamps.size
+        println(sampleCount)
         for (i in 0..<sampleCount){
             val modulePositions = Array(4){SwerveModulePosition()}
             val moduleDeltas = Array(4){SwerveModulePosition()}
@@ -113,6 +114,8 @@ object Drivetrain : SubsystemBase() {
                 val twist = kinematics.toTwist2d(moduleDeltas[0], moduleDeltas[1], moduleDeltas[2], moduleDeltas[3])
                 rawGyroRotation = rawGyroRotation.plus(Rotation2d(twist.dtheta))
             }
+
+            println("updated with time")
 
             poseEstimator.updateWithTime(
                 sampleTimestamps[i],
@@ -211,6 +214,7 @@ object Drivetrain : SubsystemBase() {
     }
 
     fun getPose():Pose2d{
+        println(poseEstimator.estimatedPosition.rotation.radians)
         return poseEstimator.estimatedPosition
     }
 

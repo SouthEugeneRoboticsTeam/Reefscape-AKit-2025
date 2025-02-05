@@ -58,8 +58,8 @@ object SwerveConstants {
     const val DRIVE_I = 0.0
     const val DRIVE_D = 0.0
 
-    const val DRIVE_KS = 0.0
-    const val DRIVE_KV = 0.0
+    const val DRIVE_KS = 0.29899
+    const val DRIVE_KV = 0.11812
     const val DRIVE_KA = 0.0
 
     const val TURN_P = 1.0
@@ -95,4 +95,7 @@ object SwerveConstants {
     const val WHEEL_COF = 1.54
 
     val driveMotorGearbox: DCMotor = DCMotor.getNEO(1).withReduction(DRIVE_GEAR_RATIO)
+
+    val FF_RAMP_RATE = 1.0
+
 }
