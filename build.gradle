@@ -6,6 +6,7 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "2.1.0"
     id "edu.wpi.first.GradleRIO" version "2025.1.1"
     id "com.google.devtools.ksp" version "2.1.0-1.0.29"
+    id "com.peterabeles.gversion" version "1.10"
     id "idea"
 }
 
@@ -127,6 +128,50 @@ tasks.withType(JavaCompile) {
     // Configure string concat to always inline compile
     options.compilerArgs.add '-XDstringConcat=inline'
 }
+
+// Create version file
+project.compileJava.dependsOn(createVersionFile)
+gversion {
+    srcDir       = "src/main/java/"
+    classPackage = "org.sert2521.reefscape2025"
+    className    = "BuildConstants"
+    dateFormat   = "yyyy-MM-dd HH:mm:ss z"
+    timeZone     = "America/New_York"
+    indent       = "    "
+}
+
+// Create commit with working changes on event branches
+task(eventDeploy) {
+    doLast {
+        if (project.gradle.startParameter.taskNames.any({ it.toLowerCase().contains("deploy") })) {
+            def branchPrefix = "event"
+            def branch = 'git branch --show-current'.execute().text.trim()
+            def commitMessage = "Update at '${new Date().toString()}'"
+
+            if (branch.startsWith(branchPrefix)) {
+                exec {
+                    workingDir(projectDir)
+                    executable 'git'
+                    args 'add', '-A'
+                }
+                exec {
+                    workingDir(projectDir)
+                    executable 'git'
+                    args 'commit', '-m', commitMessage
+                    ignoreExitValue = true
+                }
+
+                println "Committed to branch: '$branch'"
+                println "Commit message: '$commitMessage'"
+            } else {
+                println "Not on an event branch, skipping commit"
+            }
+        } else {
+            println "Not running deploy task, skipping commit"
+        }
+    }
+}
+createVersionFile.dependsOn(eventDeploy)
 
 kotlin {
     compilerOptions {

@@ -24,6 +24,7 @@ import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.math.min
 
 
 object Drivetrain : SubsystemBase() {
@@ -100,7 +101,8 @@ object Drivetrain : SubsystemBase() {
 
         val sampleTimestamps = modules[0].getOdometryTimestamps()
         val sampleCount = sampleTimestamps.size
-        println(sampleCount)
+        val gyroSampleCount = gyroInputs.odometryYawTimestamps.size
+        println(Array(sampleCount){sampleTimestamps[it]-gyroInputs.odometryYawTimestamps[min(it, gyroSampleCount)]})
         for (i in 0..<sampleCount){
             val modulePositions = Array(4){SwerveModulePosition()}
             val moduleDeltas = Array(4){SwerveModulePosition()}
@@ -117,11 +119,10 @@ object Drivetrain : SubsystemBase() {
             if(gyroInputs.connected){
                 rawGyroRotation = gyroInputs.odometryYawPositions[i]
             } else {
-                val twist = kinematics.toTwist2d(moduleDeltas[0], moduleDeltas[1], moduleDeltas[2], moduleDeltas[3])
+                val twist = kinematics.toTwist2d(*moduleDeltas)
                 rawGyroRotation = rawGyroRotation.plus(Rotation2d(twist.dtheta))
             }
 
-            println("updated with time")
 
             poseEstimator.updateWithTime(
                 sampleTimestamps[i],
