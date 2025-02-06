@@ -136,7 +136,7 @@ gversion {
     classPackage = "org.sert2521.reefscape2025"
     className    = "BuildConstants"
     dateFormat   = "yyyy-MM-dd HH:mm:ss z"
-    timeZone     = "America/New_York"
+    timeZone     = "America/Los_Angeles"
     indent       = "    "
 }
 

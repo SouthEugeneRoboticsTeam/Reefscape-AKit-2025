@@ -34,6 +34,16 @@ object Robot : LoggedRobot()
 
     init
     {
+        Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME)
+        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE)
+        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA)
+        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE)
+        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH)
+        when (BuildConstants.DIRTY) {
+            0 -> Logger.recordMetadata("GitDirty", "All changes committed")
+            1 -> Logger.recordMetadata("GitDirty", "Uncomitted changes")
+            else -> Logger.recordMetadata("GitDirty", "Unknown")
+        }
         // Kotlin initializer block, which effectually serves as the constructor code.
         // https://kotlinlang.org/docs/classes.html#constructors
         // This work can also be done in the inherited `robotInit()` method. But as of the 2025 season the 
