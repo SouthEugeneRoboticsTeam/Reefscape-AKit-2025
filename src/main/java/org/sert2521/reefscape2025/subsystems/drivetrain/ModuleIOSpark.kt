@@ -17,7 +17,6 @@ import org.sert2521.reefscape2025.utils.SparkUtil.ifOk
 import org.sert2521.reefscape2025.utils.SparkUtil.sparkStickyFault
 import java.util.function.DoubleSupplier
 import kotlin.math.PI
-import kotlin.math.sign
 
 //It was quite the fun exercise to translate this into kotlin
 
@@ -177,6 +176,19 @@ class ModuleIOSpark(module:Int):ModuleIO {
             inputs.turnCurrentAmps = it
         }
         inputs.turnConnected = turnConnectedDebounce.calculate(!sparkStickyFault)
+
+
+        inputs.odometryTimestamps =
+            timestampQueue.stream().mapToDouble { it }.toArray()
+        inputs.odometryDrivePositionsRad =
+            drivePositionQueue.stream().mapToDouble { it }.toArray()
+        inputs.odometryTurnPositions =
+            turnPositionQueue.stream()
+                .map { Rotation2d(it).minus(zeroRotation) }
+                    .toArray().filterIsInstance<Rotation2d>().toTypedArray()
+        timestampQueue.clear()
+        drivePositionQueue.clear()
+        turnPositionQueue.clear()
     }
 
     override fun setDriveOpenLoop(output: Double) {

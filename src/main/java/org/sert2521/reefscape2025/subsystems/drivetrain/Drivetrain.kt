@@ -86,6 +86,12 @@ object Drivetrain : SubsystemBase() {
 
         odometryLock.unlock()
 
+        if (DriverStation.isDisabled()){
+            for (module in modules){
+                module.stop()
+            }
+        }
+
 
         if (DriverStation.isDisabled()){
             Logger.recordOutput("SwerveModuleStates/Setpoints", *Array(4){SwerveModuleState()})
