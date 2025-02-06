@@ -17,5 +17,4 @@ interface ElevatorIO {
 
     fun setVoltage(voltage:Double){}
 
-
 }
