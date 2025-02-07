@@ -30,9 +30,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.3
+            "name": "Wait L1 Post-Outtake"
           }
         },
         {
@@ -40,123 +40,138 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Center - L1 L4 L4.1"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Center - L1 L4 L4.1"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait Human Player"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Center - L1 L4 L4.2"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Elevator Stow"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Wrist Stow"
+                  "commands": [
+                    {
+                      "type": "parallel",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Elevator Stow"
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Wrist Stow"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Dispenser Intake"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator L4"
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "wait",
+          "type": "parallel",
           "data": {
-            "waitTime": 0.5
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Center - L1 L4 L4.3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait Human Player"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Center - L1 L4 L4.4"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator Stow"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Dispenser Intake"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator L4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Dispenser Intake"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Center - L1 L4 L4.2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator L4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "name": "Wait L2-4 Pre-Outtake"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Dispenser Outtake"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Center - L1 L4 L4.3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator Stow"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Dispenser Intake"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Center - L1 L4 L4.4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator L4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Elevator L4"
           }
         }
       ]
