@@ -34,7 +34,10 @@ object Autos
         "Elevator L4" to Commands.none(),
 
         "Dispenser Intake" to Commands.none(),
-        "Dispenser Outtake" to Commands.none()
+        "Dispenser Outtake" to Commands.none(),
+
+        "Wait L2-4 Outtake" to Commands.none(),
+        "Wait Human Player" to Commands.none()
     )
 
     init{
