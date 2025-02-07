@@ -30,9 +30,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Center - L1 L4 L4.1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center - L1 L4 L4.1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Stow"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -61,15 +80,40 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Dispenser Outtake"
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Center - L1 L4 L4.3"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center - L1 L4 L4.3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Stow"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -100,7 +144,7 @@
         {
           "type": "named",
           "data": {
-            "name": "L1 Outtake"
+            "name": "Elevator L4"
           }
         }
       ]
