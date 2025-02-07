@@ -14,10 +14,10 @@ object SwerveConstants {
     val moduleIdleMode = IdleMode.kCoast
 
     val moduleZeroRotations = arrayOf(
-        Rotation2d(-0.829),
-        Rotation2d(-3.049),
-        Rotation2d(2.772),
-        Rotation2d(2.8855)
+        Rotation2d(-2.992),
+        Rotation2d(-1.58),
+        Rotation2d(-1.35),
+        Rotation2d(-0.56)
     )
 
     val indexToCorner = mapOf(
