@@ -26,13 +26,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Wait L2-4 Outtake"
+            "name": "Wait L2-4 Pre-Outtake"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Dispenser Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Post-Outtake"
           }
         },
         {
@@ -95,7 +101,19 @@
         {
           "type": "named",
           "data": {
+            "name": "Wait L2-4 Pre-Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Dispenser Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Post-Outtake"
           }
         },
         {
@@ -110,6 +128,12 @@
                       "type": "path",
                       "data": {
                         "pathName": "Right - 3 - L4 .3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait Human Player"
                       }
                     },
                     {
@@ -147,6 +171,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Pre-Outtake"
           }
         },
         {

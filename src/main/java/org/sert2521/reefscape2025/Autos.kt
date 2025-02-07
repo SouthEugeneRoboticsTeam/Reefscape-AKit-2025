@@ -36,7 +36,8 @@ object Autos
         "Dispenser Intake" to Commands.none(),
         "Dispenser Outtake" to Commands.none(),
 
-        "Wait L2-4 Outtake" to Commands.none(),
+        "Wait L2-4 Pre-Outtake" to Commands.none(),
+        "Wait L2-4 Post-Outtake" to Commands.none(),
         "Wait Human Player" to Commands.none()
     )
 
