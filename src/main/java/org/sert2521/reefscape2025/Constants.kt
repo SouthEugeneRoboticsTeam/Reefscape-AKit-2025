@@ -24,7 +24,7 @@ object ElectronicIDs{
 
     const val GROUNDINTAKE_MOTOR_ID = -1
     const val WRIST_MOTOR_ID = -1
-    const val WRIST_TRUE_ENCODER = -1
+    const val WRIST_ABS_ENCODER = -1
 
     const val LASER_ID = -1
 }
@@ -56,6 +56,7 @@ object TuningConstants{
 object PhysicalConstants {
     const val WRIST_ENCODER_MULTIPLIER = 1.0
     const val WRIST_ENCODER_TRANSFORM = 0.1
+    const val WRIST_MOTOR_MULTIPLIER = 1.0
 
     val robotMass = Pounds.of(115.0)
     val momentOfInertia = Units.KilogramSquareMeters.of(0.0)

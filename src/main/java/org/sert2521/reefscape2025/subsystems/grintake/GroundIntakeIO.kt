@@ -12,7 +12,8 @@ interface GroundIntakeIO {
 
         var wristAppliedVolts = 0.0
         var wristCurrentAmps = 0.0
-        var wristVelocityRPM = 0.0
+        var wristVelocityRadPerSec = 0.0
+        var wristPosition = 0.0
     }
 
     fun updateInputs(inputs: GroundIntakeIOInputs) {}

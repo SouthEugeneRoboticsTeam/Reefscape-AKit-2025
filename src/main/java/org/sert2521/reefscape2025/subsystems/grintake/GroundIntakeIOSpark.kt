@@ -6,12 +6,13 @@ import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkMaxConfig
 import edu.wpi.first.wpilibj.DutyCycleEncoder
-import org.sert2521.reefscape2025.ElectronicIDs
 import org.sert2521.reefscape2025.ElectronicIDs.GROUNDINTAKE_MOTOR_ID
+import org.sert2521.reefscape2025.ElectronicIDs.WRIST_ABS_ENCODER
 import org.sert2521.reefscape2025.ElectronicIDs.WRIST_MOTOR_ID
-import org.sert2521.reefscape2025.PhysicalConstants
+import org.sert2521.reefscape2025.PhysicalConstants.WRIST_ENCODER_MULTIPLIER
+import org.sert2521.reefscape2025.PhysicalConstants.WRIST_ENCODER_TRANSFORM
+import org.sert2521.reefscape2025.PhysicalConstants.WRIST_MOTOR_MULTIPLIER
 import org.sert2521.reefscape2025.TuningConstants.WRIST_CURRENT_LIMIT
-import org.sert2521.reefscape2025.subsystems.grintake.GroundIntake.trueEncoder
 
 class GroundIntakeIOSpark:GroundIntakeIO {
     //Intake
@@ -21,6 +22,7 @@ class GroundIntakeIOSpark:GroundIntakeIO {
     //Wrist
     val wristMotor = SparkMax(WRIST_MOTOR_ID, MotorType.kBrushless)
     val wristConfig = SparkMaxConfig()
+    val absEncoder = DutyCycleEncoder(WRIST_ABS_ENCODER)
 
     init {
         //Intake settings
@@ -34,6 +36,8 @@ class GroundIntakeIOSpark:GroundIntakeIO {
             .inverted(false)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(WRIST_CURRENT_LIMIT)
+            .encoder.positionConversionFactor(WRIST_MOTOR_MULTIPLIER)
+                .velocityConversionFactor(WRIST_MOTOR_MULTIPLIER)
 
         //Configuration
         intakeMotor.configure(intakeConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
@@ -49,7 +53,8 @@ class GroundIntakeIOSpark:GroundIntakeIO {
         //Update Wrist Inputs
         inputs.wristAppliedVolts = wristMotor.outputCurrent
         inputs.wristCurrentAmps = wristMotor.busVoltage * wristMotor.appliedOutput
-        inputs.wristVelocityRPM = wristMotor.encoder.velocity
+        inputs.wristVelocityRadPerSec = wristMotor.encoder.velocity
+        inputs.wristPosition = absEncoder.get() * WRIST_ENCODER_MULTIPLIER + WRIST_ENCODER_TRANSFORM
     }
 
     override fun setIntakeMotor(speed: Double) {
@@ -68,4 +73,4 @@ class GroundIntakeIOSpark:GroundIntakeIO {
         wristMotor.setVoltage(voltage)
     }
 
-    }
+}
