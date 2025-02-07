@@ -1,0 +1,112 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center - L1 L4 L4.0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Wrist to L1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L1 Outtake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center - L1 L4 L4.1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dispenser Intake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center - L1 L4 L4.2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dispenser Outtake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center - L1 L4 L4.3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dispenser Intake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center - L1 L4 L4.4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L1 Outtake"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": true
+}
