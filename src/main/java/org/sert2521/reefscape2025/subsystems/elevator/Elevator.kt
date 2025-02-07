@@ -21,4 +21,8 @@ object Elevator : SubsystemBase() {
     fun getPosition():Double{
         return ioInputs.laserPosition
     }
+
+    fun stop() {
+        io.setVoltage(0.0)
+    }
 }

@@ -13,7 +13,7 @@ class HoldWrist : Command() {
     private val feedforward = ArmFeedforward(
         TuningConstants.WRIST_S, TuningConstants.WRIST_G,
         TuningConstants.WRIST_V, TuningConstants.WRIST_A)
-    private var wristAngle = GroundIntake.getWristRadians()
+    private var wristAngle = groundIntake.getWristRadians()
 
     init {
         // each subsystem used by the command must be passed into the addRequirements() method

@@ -32,7 +32,7 @@ class ElevatorIOSpark:ElevatorIO {
         rightConfig
             .smartCurrentLimit(40)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
-        rightConfig.follow(leftMotor, true)
+            .follow(leftMotor, true)
 
         leftMotor.configure(leftConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
         rightMotor.configure(rightConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
