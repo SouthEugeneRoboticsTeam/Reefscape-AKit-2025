@@ -15,7 +15,7 @@ object Input {
 
     private var rotationOffset = Rotation2d()
 
-    val rotationReset = JoystickButton(driverController, 1)
+    val rotationReset = JoystickButton(driverController, 4)
 
     init {
         rotationReset.onTrue(runOnce({ rotationOffset= Drivetrain.getPose().rotation}))

@@ -74,7 +74,7 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : Command() {
                     newY * SwerveConstants.DRIVE_SPEED,
                     newX * SwerveConstants.DRIVE_SPEED,
                     joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
-                    Drivetrain.getPose().rotation//.minus(inputRotOffset())
+                    Drivetrain.getPose().rotation.minus(inputRotOffset())
                 )
             )
         }

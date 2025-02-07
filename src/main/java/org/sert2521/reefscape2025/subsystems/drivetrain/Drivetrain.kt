@@ -102,7 +102,8 @@ object Drivetrain : SubsystemBase() {
         val sampleTimestamps = modules[0].getOdometryTimestamps()
         val sampleCount = sampleTimestamps.size
         val gyroSampleCount = gyroInputs.odometryYawTimestamps.size
-        println(Array(sampleCount){sampleTimestamps[it]-gyroInputs.odometryYawTimestamps[min(it, gyroSampleCount)]})
+        //println(sampleCount)
+        //println(Array(sampleCount){sampleTimestamps[it]-gyroInputs.odometryYawTimestamps[min(it, gyroSampleCount)]})
         for (i in 0..<sampleCount){
             val modulePositions = Array(4){SwerveModulePosition()}
             val moduleDeltas = Array(4){SwerveModulePosition()}
@@ -221,7 +222,6 @@ object Drivetrain : SubsystemBase() {
     }
 
     fun getPose():Pose2d{
-        println(poseEstimator.estimatedPosition.rotation.radians)
         return poseEstimator.estimatedPosition
     }
 
