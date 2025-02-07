@@ -27,8 +27,8 @@ object SwerveConstants {
         3 to "BR"
     )
 
-    val driveIDs = arrayOf(5, 6, 7, 8)
-    val turnIDs = arrayOf(9, 10, 11, 12)
+    val driveIDs = arrayOf(6, 5, 8, 7)
+    val turnIDs = arrayOf(10, 9, 12, 11)
     val encoderIDs = arrayOf(1, 2, 3, 4)
 
     const val DRIVE_GEAR_RATIO = 6.75
