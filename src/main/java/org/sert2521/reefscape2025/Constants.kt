@@ -9,6 +9,14 @@ object SetpointConstants{
     const val WRIST_STOW = 0.0
     const val WRIST_GROUND = 0.0
     const val WRIST_L1 = 0.0
+
+    const val ELEVATOR_STOW = 0.0
+    const val ELEVATOR_L2 = 0.0
+    const val ELEVATOR_L3 = 0.0
+    const val ELEVATOR_L4 = 0.0
+    const val ELEVATOR_ALGAE = 0.0
+
+    const val INTAKE_SPEED = 0.4
 }
 
 object ConfigConstants{
