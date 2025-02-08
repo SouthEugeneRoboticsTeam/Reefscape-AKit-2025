@@ -3,7 +3,8 @@ package org.sert2521.reefscape2025.subsystems.dispenser
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.AutoLogOutput
-import org.sert2521.reefscape2025.SetpointConstants.INTAKE_SPEED
+import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_INTAKE_SPEED
+import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_SPEED
 
 object Dispenser : SubsystemBase() {
     private val io = DispenserIOSpark()
@@ -43,10 +44,14 @@ object Dispenser : SubsystemBase() {
         return ioInputs.velocityRPM
     }
 
+
+
+
+
     fun idleDispenserCommand():Command{
         return run{
             if (getBlocked()) {
-                setMotor(INTAKE_SPEED)
+                setMotor(DISPENSER_INTAKE_SPEED)
             } else {
                 stop()
             }
@@ -55,7 +60,7 @@ object Dispenser : SubsystemBase() {
 
     fun runDispenserCommand():Command{
         return run{
-            setMotor(INTAKE_SPEED)
+            setMotor(DISPENSER_INTAKE_SPEED)
         }
     }
 
@@ -76,8 +81,14 @@ object Dispenser : SubsystemBase() {
     fun idleRampBeambreakNonfunctional():Command{
         return run{
             if (getDispenserBeambreakBlocked()){
-                setMotor(INTAKE_SPEED)
+                setMotor(DISPENSER_INTAKE_SPEED)
             }
+        }
+    }
+
+    fun outtakeCommand():Command{
+        return run{
+            setMotor(DISPENSER_OUTTAKE_SPEED)
         }
     }
 }

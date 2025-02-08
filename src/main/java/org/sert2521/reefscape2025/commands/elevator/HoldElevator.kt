@@ -4,13 +4,12 @@ import edu.wpi.first.math.controller.ElevatorFeedforward
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.wpilibj2.command.Command
 import org.sert2521.reefscape2025.TuningConstants
+import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_G
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 
 class HoldElevator : Command() {
     private val motorPID = PIDController(TuningConstants.ELEVATOR_P, TuningConstants.ELEVATOR_I, TuningConstants.ELEVATOR_D)
-    private val feedforward = ElevatorFeedforward(
-        TuningConstants.ELEVATOR_S, TuningConstants.ELEVATOR_V,
-        TuningConstants.ELEVATOR_G, TuningConstants.ELEVATOR_A)
+
     private var elevatorSetPoint = Elevator.goal
     private var elevatorPosition = Elevator.getPosition()
 
@@ -26,6 +25,6 @@ class HoldElevator : Command() {
 
     override fun execute() {
         elevatorPosition = Elevator.getPosition()
-        Elevator.setVoltage(motorPID.calculate(Elevator.getPosition(), elevatorSetPoint) + feedforward.calculate(0.0))
+        Elevator.setVoltage(motorPID.calculate(Elevator.getPosition(), elevatorSetPoint) + ELEVATOR_G)
     }
 }

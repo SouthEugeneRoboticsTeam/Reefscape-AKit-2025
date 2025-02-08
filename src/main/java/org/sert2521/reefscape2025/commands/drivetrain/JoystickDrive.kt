@@ -28,10 +28,6 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : Command() {
         addRequirements(Drivetrain)
     }
 
-    override fun initialize() {
-
-    }
-
     override fun execute() {
         var x = joystickX()
         var y = joystickY()

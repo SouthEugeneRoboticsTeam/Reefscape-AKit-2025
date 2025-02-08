@@ -15,12 +15,6 @@ class DispenserOuttake : Command() {
         Dispenser.setMotor(0.7)
     }
 
-    override fun execute() {}
-
-    override fun isFinished(): Boolean {
-        return false
-    }
-
     override fun end(interrupted: Boolean) {
         Dispenser.stop()
     }

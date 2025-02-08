@@ -1,7 +1,7 @@
 package org.sert2521.reefscape2025.commands.dispenser
 
 import edu.wpi.first.wpilibj2.command.Command
-import org.sert2521.reefscape2025.SetpointConstants.INTAKE_SPEED
+import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_INTAKE_SPEED
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 
 class DispenserReverse : Command() {
@@ -13,7 +13,7 @@ class DispenserReverse : Command() {
     }
 
     override fun initialize() {
-        Dispenser.setMotor(-INTAKE_SPEED)
+        Dispenser.setMotor(-DISPENSER_INTAKE_SPEED)
     }
 
     override fun execute() {}
