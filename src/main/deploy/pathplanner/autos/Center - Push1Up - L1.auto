@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center - Push1Up - L1.0"
+            "pathName": "Center - Push1Left - L1.0"
           }
         },
         {
@@ -23,7 +23,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center - Push1Up - L1.1"
+                  "pathName": "Center - Push1Left - L1.1"
                 }
               }
             ]
