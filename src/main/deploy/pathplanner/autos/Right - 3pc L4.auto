@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right - 3 - L4 .0"
+                  "pathName": "Right - 3pc L4.0"
                 }
               },
               {
@@ -52,7 +52,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Right - 3 - L4 .1"
+                        "pathName": "Right - 3pc L4.1"
                       }
                     },
                     {
@@ -64,7 +64,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Right - 3 - L4 .2"
+                        "pathName": "Right - 3pc L4.2"
                       }
                     }
                   ]
@@ -127,7 +127,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Right - 3 - L4 .3"
+                        "pathName": "Right - 3pc L4.3"
                       }
                     },
                     {
@@ -139,7 +139,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Right - 3 - L4 .4"
+                        "pathName": "Right - 3pc L4.4"
                       }
                     }
                   ]
