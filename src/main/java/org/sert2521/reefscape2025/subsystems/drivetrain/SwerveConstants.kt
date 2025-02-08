@@ -97,6 +97,6 @@ object SwerveConstants {
 
     val driveMotorGearbox: DCMotor = DCMotor.getNEO(1).withReduction(DRIVE_GEAR_RATIO)
 
-    val FF_RAMP_RATE = 1.0
+    const val FF_RAMP_RATE = 1.0
 
 }
