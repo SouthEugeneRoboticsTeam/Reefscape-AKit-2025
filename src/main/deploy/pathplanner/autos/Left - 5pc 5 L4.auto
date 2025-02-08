@@ -11,22 +11,28 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Wrist L1"
+                  "name": "Elevator L4"
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left - 5pc.0"
+                  "pathName": "Left - 5pc 5 L4.0"
                 }
               }
             ]
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "L1 Outtake"
+            "name": "Dispenser Outtake"
           }
         },
         {
@@ -40,7 +46,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left - 5pc.1"
+                        "pathName": "Left - 5pc 5 L4.1"
                       }
                     },
                     {
@@ -52,7 +58,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left - 5pc.2"
+                        "pathName": "Left - 5pc 5 L4.2"
                       }
                     }
                   ]
@@ -122,7 +128,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left - 5pc.3"
+                        "pathName": "Left - 5pc 5 L4.3"
                       }
                     },
                     {
@@ -134,7 +140,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left - 5pc.4"
+                        "pathName": "Left - 5pc 5 L4.4"
                       }
                     }
                   ]
@@ -191,7 +197,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left - 5pc.5"
+                        "pathName": "Left - 5pc 5 L4.5"
                       }
                     },
                     {
@@ -203,7 +209,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left - 5pc.6"
+                        "pathName": "Left - 5pc 5 L4.6"
                       }
                     }
                   ]
@@ -260,7 +266,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left - 5pc.7"
+                        "pathName": "Left - 5pc 5 L4.7"
                       }
                     },
                     {
@@ -272,7 +278,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left - 5pc.8"
+                        "pathName": "Left - 5pc 5 L4.8"
                       }
                     }
                   ]
@@ -310,18 +316,12 @@
           "type": "wait",
           "data": {
             "waitTime": 0.15
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Dispenser Outtake"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": true
 }
