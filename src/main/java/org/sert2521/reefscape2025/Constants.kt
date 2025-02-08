@@ -5,11 +5,6 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Pounds
 import edu.wpi.first.wpilibj.RobotBase
 
-enum class BeamState{
-    CLEAR,
-    BLOCKED
-}
-
 object SetpointConstants{
     const val WRIST_STOW = 0.0
     const val WRIST_GROUND = 0.0
