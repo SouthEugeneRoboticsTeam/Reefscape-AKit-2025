@@ -2,7 +2,6 @@ package org.sert2521.reefscape2025.commands.dispenser
 
 import edu.wpi.first.wpilibj2.command.Command
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
-import org.sert2521.reefscape2025.subsystems.dispenser.DispenserIO
 
 class DispenserIntake : Command() {
 
@@ -18,13 +17,13 @@ class DispenserIntake : Command() {
     }
 
     override fun execute() {
-        if (Dispenser.getBeambreakBlocked()){
+        if (Dispenser.getDispenserBeambreakBlocked()){
             triggered = true
         }
     }
 
     override fun isFinished(): Boolean {
-        return !Dispenser.getBeambreakBlocked() && triggered
+        return !Dispenser.getDispenserBeambreakBlocked() && triggered
     }
 
     override fun end(interrupted: Boolean) {

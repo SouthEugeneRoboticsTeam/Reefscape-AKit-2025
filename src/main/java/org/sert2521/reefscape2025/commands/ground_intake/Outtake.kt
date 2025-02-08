@@ -1,11 +1,11 @@
-package org.sert2521.reefscape2025.commands.grintake
+package org.sert2521.reefscape2025.commands.ground_intake
 
 import edu.wpi.first.wpilibj2.command.Command
-import org.sert2521.reefscape2025.subsystems.grintake.GroundIntake
+import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 
-class Intake : Command() {
+class Outtake : Command() {
+
     private val groundIntake = GroundIntake
-
 
     init {
         // each subsystem used by the command must be passed into the addRequirements() method
@@ -13,18 +13,16 @@ class Intake : Command() {
     }
 
     override fun initialize() {
-        groundIntake.setIntakeMotor(0.4)
+        groundIntake.setMotor(-0.4)
     }
 
-    override fun execute() {
-
-    }
+    override fun execute() {}
 
     override fun isFinished(): Boolean {
         return false
     }
 
     override fun end(interrupted: Boolean) {
-        GroundIntake.stopIntake()
+        GroundIntake.stop()
     }
 }
