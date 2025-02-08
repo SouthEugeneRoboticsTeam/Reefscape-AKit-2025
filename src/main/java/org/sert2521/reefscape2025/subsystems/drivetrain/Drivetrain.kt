@@ -3,6 +3,7 @@ package org.sert2521.reefscape2025.subsystems.drivetrain
 import edu.wpi.first.hal.FRCNetComm
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.Matrix
+import edu.wpi.first.math.VecBuilder
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -19,12 +20,12 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
+import org.sert2521.reefscape2025.utils.LimelightHelpers
 import java.util.concurrent.locks.ReentrantLock
-import kotlin.math.min
+import kotlin.math.abs
 
 
 object Drivetrain : SubsystemBase() {
@@ -231,6 +232,30 @@ object Drivetrain : SubsystemBase() {
 
     fun setPose(pose:Pose2d){
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose)
+    }
+
+    fun doVision(){
+        var doRejectUpdate = false
+        LimelightHelpers.SetRobotOrientation(
+            "limelight",
+            poseEstimator.estimatedPosition.rotation.degrees,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+        )
+        val mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight")
+        if (abs(Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec)) > 720)  // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            doRejectUpdate = true
+        }
+        if (mt2.tagCount == 0) {
+            doRejectUpdate = true
+        }
+        if (!doRejectUpdate) {
+            addVisionMeasurement(mt2.pose, mt2.timestampSeconds)
+        }
     }
 
     fun addVisionMeasurement(visionEstimationMeters:Pose2d, timestampSeconds:Double,

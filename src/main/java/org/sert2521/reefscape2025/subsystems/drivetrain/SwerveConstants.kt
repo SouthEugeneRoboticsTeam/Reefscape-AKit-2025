@@ -2,6 +2,7 @@ package org.sert2521.reefscape2025.subsystems.drivetrain
 
 import com.pathplanner.lib.config.PIDConstants
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
+import edu.wpi.first.math.Vector
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.system.plant.DCMotor
@@ -27,9 +28,10 @@ object SwerveConstants {
         3 to "BR"
     )
 
-    val driveIDs = arrayOf(6, 5, 8, 7)
-    val turnIDs = arrayOf(10, 9, 12, 11)
     val encoderIDs = arrayOf(1, 2, 3, 4)
+    val driveIDs = arrayOf(5, 6, 7, 8)
+    val turnIDs = arrayOf(9, 10, 11, 12)
+
 
     const val DRIVE_GEAR_RATIO = 6.75
     const val TURN_GEAR_RATIO = 21.4285714
@@ -99,4 +101,5 @@ object SwerveConstants {
 
     const val FF_RAMP_RATE = 1.0
 
+    const val LIMELIGHT_STDV = VectorBui
 }
