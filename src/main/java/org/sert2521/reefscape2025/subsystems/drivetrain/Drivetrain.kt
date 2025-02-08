@@ -134,6 +134,8 @@ object Drivetrain : SubsystemBase() {
         }
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
+
+        doVision()
         Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds())
         Logger.recordOutput("SwerveModuleStates/Measured", *getModuleStates())
         Logger.recordOutput("Odometry/Robot Pose", getPose())
@@ -235,28 +237,58 @@ object Drivetrain : SubsystemBase() {
     }
 
     fun doVision(){
-        var doRejectUpdate = false
-        LimelightHelpers.SetRobotOrientation(
-            "limelight",
-            poseEstimator.estimatedPosition.rotation.degrees,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-        )
-        val mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight")
-        if (abs(Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec)) > 720)  // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        val useMegaTag2 = gyroInputs.connected; //set to false to use MegaTag1
+        var doRejectUpdate = false;
+        if(!useMegaTag2)
         {
-            doRejectUpdate = true
+            val mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+
+            if(mt1.tagCount == 1 && mt1.rawFiducials.size == 1)
+            {
+                if(mt1.rawFiducials[0].ambiguity > .7)
+                {
+                    doRejectUpdate = true;
+                }
+                if(mt1.rawFiducials[0].distToCamera > 3)
+                {
+                    doRejectUpdate = true;
+                }
+            }
+            if(mt1.tagCount == 0)
+            {
+                doRejectUpdate = true;
+            }
+
+            if(!doRejectUpdate)
+            {
+                addVisionMeasurement(
+                    mt1.pose,
+                    mt1.timestampSeconds,
+                    SwerveConstants.LIMELIGHT_STDV);
+            }
         }
-        if (mt2.tagCount == 0) {
-            doRejectUpdate = true
-        }
-        if (!doRejectUpdate) {
-            addVisionMeasurement(mt2.pose, mt2.timestampSeconds)
+        else
+        {
+            LimelightHelpers.SetRobotOrientation("limelight", poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+            val mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+            if(abs(Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec)) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+            {
+                doRejectUpdate = true;
+            }
+            if(mt2.tagCount == 0)
+            {
+                doRejectUpdate = true;
+            }
+            if(!doRejectUpdate)
+            {
+                addVisionMeasurement(
+                    mt2.pose,
+                    mt2.timestampSeconds,
+                    SwerveConstants.LIMELIGHT_STDV);
+            }
         }
     }
+
 
     fun addVisionMeasurement(visionEstimationMeters:Pose2d, timestampSeconds:Double,
                              visionMeasurementsStDev: Matrix<N3, N1>){

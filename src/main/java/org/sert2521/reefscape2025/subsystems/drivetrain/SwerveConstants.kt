@@ -2,6 +2,7 @@ package org.sert2521.reefscape2025.subsystems.drivetrain
 
 import com.pathplanner.lib.config.PIDConstants
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
+import edu.wpi.first.math.VecBuilder
 import edu.wpi.first.math.Vector
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
@@ -101,5 +102,5 @@ object SwerveConstants {
 
     const val FF_RAMP_RATE = 1.0
 
-    const val LIMELIGHT_STDV = VectorBui
+    val LIMELIGHT_STDV = VecBuilder.fill(0.7, 0.7, 9999999.9)
 }
