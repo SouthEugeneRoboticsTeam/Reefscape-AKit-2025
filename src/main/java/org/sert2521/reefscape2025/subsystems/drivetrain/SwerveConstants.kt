@@ -1,22 +1,40 @@
 package org.sert2521.reefscape2025.subsystems.drivetrain
 
 import com.pathplanner.lib.config.PIDConstants
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.system.plant.DCMotor
 import kotlin.math.PI
 
 object SwerveConstants {
-    val moduleZeroRotations = arrayOf(Rotation2d(), Rotation2d(), Rotation2d(), Rotation2d())
 
-    val driveIDs = arrayOf(-1, -1, -1, -1)
-    val turnIDs = arrayOf(-1, -1, -1, -1)
-    val encoderIDs = arrayOf(-1, -1, -1, -1)
+    //set value to IdleMode.kBrake when actually running drivetrain
+    //set value to IdleMode.kCoast when testing, makes modules easier to turn by hand
+    val moduleIdleMode = IdleMode.kCoast
+
+    val moduleZeroRotations = arrayOf(
+        Rotation2d(-2.992),
+        Rotation2d(-1.58),
+        Rotation2d(-1.35),
+        Rotation2d(-0.56)
+    )
+
+    val indexToCorner = mapOf(
+        0 to "FL",
+        1 to "FR",
+        2 to "BL",
+        3 to "BR"
+    )
+
+    val driveIDs = arrayOf(6, 5, 8, 7)
+    val turnIDs = arrayOf(10, 9, 12, 11)
+    val encoderIDs = arrayOf(1, 2, 3, 4)
 
     const val DRIVE_GEAR_RATIO = 6.75
     const val TURN_GEAR_RATIO = 21.4285714
 
-    const val TURN_INVERTED = false
+    const val TURN_INVERTED = true
     const val TURN_REL_ENCODER_INVERTED = false
 
     const val DRIVE_CURRENT_LIMIT_TELE = 0
@@ -26,8 +44,10 @@ object SwerveConstants {
     const val TURN_CURRENT_LIMIT_AUTO = 0
 
 
+    const val WHEEL_RADIUS_METERS = 0.0508
 
-    const val DRIVE_CONVERSION_POSITION = PI * 0.1016 / DRIVE_GEAR_RATIO
+    //Drive positions in radians
+    const val DRIVE_CONVERSION_POSITION = 2 * PI / DRIVE_GEAR_RATIO
     const val DRIVE_CONVERSION_VELOCITY = DRIVE_CONVERSION_POSITION / 60.0
 
     const val TURN_REL_CONVERSION_POSITION = (2*PI) / TURN_GEAR_RATIO
@@ -37,24 +57,25 @@ object SwerveConstants {
     const val DRIVE_P = 0.0
     const val DRIVE_I = 0.0
     const val DRIVE_D = 0.0
-    const val DRIVE_FF = 0.0
 
-    const val DRIVE_KS = 0.0
+    const val DRIVE_KS = 0.29899
+    const val DRIVE_KV = 0.11812
+    const val DRIVE_KA = 0.0
 
-    const val TURN_P = 0.0
+    const val TURN_P = 1.0
     const val TURN_I = 0.0
-    const val TURN_D = 0.0
+    const val TURN_D = 0.2
     const val TURN_FF = 0.0
     const val TURN_PID_MIN_INPUT = 0.0
     const val TURN_PID_MAX_INPUT = 2 * PI
 
     const val TURN_ABS_ENCODER_CONVERSION_POSITION = 2 * PI
 
-    const val ODOMETRY_FREQUENCY = 50
-    const val ODOMETRY_PERIOD = 1000 / ODOMETRY_FREQUENCY
+
+    const val ODOMETRY_PERIOD = 5
+    const val ODOMETRY_FREQUENCY = 1000 / ODOMETRY_PERIOD
 
 
-    const val WHEEL_RADIUS_METERS = 0.0508
 
     const val MAX_SPEED_MPS = 4.571
 
@@ -63,10 +84,10 @@ object SwerveConstants {
 
 
     val moduleTranslations = arrayOf(
-        Translation2d(),
-        Translation2d(),
-        Translation2d(),
-        Translation2d()
+        Translation2d(11.35, 11.35),
+        Translation2d(11.35, -11.35),
+        Translation2d(-11.35, 11.35),
+        Translation2d(-11.35, -11.35)
     )
 
     val autoTranslationPID = PIDConstants(0.0, 0.0, 0.0)
@@ -75,4 +96,7 @@ object SwerveConstants {
     const val WHEEL_COF = 1.54
 
     val driveMotorGearbox: DCMotor = DCMotor.getNEO(1).withReduction(DRIVE_GEAR_RATIO)
+
+    const val FF_RAMP_RATE = 1.0
+
 }

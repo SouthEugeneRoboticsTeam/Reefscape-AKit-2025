@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import org.sert2521.reefscape2025.commands.drivetrain.DrivetrainFeedforwardSysId
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 
@@ -43,6 +45,8 @@ object Autos
     )
 
     init{
+        NamedCommands.registerCommands(namedCommandList)
+
         AutoBuilder.configure(
             Drivetrain::getPose,
             Drivetrain::setPose,
@@ -62,14 +66,16 @@ object Autos
                     SwerveConstants.driveMotorGearbox,
                     SwerveConstants.DRIVE_CURRENT_LIMIT_AUTO.toDouble(),
                     1
-                )
+                ),
+                *SwerveConstants.moduleTranslations
             ),
             {false}
         )
 
-        NamedCommands.registerCommands(namedCommandList)
-
         autoChooser = AutoBuilder.buildAutoChooser()
+
+        autoChooser.addOption("SysId quasistatic", DrivetrainFeedforwardSysId.get())
+        autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
 
         SmartDashboard.putData("Auto Chooser", autoChooser)
     }

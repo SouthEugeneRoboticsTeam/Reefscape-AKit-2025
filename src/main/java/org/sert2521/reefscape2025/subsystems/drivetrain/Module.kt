@@ -9,12 +9,7 @@ import org.littletonrobotics.junction.Logger
 class Module(val index:Int) {
     val io = ModuleIOSpark(index)
     val inputs = LoggedModuleIOInputs()
-    val indexToCorner = mapOf(
-        0 to "FL",
-        1 to "FR",
-        2 to "BL",
-        3 to "BR"
-    )
+    private val indexToCorner = SwerveConstants.indexToCorner
 
     val driveDisconnectedAlert = Alert(
         "Disconnected drive motor on "+indexToCorner[index]+" module.",
@@ -41,14 +36,22 @@ class Module(val index:Int) {
 
         driveDisconnectedAlert.set(!inputs.driveConnected)
         turnDisconnectedAlert.set(!inputs.turnConnected)
+
+        io.updateTurnEncoder()
     }
 
-    fun runSetpoint(state:SwerveModuleState){
+    fun runSetpoint(state:SwerveModuleState):SwerveModuleState{
+        /**
+         * Returns the optimized swerve module state for logging purposes
+         **/
+
         state.optimize(getAngle())
         state.cosineScale(getAngle())
 
         io.setDriveVelocity(state.speedMetersPerSecond/SwerveConstants.WHEEL_RADIUS_METERS)
         io.setTurnPosition(state.angle)
+
+        return state
     }
 
     fun runCharacterization(output:Double){

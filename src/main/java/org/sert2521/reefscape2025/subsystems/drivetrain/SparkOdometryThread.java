@@ -24,6 +24,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.function.DoubleSupplier;
 
 //LMAOOO I am not translating this one
+//I realized that you can have intellij translate it but you still have to debug it so whatever
 
 /**
  * Provides an interface for asynchronously reading high-frequency measurements to a set of queues.
@@ -55,7 +56,7 @@ public class SparkOdometryThread {
 
   public void start() {
     if (timestampQueues.size() > 0) {
-      notifier.startPeriodic(1.0 / SwerveConstants.ODOMETRY_PERIOD);
+      notifier.startPeriodic(1.0 / SwerveConstants.ODOMETRY_FREQUENCY);
     }
   }
 

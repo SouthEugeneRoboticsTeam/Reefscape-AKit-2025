@@ -22,7 +22,9 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.MetaConstants
+import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.math.min
 
 
 object Drivetrain : SubsystemBase() {
@@ -68,6 +70,8 @@ object Drivetrain : SubsystemBase() {
 
         SparkOdometryThread.getInstance().start()
 
+        this.defaultCommand = JoystickDrive()
+
         //I'm putting the auto builder somewhere else because this is ridiculous
     }
 
@@ -83,14 +87,23 @@ object Drivetrain : SubsystemBase() {
 
         odometryLock.unlock()
 
+        if (DriverStation.isDisabled()){
+            for (module in modules){
+                module.stop()
+            }
+        }
+
 
         if (DriverStation.isDisabled()){
-            Logger.recordOutput("SwerveStates/Setpoints", *Array(4){SwerveModuleState()})
-            Logger.recordOutput("SwerveStates/Optimized Setpoints", *Array(4){SwerveModuleState()})
+            Logger.recordOutput("SwerveModuleStates/Setpoints", *Array(4){SwerveModuleState()})
+            Logger.recordOutput("SwerveModuleStates/Optimized Setpoints", *Array(4){SwerveModuleState()})
         }
 
         val sampleTimestamps = modules[0].getOdometryTimestamps()
         val sampleCount = sampleTimestamps.size
+        val gyroSampleCount = gyroInputs.odometryYawTimestamps.size
+        //println(sampleCount)
+        //println(Array(sampleCount){sampleTimestamps[it]-gyroInputs.odometryYawTimestamps[min(it, gyroSampleCount)]})
         for (i in 0..<sampleCount){
             val modulePositions = Array(4){SwerveModulePosition()}
             val moduleDeltas = Array(4){SwerveModulePosition()}
@@ -107,9 +120,10 @@ object Drivetrain : SubsystemBase() {
             if(gyroInputs.connected){
                 rawGyroRotation = gyroInputs.odometryYawPositions[i]
             } else {
-                val twist = kinematics.toTwist2d(moduleDeltas[0], moduleDeltas[1], moduleDeltas[2], moduleDeltas[3])
+                val twist = kinematics.toTwist2d(*moduleDeltas)
                 rawGyroRotation = rawGyroRotation.plus(Rotation2d(twist.dtheta))
             }
+
 
             poseEstimator.updateWithTime(
                 sampleTimestamps[i],
@@ -119,6 +133,9 @@ object Drivetrain : SubsystemBase() {
         }
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
+        Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds())
+        Logger.recordOutput("SwerveModuleStates/Measured", *getModuleStates())
+        Logger.recordOutput("Odometry/Robot Pose", getPose())
     }
 
     fun driveRobotOriented(speeds: ChassisSpeeds){
@@ -127,15 +144,18 @@ object Drivetrain : SubsystemBase() {
         val setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds)
         SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveConstants.MAX_SPEED_MPS)
 
-        Logger.recordOutput("SwerveModules/Setpoints",*setpointStates)
+        Logger.recordOutput("SwerveModuleStates/Setpoints",*setpointStates)
         Logger.recordOutput("SwerveChassisSpeeds/Setpoints",discreteSpeeds)
 
+        val optimizedStates = Array(4) { SwerveModuleState() }
+
         for (i in 0..<4){
-            modules[i].runSetpoint(setpointStates[i])
+            optimizedStates[i] = modules[i].runSetpoint(setpointStates[i])
         }
 
+        Logger.recordOutput("SwerveModuleStates/Optimized Setpoints", *optimizedStates)
 
-        Logger.recordOutput("SwerveStates/SetpointsOptimized",*setpointStates)
+
     }
 
     fun runCharacterization(output:Double){
@@ -170,7 +190,6 @@ object Drivetrain : SubsystemBase() {
             .andThen(sysId.dynamic(direction))
     }
 
-    @AutoLogOutput(key = "SwerveStates/Measured")
     private fun getModuleStates():Array<SwerveModuleState>{
         return Array(4){modules[it].getState()}
     }
@@ -179,7 +198,6 @@ object Drivetrain : SubsystemBase() {
         return Array(4){modules[it].getPosition()}
     }
 
-    @AutoLogOutput(key = "SwerveStates/Measured")
     fun getChassisSpeeds():ChassisSpeeds{
         //THE IDE IS LYING I SWEAR THIS WORKS
         //I'VE ALREADY SPENT HOURS OF MY LIFE TRYING TO STOP THIS FROM HAPPENING
@@ -203,7 +221,6 @@ object Drivetrain : SubsystemBase() {
         return Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec)
     }
 
-    @AutoLogOutput(key = "Odometry/Robot")
     fun getPose():Pose2d{
         return poseEstimator.estimatedPosition
     }

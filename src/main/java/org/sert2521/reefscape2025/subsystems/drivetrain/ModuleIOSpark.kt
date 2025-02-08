@@ -7,9 +7,9 @@ import com.revrobotics.spark.SparkClosedLoopController.ArbFFUnits
 import com.revrobotics.spark.SparkLowLevel.MotorType
 import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkMaxConfig
 import edu.wpi.first.math.MathUtil
+import edu.wpi.first.math.controller.SimpleMotorFeedforward
 import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Rotation2d
 import org.sert2521.reefscape2025.utils.SparkUtil
@@ -17,7 +17,6 @@ import org.sert2521.reefscape2025.utils.SparkUtil.ifOk
 import org.sert2521.reefscape2025.utils.SparkUtil.sparkStickyFault
 import java.util.function.DoubleSupplier
 import kotlin.math.PI
-import kotlin.math.sign
 
 //It was quite the fun exercise to translate this into kotlin
 
@@ -29,6 +28,14 @@ class ModuleIOSpark(module:Int):ModuleIO {
 
     val driveEncoder = driveMotor.encoder
     val turnEncoder = turnMotor.encoder
+
+    val driveFeedforward = SimpleMotorFeedforward(
+        SwerveConstants.DRIVE_KS,
+        SwerveConstants.DRIVE_KV,
+        SwerveConstants.DRIVE_KA
+    )
+
+    var lastVelocity = 0.0
 
     val absEncoder = CANcoder(SwerveConstants.encoderIDs[module])
 
@@ -53,7 +60,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
         val driveConfig = SparkMaxConfig()
 
         driveConfig
-            .idleMode(IdleMode.kBrake)
+            .idleMode(SwerveConstants.moduleIdleMode)
             .smartCurrentLimit(SwerveConstants.DRIVE_CURRENT_LIMIT_TELE)
             .voltageCompensation(12.0)
 
@@ -97,12 +104,12 @@ class ModuleIOSpark(module:Int):ModuleIO {
         val turnConfig = SparkMaxConfig()
         turnConfig
             .inverted(SwerveConstants.TURN_INVERTED)
-            .idleMode(IdleMode.kBrake)
+            .idleMode(SwerveConstants.moduleIdleMode)
             .smartCurrentLimit(SwerveConstants.TURN_CURRENT_LIMIT_TELE)
             .voltageCompensation(12.0)
 
         turnConfig.encoder
-            .inverted(SwerveConstants.TURN_REL_ENCODER_INVERTED)
+            //.inverted(SwerveConstants.TURN_REL_ENCODER_INVERTED)
             .positionConversionFactor(SwerveConstants.TURN_REL_CONVERSION_POSITION)
             .velocityConversionFactor(SwerveConstants.TURN_REL_CONVERSION_VELOCITY)
             .uvwMeasurementPeriod(20)
@@ -169,6 +176,19 @@ class ModuleIOSpark(module:Int):ModuleIO {
             inputs.turnCurrentAmps = it
         }
         inputs.turnConnected = turnConnectedDebounce.calculate(!sparkStickyFault)
+
+
+        inputs.odometryTimestamps =
+            timestampQueue.stream().mapToDouble { it }.toArray()
+        inputs.odometryDrivePositionsRad =
+            drivePositionQueue.stream().mapToDouble { it }.toArray()
+        inputs.odometryTurnPositions =
+            turnPositionQueue.stream()
+                .map { Rotation2d(it).minus(zeroRotation) }
+                    .toArray().filterIsInstance<Rotation2d>().toTypedArray()
+        timestampQueue.clear()
+        drivePositionQueue.clear()
+        turnPositionQueue.clear()
     }
 
     override fun setDriveOpenLoop(output: Double) {
@@ -180,7 +200,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
     }
 
     override fun setDriveVelocity(velocityRadPerSec: Double) {
-        val ffVolts = SwerveConstants.DRIVE_KS*velocityRadPerSec.sign + SwerveConstants.DRIVE_FF*velocityRadPerSec
+        val ffVolts = driveFeedforward.calculate(velocityRadPerSec)
         driveController.setReference(
             velocityRadPerSec,
             SparkBase.ControlType.kVelocity,
@@ -201,14 +221,18 @@ class ModuleIOSpark(module:Int):ModuleIO {
     }
 
     override fun updateTurnEncoder() {
-        if (SwerveConstants.TURN_INVERTED) {
-            turnEncoder.setPosition(
-                SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
-            )
-        } else {
-            turnEncoder.setPosition(
-                -SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION*absEncoder.absolutePosition.valueAsDouble
-            )
-        }
+//        if (SwerveConstants.TURN_INVERTED) {
+//            turnEncoder.setPosition(
+//                SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
+//            )
+//        } else {
+//            turnEncoder.setPosition(
+//                -SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
+//            )
+//        }
+
+        turnEncoder.setPosition(
+            SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
+        )
     }
 }
