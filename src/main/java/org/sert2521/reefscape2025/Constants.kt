@@ -1,12 +1,8 @@
 package org.sert2521.reefscape2025
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile
-import edu.wpi.first.units.BaseUnits.MassUnit
-import edu.wpi.first.units.MassUnit
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Pounds
-import edu.wpi.first.units.measure.Mass
-import edu.wpi.first.units.measure.MomentOfInertia
 import edu.wpi.first.wpilibj.RobotBase
 
 enum class BeamState{
@@ -14,13 +10,20 @@ enum class BeamState{
     BLOCKED
 }
 
+object SetpointConstants{
+    const val WRIST_STOW = 0.0
+    const val WRIST_GROUND = 0.0
+    const val WRIST_L1 = 0.0
+}
+
 object ConfigConstants{
-    val POWER_DEADBAND = 0.0
+    const val POWER_DEADBAND = 0.0
 }
 
 object ElectronicIDs{
     const val DISPENSER_MOTOR_ID = -1
-    const val BEAMBREAK_ID = -1
+    const val BEAMBREAK_DISPENSER = -1
+    const val BEAMBREAK_RAMP = -1
 
     const val ELEVATOR_LEFT_ID = -1
     const val ELEVATOR_RIGHT_ID = -1
@@ -63,7 +66,6 @@ object PhysicalConstants {
 
     val robotMass = Pounds.of(115.0)
     val momentOfInertia = Units.KilogramSquareMeters.of(0.0)
-
 }
 
 object MetaConstants{

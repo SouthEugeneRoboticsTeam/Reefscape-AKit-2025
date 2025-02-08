@@ -1,4 +1,4 @@
-package org.sert2521.reefscape2025.subsystems.grintake
+package org.sert2521.reefscape2025.subsystems.ground_intake
 
 
 import org.team9432.annotation.Logged
@@ -9,11 +9,6 @@ interface GroundIntakeIO {
         var intakeAppliedVolts = 0.0
         var intakeCurrentAmps = 0.0
         var intakeVelocityRPM = 0.0
-
-        var wristAppliedVolts = 0.0
-        var wristCurrentAmps = 0.0
-        var wristVelocityRadPerSec = 0.0
-        var wristPosition = 0.0
     }
 
     fun updateInputs(inputs: GroundIntakeIOInputs) {}
@@ -21,8 +16,4 @@ interface GroundIntakeIO {
     fun setIntakeMotor(speed: Double) {}
 
     fun setIntakeVoltage(voltage: Double) {}
-
-    fun setWristMotor(speed: Double) {}
-
-    fun setWristVoltage(voltage: Double) {}
 }
