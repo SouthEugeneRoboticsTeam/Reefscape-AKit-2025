@@ -236,7 +236,7 @@ object Drivetrain : SubsystemBase() {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose)
     }
 
-    fun doVision(){
+    private fun doVision(){
         val useMegaTag2 = gyroInputs.connected; //set to false to use MegaTag1
         var doRejectUpdate = false;
         if(!useMegaTag2)
