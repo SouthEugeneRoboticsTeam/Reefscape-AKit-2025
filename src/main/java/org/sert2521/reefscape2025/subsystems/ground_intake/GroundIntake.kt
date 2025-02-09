@@ -2,6 +2,8 @@ package org.sert2521.reefscape2025.subsystems.ground_intake
 
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.sert2521.reefscape2025.SetpointConstants.GROUND_INTAKE_SPEED
+import org.sert2521.reefscape2025.SetpointConstants.GROUND_OUTTAKE_SPEED
 
 object GroundIntake : SubsystemBase() {
 
@@ -34,7 +36,19 @@ object GroundIntake : SubsystemBase() {
         return ioInputs.intakeVelocityRPM
     }
 
-    fun stopCommand(): Command {
-        return run{stop()}
+    fun stopCommand():Command {
+        return run{ stop() }
+    }
+
+    fun intakeCommand():Command{
+        return run{
+            setMotor(GROUND_INTAKE_SPEED)
+        }
+    }
+
+    fun outtakeCommand():Command{
+        return run{
+            setMotor(GROUND_OUTTAKE_SPEED)
+        }
     }
 }

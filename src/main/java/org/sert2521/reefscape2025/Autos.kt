@@ -11,10 +11,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.sert2521.reefscape2025.commands.drivetrain.DrivetrainFeedforwardSysId
+import org.sert2521.reefscape2025.commands.elevator.SetElevator
+import org.sert2521.reefscape2025.commands.wrist.SetWrist
+import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
+import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 
 
 object Autos
@@ -22,26 +27,26 @@ object Autos
     private var autoChooser = SendableChooser<Command>()
 
     val namedCommandList = mapOf<String,Command>(
-        "Wrist L1" to Commands.none(),
-        "Wrist Ground" to Commands.none(),
-        "Wrist Stow" to Commands.none(),
-        "Wrist Algae" to Commands.none(),
+        "Wrist L1" to SetWrist(SetpointConstants.WRIST_L1),
+        "Wrist Ground" to SetWrist(SetpointConstants.WRIST_GROUND),
+        "Wrist Stow" to SetWrist(SetpointConstants.WRIST_STOW),
+        "Wrist Algae" to SetWrist(SetpointConstants.WRIST_ALGAE),
 
-        "Wrist Intake" to Commands.none(),
-        "Wrist Outtake" to Commands.none(),
+        "Ground Intake" to GroundIntake.intakeCommand().withTimeout(3.0),
+        "Ground Outtake" to GroundIntake.outtakeCommand().withTimeout(0.2),
 
-        "Elevator Stow" to Commands.none(),
-        "Elevator L2" to Commands.none(),
-        "Elevator L3" to Commands.none(),
-        "Elevator L4" to Commands.none(),
+        "Elevator Stow" to SetElevator(SetpointConstants.ELEVATOR_STOW),
+        "Elevator L2" to SetElevator(SetpointConstants.ELEVATOR_L2),
+        "Elevator L3" to SetElevator(SetpointConstants.ELEVATOR_L3),
+        "Elevator L4" to SetElevator(SetpointConstants.ELEVATOR_L4),
 
         "Dispenser Intake" to Commands.none(),
-        "Dispenser Outtake" to Commands.none(),
+        "Dispenser Outtake" to Dispenser.outtakeCommand().withTimeout(0.2),
 
         "Wait L1 Post-Outtake" to Commands.none(),
-        "Wait L2-4 Pre-Outtake" to Commands.none(),
+        "Wait L2-4 Pre-Outtake" to Commands.waitSeconds(0.4),
         "Wait L2-4 Post-Outtake" to Commands.none(),
-        "Wait Human Player" to Commands.none()
+        "Wait Human Player" to Commands.waitSeconds(1.0)
     )
 
     init{

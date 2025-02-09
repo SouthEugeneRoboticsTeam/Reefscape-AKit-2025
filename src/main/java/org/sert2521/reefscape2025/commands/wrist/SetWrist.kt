@@ -4,10 +4,9 @@ import edu.wpi.first.math.controller.ArmFeedforward
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.wpilibj2.command.Command
 import org.sert2521.reefscape2025.TuningConstants
-import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 import org.sert2521.reefscape2025.subsystems.wrist.Wrist
 
-class RunWrist(private val wristSetPoint:Double) : Command() {
+class SetWrist(private val wristSetPoint:Double) : Command() {
     //Smooth motion stuff
     private val motorPID = PIDController(TuningConstants.WRIST_P, TuningConstants.WRIST_I, TuningConstants.WRIST_D)
     private val feedforward = ArmFeedforward(TuningConstants.WRIST_S, TuningConstants.WRIST_G,
