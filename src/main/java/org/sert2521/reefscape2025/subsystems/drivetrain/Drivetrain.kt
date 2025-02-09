@@ -269,7 +269,7 @@ object Drivetrain : SubsystemBase() {
         }
         else
         {
-            LimelightHelpers.SetRobotOrientation("limelight", poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+            LimelightHelpers.SetRobotOrientation("limelight", poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0);
             val mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
             if(abs(Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec)) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
             {

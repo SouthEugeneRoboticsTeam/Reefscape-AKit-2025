@@ -6,7 +6,6 @@ import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkMaxConfig
 import edu.wpi.first.wpilibj.DigitalInput
-import org.sert2521.reefscape2025.BeamState
 import org.sert2521.reefscape2025.ElectronicIDs.BEAMBREAK_DISPENSER
 import org.sert2521.reefscape2025.ElectronicIDs.BEAMBREAK_RAMP
 import org.sert2521.reefscape2025.ElectronicIDs.DISPENSER_MOTOR_ID
