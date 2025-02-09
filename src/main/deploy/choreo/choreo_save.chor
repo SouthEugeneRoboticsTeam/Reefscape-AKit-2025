@@ -3,7 +3,22 @@
  "version":1,
  "type":"Swerve",
  "variables":{
-  "expressions":{},
+  "expressions":{
+   "startX":{
+    "dimension":"Length",
+    "var":{
+     "exp":"7.146318435668945 m",
+     "val":7.146318435668945
+    }
+   },
+   "hAng":{
+    "dimension":"Angle",
+    "var":{
+     "exp":"55 deg",
+     "val":0.9599310885968813
+    }
+   }
+  },
   "poses":{}
  },
  "config":{

@@ -46,7 +46,8 @@ object Autos
         "Wait L1 Post-Outtake" to Commands.none(),
         "Wait L2-4 Pre-Outtake" to Commands.waitSeconds(0.4),
         "Wait L2-4 Post-Outtake" to Commands.none(),
-        "Wait Human Player" to Commands.waitSeconds(1.0)
+        "Wait Human Player" to Commands.waitSeconds(1.0),
+        "Wait Dispenser" to Commands.waitUntil{!Dispenser.getBlocked()}
     )
 
     init{
