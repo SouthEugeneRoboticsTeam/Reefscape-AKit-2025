@@ -1,0 +1,206 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center - Push 3pc.0"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator L4"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center - Push 3pc.1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Pre-Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dispenser Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Post-Outtake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Center - Push 3pc.2"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait Human Player"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Center - Push 3pc.3"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator Stow"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Dispenser Intake"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator L4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Pre-Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dispenser Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Post-Outtake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Center - Push 3pc.4"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait Human Player"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Center - Push 3pc.5"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator Stow"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Dispenser Intake"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator L4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Pre-Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dispenser Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Post-Outtake"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": true
+}
