@@ -5,14 +5,15 @@ import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.config.ModuleConfig
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
-import com.pathplanner.lib.controllers.PathFollowingController
-import edu.wpi.first.math.controller.HolonomicDriveController
+import com.pathplanner.lib.pathfinding.Pathfinding
+import com.pathplanner.lib.util.PathPlannerLogging
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
-import edu.wpi.first.wpilibj2.command.WaitCommand
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.commands.drivetrain.DrivetrainFeedforwardSysId
 import org.sert2521.reefscape2025.commands.elevator.SetElevator
 import org.sert2521.reefscape2025.commands.wrist.SetWrist
@@ -20,7 +21,7 @@ import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
-
+import org.sert2521.reefscape2025.utils.LocalADStarAK
 
 object Autos
 {
@@ -47,7 +48,8 @@ object Autos
         "Wait L2-4 Pre-Outtake" to Commands.waitSeconds(0.4),
         "Wait L2-4 Post-Outtake" to Commands.none(),
         "Wait Human Player" to Commands.waitSeconds(1.0),
-        "Wait Dispenser" to Commands.waitUntil{!Dispenser.getBlocked()}
+        "Wait Dispenser" to Commands.waitSeconds(2.0)
+            .andThen(Commands.waitUntil{!Dispenser.getBlocked()})
     )
 
     init{
@@ -77,6 +79,16 @@ object Autos
             ),
             {false}
         )
+        Pathfinding.setPathfinder(LocalADStarAK())
+        PathPlannerLogging.setLogActivePathCallback { activePath:List<Pose2d> ->
+            Logger.recordOutput(
+                "Odometry/Trajectory", activePath.toTypedArray()
+            )
+        }
+
+        PathPlannerLogging.setLogTargetPoseCallback { targetPose: Pose2d? ->
+            Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose)
+        }
 
         autoChooser = AutoBuilder.buildAutoChooser()
 
