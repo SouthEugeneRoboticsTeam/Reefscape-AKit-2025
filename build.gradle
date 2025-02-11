@@ -164,6 +164,11 @@ task(eventDeploy) {
                 println "Committed to branch: '$branch'"
                 println "Commit message: '$commitMessage'"
             } else {
+                exec {
+                    workingDir(projectDir)
+                    executable 'git'
+                    args 'add', '-A'
+                }
                 println "Not on an event branch, skipping commit"
             }
         } else {
