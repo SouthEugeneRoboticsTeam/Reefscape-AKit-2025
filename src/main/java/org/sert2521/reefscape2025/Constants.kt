@@ -83,6 +83,7 @@ object MetaConstants{
         REPLAY
     }
 
-    val simMode = Mode.REPLAY
+    val atEvent = false
+    private val simMode = Mode.REPLAY
     val currentMode = if (RobotBase.isReal()) Mode.REAL else simMode
 }

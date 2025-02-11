@@ -3,7 +3,6 @@ package org.sert2521.reefscape2025.subsystems.drivetrain
 import edu.wpi.first.hal.FRCNetComm
 import edu.wpi.first.hal.HAL
 import edu.wpi.first.math.Matrix
-import edu.wpi.first.math.VecBuilder
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
@@ -35,6 +34,9 @@ object Drivetrain : SubsystemBase() {
 
     private val gyroInputs = LoggedGyroIOInputs()
     private val gyroIO = GyroIONavX()
+
+    private val visionInputs = LoggedVisionIOInputs()
+    private val visionIO = VisionIOLimelight()
 
     private val modules = arrayOf(Module(0), Module(1), Module(2), Module(3))
 
@@ -80,6 +82,7 @@ object Drivetrain : SubsystemBase() {
         odometryLock.lock()
 
         gyroIO.updateInputs(gyroInputs)
+        visionIO.updateInputs(visionInputs)
         Logger.processInputs("Drive/Gyro", gyroInputs)
 
         for (module in modules){
@@ -135,7 +138,9 @@ object Drivetrain : SubsystemBase() {
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
 
-        doVision()
+        if (!visionInputs.rejectEstimation){
+            addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV)
+        }
         Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds())
         Logger.recordOutput("SwerveModuleStates/Measured", *getModuleStates())
         Logger.recordOutput("Odometry/Robot Pose", getPose())
@@ -221,7 +226,7 @@ object Drivetrain : SubsystemBase() {
     }
 
     fun getGyroRateDegrees():Double{
-        return Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec)
+        return abs(Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec))
     }
 
     fun getPose():Pose2d{
@@ -236,58 +241,6 @@ object Drivetrain : SubsystemBase() {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose)
     }
 
-    private fun doVision(){
-        val useMegaTag2 = gyroInputs.connected; //set to false to use MegaTag1
-        var doRejectUpdate = false;
-        if(!useMegaTag2)
-        {
-            val mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-
-            if(mt1.tagCount == 1 && mt1.rawFiducials.size == 1)
-            {
-                if(mt1.rawFiducials[0].ambiguity > .7)
-                {
-                    doRejectUpdate = true;
-                }
-                if(mt1.rawFiducials[0].distToCamera > 3)
-                {
-                    doRejectUpdate = true;
-                }
-            }
-            if(mt1.tagCount == 0)
-            {
-                doRejectUpdate = true;
-            }
-
-            if(!doRejectUpdate)
-            {
-                addVisionMeasurement(
-                    mt1.pose,
-                    mt1.timestampSeconds,
-                    SwerveConstants.LIMELIGHT_STDV);
-            }
-        }
-        else
-        {
-            LimelightHelpers.SetRobotOrientation("limelight", poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0.0, 0.0, 0.0, 0.0, 0.0);
-            val mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-            if(abs(Units.radiansToDegrees(gyroInputs.yawVelocityRadPerSec)) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-            {
-                doRejectUpdate = true;
-            }
-            if(mt2.tagCount == 0)
-            {
-                doRejectUpdate = true;
-            }
-            if(!doRejectUpdate)
-            {
-                addVisionMeasurement(
-                    mt2.pose,
-                    mt2.timestampSeconds,
-                    SwerveConstants.LIMELIGHT_STDV);
-            }
-        }
-    }
 
 
     fun addVisionMeasurement(visionEstimationMeters:Pose2d, timestampSeconds:Double,
@@ -301,5 +254,9 @@ object Drivetrain : SubsystemBase() {
 
     fun getMaxSpeedMPS():Double{
         return SwerveConstants.MAX_SPEED_MPS
+    }
+
+    fun getGyroConnected():Boolean{
+        return gyroInputs.connected
     }
 }
