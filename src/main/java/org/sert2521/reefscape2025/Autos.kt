@@ -8,6 +8,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import com.pathplanner.lib.pathfinding.Pathfinding
 import com.pathplanner.lib.util.PathPlannerLogging
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
@@ -22,6 +23,7 @@ import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 import org.sert2521.reefscape2025.utils.LocalADStarAK
+import java.sql.Array
 
 object Autos
 {
@@ -82,11 +84,11 @@ object Autos
         Pathfinding.setPathfinder(LocalADStarAK())
         PathPlannerLogging.setLogActivePathCallback { activePath:List<Pose2d> ->
             Logger.recordOutput(
-                "Odometry/Trajectory", activePath.toTypedArray()
+                "Odometry/Trajectory", *activePath.toTypedArray()
             )
         }
 
-        PathPlannerLogging.setLogTargetPoseCallback { targetPose: Pose2d? ->
+        PathPlannerLogging.setLogTargetPoseCallback { targetPose: Pose2d ->
             Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose)
         }
 
