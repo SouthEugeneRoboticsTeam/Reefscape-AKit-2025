@@ -12,8 +12,24 @@ object Dispenser : SubsystemBase() {
     private val io = DispenserIOSpark()
     private val ioInputs = LoggedDispenserIOInputs()
 
+    private val rampBeambreakFunctionalNT = LoggedNetworkBoolean("Dispenser/Ramp Beambreak Working")
+    private val dispenserBeambreakFunctionNT = LoggedNetworkBoolean("Dispenser/Dispenser Beambreak Working")
+
+    private val defaultBothWorking = idleDispenserCommand()
+    private val defaultRampWorking = idleDispenserBeambreakNonfunctional()
+    private val defaultDispenserWorking = idleRampBeambreakNonfunctional()
+    private val defaultNeitherWorking = run{ stop() }
+
+
+
+    init{
+        defaultCommand = defaultBothWorking
+    }
+
     override fun periodic() {
         io.updateInputs(ioInputs)
+
+
     }
 
     fun setVoltage(voltage:Double){
@@ -45,8 +61,6 @@ object Dispenser : SubsystemBase() {
     fun getVelocity():Double{
         return ioInputs.velocityRPM
     }
-
-
 
 
 
