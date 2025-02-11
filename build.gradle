@@ -141,7 +141,7 @@ gversion {
 }
 
 // Create commit with working changes on event branches
-task(eventDeploy) {
+tasks.register('eventDeploy') {
     doLast {
         if (project.gradle.startParameter.taskNames.any({ it.toLowerCase().contains("deploy") })) {
             def branchPrefix = "event"
@@ -166,12 +166,6 @@ task(eventDeploy) {
             } else {
                 println "Not on an event branch, skipping commit"
             }
-        } else if (project.gradle.startParameter.taskNames.any({ it.toLowerCase().contains("build") })) {
-            //exec {
-                //workingDir(projectDir)
-                //executable 'git'
-                //args 'add', '-A'
-            //}
         } else {
             println "Not running deploy or build task, skipping commit"
         }
