@@ -3,6 +3,7 @@ package org.sert2521.reefscape2025
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Joystick
+import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.reefscape2025.commands.dispenser.DispenserOuttake
@@ -12,6 +13,7 @@ import org.sert2521.reefscape2025.commands.ground_intake.Intake
 import org.sert2521.reefscape2025.commands.ground_intake.Outtake
 import org.sert2521.reefscape2025.commands.wrist.SetWrist
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
+import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 
 // Bindings:
 // Gunner:
@@ -48,7 +50,7 @@ object Input {
     // Button Assignment:
     // Drivetrain:
     private val resetDrivetrain = driverController.y()
-    private val visionAlign = driverController.x()
+    private val visionAlign = driverController.a()
 
     // Wrist:
     private val wristGround = JoystickButton(gunnerController, 12)
@@ -81,7 +83,7 @@ object Input {
 
         // Command Assignment
         // Drivetrain
-            // resetDrivetrain.onTrue(runOnce({ Drivetrain.setPose(Pose2d()) }))
+        resetDrivetrain.onTrue(runOnce({ rotationOffset=Drivetrain.getPose().rotation }))
             // visionAlign.whileTrue(VisionAlign())
 
         // Wrist
