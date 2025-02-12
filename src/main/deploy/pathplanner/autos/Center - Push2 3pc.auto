@@ -89,7 +89,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Dispenser Intake"
+                        "name": "Wait Dispenser"
                       }
                     },
                     {
@@ -114,12 +114,6 @@
           "type": "named",
           "data": {
             "name": "Dispenser Outtake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait L2-4 Post-Outtake"
           }
         },
         {
@@ -164,7 +158,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Dispenser Intake"
+                        "name": "Wait Dispenser"
                       }
                     },
                     {

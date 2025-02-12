@@ -24,12 +24,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Dispenser Outtake"
@@ -69,28 +63,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "parallel",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Wrist Stow"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "Elevator Stow"
-                            }
-                          }
-                        ]
+                        "name": "Elevator Stow"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "Dispenser Intake"
+                        "name": "Wait Dispenser"
                       }
                     },
                     {
@@ -103,12 +84,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
           }
         },
         {
@@ -159,7 +134,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Dispenser Intake"
+                        "name": "Wait Dispenser"
                       }
                     },
                     {
@@ -172,12 +147,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
           }
         },
         {
@@ -228,7 +197,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Dispenser Intake"
+                        "name": "Wait Dispenser"
                       }
                     },
                     {
@@ -241,12 +210,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.15
           }
         },
         {
@@ -297,7 +260,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Dispenser Intake"
+                        "name": "Wait Dispenser"
                       }
                     },
                     {
@@ -313,9 +276,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.15
+            "name": "Dispenser Outtake"
           }
         }
       ]

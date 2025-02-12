@@ -34,40 +34,40 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "LC-4-L4.1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator Stow"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait Human Player"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LC-4-L4.2"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "LC-4-L4.1"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait Human Player"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "LC-4-L4.2"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "sequential",
                 "data": {
                   "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator Stow"
+                      }
+                    },
                     {
                       "type": "named",
                       "data": {
@@ -84,6 +84,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Pre-Outtake"
           }
         },
         {
@@ -97,40 +103,40 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "LC-4-L4.3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator Stow"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait Human Player"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LC-4-L4.4"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "LC-4-L4.3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait Human Player"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "LC-4-L4.4"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "sequential",
                 "data": {
                   "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator Stow"
+                      }
+                    },
                     {
                       "type": "named",
                       "data": {
@@ -147,6 +153,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Pre-Outtake"
           }
         },
         {
@@ -160,40 +172,40 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "LC-4-L4.5"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Elevator Stow"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait Human Player"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "LC-4-L4.6"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "LC-4-L4.5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait Human Player"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "LC-4-L4.6"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "sequential",
                 "data": {
                   "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Elevator Stow"
+                      }
+                    },
                     {
                       "type": "named",
                       "data": {
@@ -210,6 +222,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Pre-Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dispenser Outtake"
           }
         }
       ]
