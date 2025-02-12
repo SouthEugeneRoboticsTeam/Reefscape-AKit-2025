@@ -42,12 +42,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Wait L1 Post-Outtake"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
