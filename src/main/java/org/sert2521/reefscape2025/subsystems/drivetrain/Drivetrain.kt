@@ -146,6 +146,8 @@ object Drivetrain : SubsystemBase() {
         Logger.recordOutput("Odometry/Robot Pose", getPose())
     }
 
+    /* === Setters === */
+
     fun driveRobotOriented(speeds: ChassisSpeeds){
         val discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02)
 
@@ -198,6 +200,17 @@ object Drivetrain : SubsystemBase() {
             .andThen(sysId.dynamic(direction))
     }
 
+    fun addVisionMeasurement(visionEstimationMeters:Pose2d, timestampSeconds:Double,
+                             visionMeasurementsStDev: Matrix<N3, N1>){
+        poseEstimator.addVisionMeasurement(
+            visionEstimationMeters,
+            timestampSeconds,
+            visionMeasurementsStDev
+        )
+    }
+
+    /* == Getters == */
+
     private fun getModuleStates():Array<SwerveModuleState>{
         return Array(4){modules[it].getState()}
     }
@@ -237,19 +250,8 @@ object Drivetrain : SubsystemBase() {
         return getPose().rotation
     }
 
-    fun setPose(pose:Pose2d){
+    fun setPose(pose:Pose2d) {
         poseEstimator.resetPosition(rawGyroRotation, getModulePositions(), pose)
-    }
-
-
-
-    fun addVisionMeasurement(visionEstimationMeters:Pose2d, timestampSeconds:Double,
-                             visionMeasurementsStDev: Matrix<N3, N1>){
-        poseEstimator.addVisionMeasurement(
-            visionEstimationMeters,
-            timestampSeconds,
-            visionMeasurementsStDev
-        )
     }
 
     fun getMaxSpeedMPS():Double{

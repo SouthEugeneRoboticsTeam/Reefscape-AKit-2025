@@ -3,17 +3,15 @@ package org.sert2521.reefscape2025
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Joystick
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
-import org.sert2521.reefscape2025.commands.dispenser.DispenserOuttake
-import org.sert2521.reefscape2025.commands.dispenser.DispenserRecenter
 import org.sert2521.reefscape2025.commands.elevator.SetElevator
-import org.sert2521.reefscape2025.commands.ground_intake.Intake
-import org.sert2521.reefscape2025.commands.ground_intake.Outtake
 import org.sert2521.reefscape2025.commands.wrist.SetWrist
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
+import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 
 // Bindings:
 // Gunner:
@@ -93,26 +91,35 @@ object Input {
             wristGround.onTrue(SetWrist(SetpointConstants.WRIST_GROUND))
 
         // Wrist Rollers
-            wristRollerIntake.whileTrue(Intake())
-            wristRollerOuttakeDriver.whileTrue(Intake())
-            wristRollerOuttakeGunner.whileTrue(Outtake())
+            wristRollerIntake.whileTrue(GroundIntake.intakeCommand())
+            wristRollerOuttakeDriver.whileTrue(GroundIntake.outtakeCommand())
+            wristRollerOuttakeGunner.whileTrue(GroundIntake.outtakeCommand())
 
         // Elevator
-            elevatorStow.onTrue(SetElevator(SetpointConstants.ELEVATOR_STOW))
-            elevatorL2.onTrue(SetElevator(SetpointConstants.ELEVATOR_L2).onlyWhile({!Dispenser.getBlocked()}))
-            elevatorL3.onTrue(SetElevator(SetpointConstants.ELEVATOR_L3).onlyWhile({!Dispenser.getBlocked()}))
-            elevatorL4.onTrue(SetElevator(SetpointConstants.ELEVATOR_L4).onlyWhile({!Dispenser.getBlocked()}))
+            elevatorStow.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+                .andThen(
+                    SetElevator(SetpointConstants.ELEVATOR_STOW)
+                        .until{ Dispenser.getBlocked() }))
+            elevatorL2.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+                .andThen(SetElevator(SetpointConstants.ELEVATOR_L2)
+                    .until { Dispenser.getBlocked() }))
+            elevatorL3.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+                .andThen(SetElevator(SetpointConstants.ELEVATOR_L3)
+                    .until { Dispenser.getBlocked() }))
+            elevatorL4.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+                .andThen(SetElevator(SetpointConstants.ELEVATOR_L4)
+                    .until { Dispenser.getBlocked() }))
             // toggleElevatorSafe.onTrue(runOnce({Elevator.toggleSafeMode()}))
 
         // Dispenser
             // dispenserManualIntake.onTrue(DispenserManualIntake())
-            dispenserOuttake.whileTrue(DispenserOuttake())
-            dispenserReset.onTrue(DispenserRecenter())
+            dispenserOuttake.whileTrue(Dispenser.outtakeCommand())
+            dispenserReset.onTrue(Dispenser.recenterCommand())
             // toggleAutomaticIntake.onTrue(runOnce({Dispenser.changeIntakeMode()}))
 
     }
 
-    var rotationOffset = Rotation2d(0.0)
+    private var rotationOffset = Rotation2d(0.0)
 
     fun getJoystickX():Double{ return -driverController.leftX }
 

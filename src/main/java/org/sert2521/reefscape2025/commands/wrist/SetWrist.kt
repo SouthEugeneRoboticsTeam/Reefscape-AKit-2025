@@ -33,8 +33,4 @@ class SetWrist(private val wristSetPoint:Double) : Command() {
     override fun isFinished(): Boolean {
         return motorPID.atSetpoint()
     }
-
-    override fun end(interrupted: Boolean) {
-        Wrist.stop()
-    }
 }

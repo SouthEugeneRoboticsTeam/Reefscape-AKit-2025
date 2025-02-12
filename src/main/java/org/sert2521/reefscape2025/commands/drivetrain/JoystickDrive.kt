@@ -19,7 +19,7 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : Command() {
     val joystickY = Input::getJoystickY
     val joystickZ = Input::getJoystickZ
 
-    val inputRotOffset = Input::getRotationOffset
+    val inputRotOffset = Input::getRotOffset
 
 
 

@@ -7,6 +7,7 @@ import org.sert2521.reefscape2025.commands.wrist.HoldWrist
 object Wrist : SubsystemBase() {
     private val io = WristIOSpark()
     private val ioInputs = LoggedWristIOInputs()
+
     var goal = SetpointConstants.WRIST_STOW
 
     init{
