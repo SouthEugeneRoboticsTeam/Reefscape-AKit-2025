@@ -39,6 +39,7 @@ object Autos
         "Ground Intake" to GroundIntake.intakeCommand().withTimeout(3.0).asProxy(),
         "Ground Outtake" to GroundIntake.outtakeCommand().withTimeout(0.2).asProxy(),
 
+
         "Elevator Stow" to SetElevator(SetpointConstants.ELEVATOR_STOW).asProxy(),
         "Elevator L2" to SetElevator(SetpointConstants.ELEVATOR_L2).asProxy(),
         "Elevator L3" to SetElevator(SetpointConstants.ELEVATOR_L3).asProxy(),

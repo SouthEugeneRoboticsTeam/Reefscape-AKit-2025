@@ -11,10 +11,14 @@ interface ElevatorIO {
 
         var laserPosition = 0.0
         var laserVelocity = 0.0
+
+        var motorPosition = 0.0
     }
 
-    fun updateInputs(inputs:ElevatorIOInputs) {}
+    fun updateInputs(inputs:ElevatorIOInputs)
 
-    fun setVoltage(voltage:Double){}
+    fun setVoltage(voltage:Double)
+
+    fun setEncoder(encoderValue:Double)
 
 }
