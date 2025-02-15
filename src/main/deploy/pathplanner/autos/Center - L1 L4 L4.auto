@@ -30,12 +30,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Wait L1 Post-Outtake"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -90,7 +84,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Dispenser Intake"
+                        "name": "Wait Dispenser"
                       }
                     },
                     {
@@ -103,6 +97,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait L2-4 Pre-Outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dispenser Outtake"
           }
         },
         {
@@ -147,7 +153,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Dispenser Intake"
+                        "name": "Wait Dispenser"
                       }
                     },
                     {
