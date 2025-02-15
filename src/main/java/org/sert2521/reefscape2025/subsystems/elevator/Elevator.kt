@@ -1,6 +1,7 @@
 package org.sert2521.reefscape2025.subsystems.elevator
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants
 
 object Elevator : SubsystemBase() {
@@ -11,6 +12,7 @@ object Elevator : SubsystemBase() {
 
     override fun periodic() {
         io.updateInputs(ioInputs)
+        Logger.processInputs("Elevator", ioInputs)
     }
 
     fun setVoltage(voltage:Double){

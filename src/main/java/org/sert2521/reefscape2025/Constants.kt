@@ -29,18 +29,18 @@ object ConfigConstants{
 }
 
 object ElectronicIDs{
-    const val DISPENSER_MOTOR_ID = -1
-    const val BEAMBREAK_DISPENSER = -1
-    const val BEAMBREAK_RAMP = -1
+    const val DISPENSER_MOTOR_ID = 15
+    const val BEAMBREAK_DISPENSER = 9
+    const val BEAMBREAK_RAMP = 1
 
-    const val ELEVATOR_LEFT_ID = -1
-    const val ELEVATOR_RIGHT_ID = -1
+    const val ELEVATOR_LEFT_ID = 13
+    const val ELEVATOR_RIGHT_ID = 14
 
-    const val GROUNDINTAKE_MOTOR_ID = -1
-    const val WRIST_MOTOR_ID = -1
-    const val WRIST_ABS_ENCODER = -1
+    const val GROUNDINTAKE_MOTOR_ID = 17
+    const val WRIST_MOTOR_ID = 16
+    const val WRIST_ABS_ENCODER = 18
 
-    const val LASER_ID = -1
+    const val LASER_ID = 19
 }
 
 object TuningConstants{

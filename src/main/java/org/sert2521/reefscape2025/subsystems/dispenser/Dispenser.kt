@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
+import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean
 import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_INTAKE_SPEED
 import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_SPEED
@@ -41,6 +42,7 @@ object Dispenser : SubsystemBase() {
 
     override fun periodic() {
         io.updateInputs(ioInputs)
+        Logger.processInputs("Dispenser", ioInputs)
     }
 
     fun setVoltage(voltage:Double){

@@ -1,6 +1,7 @@
 package org.sert2521.reefscape2025.subsystems.wrist
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.commands.wrist.HoldWrist
 
@@ -16,6 +17,7 @@ object Wrist : SubsystemBase() {
 
     override fun periodic(){
         io.updateInputs(ioInputs)
+        Logger.processInputs("Wrist/Pivot", ioInputs)
     }
 
     fun setVoltage(voltage:Double){

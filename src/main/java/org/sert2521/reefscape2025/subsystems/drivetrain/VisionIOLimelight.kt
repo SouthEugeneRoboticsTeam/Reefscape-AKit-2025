@@ -44,18 +44,20 @@ class VisionIOLimelight: VisionIO {
         else
         {
             LimelightHelpers.SetRobotOrientation("limelight", Drivetrain.getPose().rotation.degrees, 0.0, 0.0, 0.0, 0.0, 0.0);
-            val mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+            val mt2:LimelightHelpers.PoseEstimate? = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
             if(Drivetrain.getGyroRateDegrees() > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
             {
                 doRejectUpdate = true;
             }
-            if(mt2.tagCount == 0)
+            if(mt2 == null){
+                doRejectUpdate = true
+            }else if(mt2.tagCount == 0)
             {
                 doRejectUpdate = true;
             }
             if(!doRejectUpdate)
             {
-                inputs.estimatedPosition = mt2.pose
+                inputs.estimatedPosition = mt2!!.pose
                 inputs.timestamp = mt2.timestampSeconds
                 inputs.rejectEstimation = false
             } else {

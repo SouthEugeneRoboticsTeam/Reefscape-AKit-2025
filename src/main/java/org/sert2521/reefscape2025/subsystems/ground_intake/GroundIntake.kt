@@ -2,6 +2,7 @@ package org.sert2521.reefscape2025.subsystems.ground_intake
 
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants.GROUND_INTAKE_SPEED
 import org.sert2521.reefscape2025.SetpointConstants.GROUND_OUTTAKE_SPEED
 
@@ -17,6 +18,7 @@ object GroundIntake : SubsystemBase() {
     //Updates inputs ig
     override fun periodic() {
         io.updateInputs(ioInputs)
+        Logger.processInputs("Wrist/Rollers", ioInputs)
     }
 
     //Intake functions

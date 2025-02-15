@@ -13,7 +13,7 @@ object SwerveConstants {
 
     //set value to IdleMode.kBrake when actually running drivetrain
     //set value to IdleMode.kCoast when testing, makes modules easier to turn by hand
-    val moduleIdleMode = IdleMode.kCoast
+    val moduleIdleMode = IdleMode.kBrake
 
     val moduleZeroRotations = arrayOf(
         Rotation2d(-2.992),
@@ -40,8 +40,8 @@ object SwerveConstants {
     const val TURN_INVERTED = true
     const val TURN_REL_ENCODER_INVERTED = false
 
-    const val DRIVE_CURRENT_LIMIT_TELE = 0
-    const val TURN_CURRENT_LIMIT_TELE = 0
+    const val DRIVE_CURRENT_LIMIT_TELE = 40
+    const val TURN_CURRENT_LIMIT_TELE = 30
 
     const val DRIVE_CURRENT_LIMIT_AUTO = 0
     const val TURN_CURRENT_LIMIT_AUTO = 0
@@ -60,9 +60,12 @@ object SwerveConstants {
     const val DRIVE_P = 0.0
     const val DRIVE_I = 0.0
     const val DRIVE_D = 0.0
-
-    const val DRIVE_KS = 0.29899
-    const val DRIVE_KV = 0.11812
+//kS: 0.27859
+//kV: 0.13335
+    //kS: 0.29108
+// kV: 0.13158
+    const val DRIVE_KS = 0.29108
+    const val DRIVE_KV = 0.13158
     const val DRIVE_KA = 0.0
 
     const val TURN_P = 1.0

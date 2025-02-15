@@ -85,15 +85,15 @@ object Input {
             // visionAlign.whileTrue(VisionAlign())
 
         // Wrist
-            wristStow.onTrue(SetWrist(SetpointConstants.WRIST_STOW))
-            wristL1.onTrue(SetWrist(SetpointConstants.WRIST_L1))
-            wristAlgae.onTrue(SetWrist(SetpointConstants.WRIST_ALGAE))
-            wristGround.onTrue(SetWrist(SetpointConstants.WRIST_GROUND))
+//            wristStow.onTrue(SetWrist(SetpointConstants.WRIST_STOW))
+//            wristL1.onTrue(SetWrist(SetpointConstants.WRIST_L1))
+//            wristAlgae.onTrue(SetWrist(SetpointConstants.WRIST_ALGAE))
+//            wristGround.onTrue(SetWrist(SetpointConstants.WRIST_GROUND))
 
         // Wrist Rollers
-            wristRollerIntake.whileTrue(GroundIntake.intakeCommand())
-            wristRollerOuttakeDriver.whileTrue(GroundIntake.outtakeCommand())
-            wristRollerOuttakeGunner.whileTrue(GroundIntake.outtakeCommand())
+//            wristRollerIntake.whileTrue(GroundIntake.intakeCommand())
+//            wristRollerOuttakeDriver.whileTrue(GroundIntake.outtakeCommand())
+//            wristRollerOuttakeGunner.whileTrue(GroundIntake.outtakeCommand())
 
         // Elevator
             elevatorStow.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}

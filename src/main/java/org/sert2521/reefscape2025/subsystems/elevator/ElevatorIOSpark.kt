@@ -39,10 +39,10 @@ class ElevatorIOSpark:ElevatorIO {
     }
 
     override fun updateInputs(inputs: ElevatorIO.ElevatorIOInputs) {
-        inputs.currentAmps = (leftMotor.outputCurrent + rightMotor.outputCurrent)/2
+        inputs.currentAmps = (leftMotor.outputCurrent + rightMotor.outputCurrent) / 2
         inputs.appliedVolts = (leftMotor.busVoltage * leftMotor.appliedOutput + rightMotor.busVoltage * rightMotor.appliedOutput)/2
         inputs.laserPosition = distanceSensor.distance.value.`in`(Units.Meters)
-        inputs.laserVelocity = (leftMotor.encoder.velocity + rightMotor.encoder.velocity)/2
+        inputs.laserVelocity = (leftMotor.encoder.velocity + rightMotor.encoder.velocity) / 2
     }
 
     override fun setVoltage(voltage: Double) {

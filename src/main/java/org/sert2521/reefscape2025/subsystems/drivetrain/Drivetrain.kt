@@ -84,6 +84,7 @@ object Drivetrain : SubsystemBase() {
         gyroIO.updateInputs(gyroInputs)
         visionIO.updateInputs(visionInputs)
         Logger.processInputs("Drive/Gyro", gyroInputs)
+        Logger.processInputs("Drive/Vision", visionInputs)
 
         for (module in modules){
             module.periodic()
