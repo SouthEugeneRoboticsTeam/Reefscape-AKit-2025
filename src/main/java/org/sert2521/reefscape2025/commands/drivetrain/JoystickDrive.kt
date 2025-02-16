@@ -1,5 +1,6 @@
 package org.sert2521.reefscape2025.commands.drivetrain
 
+import edu.wpi.first.math.filter.SlewRateLimiter
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
@@ -32,8 +33,6 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : Command() {
         var x = joystickX()
         var y = joystickY()
 
-
-
         val angle = atan2(y, x)
 
 
@@ -65,14 +64,25 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : Command() {
             Drivetrain.stop()
         }
         else if (fieldOriented) {
-            Drivetrain.driveRobotOriented(
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                    newY * SwerveConstants.DRIVE_SPEED,
-                    newX * SwerveConstants.DRIVE_SPEED,
-                    joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
-                    Drivetrain.getPose().rotation.minus(inputRotOffset())
+            if (Input.getSlowMode()){
+                Drivetrain.driveRobotOriented(
+                    ChassisSpeeds.fromFieldRelativeSpeeds(
+                        newY * SwerveConstants.DRIVE_SPEED,
+                        newX * SwerveConstants.DRIVE_SPEED,
+                        joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
+                        Drivetrain.getPose().rotation.minus(inputRotOffset())
+                    )
                 )
-            )
+            } else {
+                Drivetrain.driveRobotOriented(
+                    ChassisSpeeds.fromFieldRelativeSpeeds(
+                        newY * SwerveConstants.DRIVE_SPEED,
+                        newX * SwerveConstants.DRIVE_SPEED,
+                        joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
+                        Drivetrain.getPose().rotation.minus(inputRotOffset())
+                    )
+                )
+            }
         }
         else {
             Drivetrain.driveRobotOriented(

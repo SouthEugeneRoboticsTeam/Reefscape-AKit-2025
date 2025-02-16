@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
+import org.sert2521.reefscape2025.commands.elevator.RemoveAlgae
 import org.sert2521.reefscape2025.commands.elevator.SetElevator
 import org.sert2521.reefscape2025.commands.wrist.SetWrist
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
@@ -66,6 +67,7 @@ object Input {
     private val elevatorL2 = JoystickButton(gunnerController, 7)
     private val elevatorL3 = JoystickButton(gunnerController, 6)
     private val elevatorL4 = JoystickButton(gunnerController, 5)
+    private val elevatorAlgae = JoystickButton(gunnerController, 9)
     private val toggleElevatorSafe = JoystickButton(gunnerController, 15)
 
     // Dispenser:
@@ -109,11 +111,16 @@ object Input {
             elevatorL4.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
                 .andThen(SetElevator(SetpointConstants.ELEVATOR_L4)
                     .until { Dispenser.getBlocked() }))
+            elevatorAlgae.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+                .andThen(SetElevator(SetpointConstants.ELEVATOR_ALGAE))
+                    .until { Dispenser.getBlocked() }.andThen(RemoveAlgae())
+                    .until { Dispenser.getBlocked() })
             // toggleElevatorSafe.onTrue(runOnce({Elevator.toggleSafeMode()}))
 
         // Dispenser
             // dispenserManualIntake.onTrue(DispenserManualIntake())
-            dispenserOuttake.whileTrue(Dispenser.outtakeCommand())
+            dispenserOuttake.whileTrue(Dispenser.outtakeCommand().withTimeout(0.1)
+                .andThen(Dispenser.stopCommand().withTimeout(0.4)))
             dispenserReset.onTrue(Dispenser.recenterCommand())
             // toggleAutomaticIntake.onTrue(runOnce({Dispenser.changeIntakeMode()}))
 
@@ -128,6 +135,8 @@ object Input {
     fun getJoystickZ():Double { return -driverController.rightX }
 
     fun getRotOffset(): Rotation2d { return rotationOffset }
+
+    fun getSlowMode():Boolean { return driverController.leftBumper().asBoolean}
 
     fun setRumble(amount: Double) { driverController.setRumble(GenericHID.RumbleType.kBothRumble, amount) }
 }

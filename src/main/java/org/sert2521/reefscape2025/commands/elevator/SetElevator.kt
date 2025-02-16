@@ -3,6 +3,7 @@ package org.sert2521.reefscape2025.commands.elevator
 import edu.wpi.first.math.controller.ElevatorFeedforward
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.controller.ProfiledPIDController
+import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj2.command.Command
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger

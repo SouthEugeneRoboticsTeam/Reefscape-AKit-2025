@@ -24,7 +24,7 @@ class ElevatorIOSpark:ElevatorIO {
     val rightConfig = SparkMaxConfig()
 
     val distanceSensor = CANrange(LASER_ID)
-    val rollingAverage = LinearFilter.movingAverage(4)
+
 
     init{
         leftConfig
@@ -32,16 +32,16 @@ class ElevatorIOSpark:ElevatorIO {
             .smartCurrentLimit(40)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
         .encoder
-            .positionConversionFactor(1.0)//0.02328333333)
-            .velocityConversionFactor(1.0)//0.02328333333)
+            .positionConversionFactor(0.02328333333)
+            .velocityConversionFactor(0.02328333333/60.0)
 
         rightConfig
             .smartCurrentLimit(40)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
             .follow(leftMotor, true)
         .encoder
-            .positionConversionFactor(1.0)//0.02328333333)
-            .velocityConversionFactor(1.0)//0.02328333333)
+            .positionConversionFactor(0.02328333333)
+            .velocityConversionFactor(0.02328333333/60.0)
 
         leftMotor.configure(leftConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
         rightMotor.configure(rightConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
@@ -50,10 +50,11 @@ class ElevatorIOSpark:ElevatorIO {
     override fun updateInputs(inputs: ElevatorIO.ElevatorIOInputs) {
         inputs.currentAmps = (leftMotor.outputCurrent + rightMotor.outputCurrent) / 2
         inputs.appliedVolts = (leftMotor.busVoltage * leftMotor.appliedOutput + rightMotor.busVoltage * rightMotor.appliedOutput)/2
-        inputs.laserPosition = rollingAverage.calculate(distanceSensor.distance.value.`in`(Units.Meters) * 2 - 0.18)
-        inputs.laserVelocity = (leftMotor.encoder.velocity + rightMotor.encoder.velocity) / 2
-        //inputs.motorPosition = (leftMotor.encoder.position) + rightMotor.encoder.position//) / 2
-        inputs.motorPosition = leftMotor.encoder.position
+        inputs.laserPosition = distanceSensor.distance.value.`in`(Units.Meters)
+        inputs.laserVelocity = (leftMotor.encoder.velocity + rightMotor.encoder.velocity) / 4
+        inputs.motorPosition = (leftMotor.encoder.position + rightMotor.encoder.position) / 4
+
+        //inputs.motorPosition = leftMotor.encoder.position
     }
 
     override fun setVoltage(voltage: Double) {

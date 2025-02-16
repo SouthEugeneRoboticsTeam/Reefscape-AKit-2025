@@ -2,12 +2,15 @@ package org.sert2521.reefscape2025
 
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
+import com.pathplanner.lib.commands.PathPlannerAuto
 import com.pathplanner.lib.config.ModuleConfig
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
+import com.pathplanner.lib.path.PathPlannerPath
 import com.pathplanner.lib.pathfinding.Pathfinding
 import com.pathplanner.lib.util.PathPlannerLogging
 import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -39,7 +42,6 @@ object Autos
         "Ground Intake" to GroundIntake.intakeCommand().withTimeout(3.0).asProxy(),
         "Ground Outtake" to GroundIntake.outtakeCommand().withTimeout(0.2).asProxy(),
 
-
         "Elevator Stow" to SetElevator(SetpointConstants.ELEVATOR_STOW).asProxy(),
         "Elevator L2" to SetElevator(SetpointConstants.ELEVATOR_L2).asProxy(),
         "Elevator L3" to SetElevator(SetpointConstants.ELEVATOR_L3).asProxy(),
@@ -63,7 +65,12 @@ object Autos
             Drivetrain::getPose,
             Drivetrain::setPose,
             Drivetrain::getChassisSpeeds,
-            Drivetrain::driveRobotOriented,
+            {
+                value:ChassisSpeeds ->
+                Drivetrain.driveRobotOriented(value)
+                println(value.vxMetersPerSecond)
+                println(value.vyMetersPerSecond)
+            },
             PPHolonomicDriveController(
                 SwerveConstants.autoTranslationPID,
                 SwerveConstants.autoRotationPID
@@ -81,21 +88,24 @@ object Autos
                 ),
                 *SwerveConstants.moduleTranslations
             ),
-            {false}
+            {false},
+            Drivetrain
         )
-        Pathfinding.setPathfinder(LocalADStarAK())
-        PathPlannerLogging.setLogActivePathCallback { activePath:List<Pose2d> ->
-            Logger.recordOutput(
-                "Odometry/Trajectory", *activePath.toTypedArray()
-            )
-        }
+        //Pathfinding.setPathfinder(LocalADStarAK())
+//        PathPlannerLogging.setLogActivePathCallback { activePath:List<Pose2d> ->
+//            Logger.recordOutput(
+//                "Odometry/Trajectory", *activePath.toTypedArray()
+//            )
+//        }
 
-        PathPlannerLogging.setLogTargetPoseCallback { targetPose: Pose2d ->
-            Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose)
-        }
+//        PathPlannerLogging.setLogTargetPoseCallback { targetPose: Pose2d ->
+//            Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose)
+//        }
 
-        autoChooser = LoggedDashboardChooser("Auto Chooser", AutoBuilder.buildAutoChooser())
+        autoChooser = LoggedDashboardChooser("Auto Chooser")//"Auto Chooser", AutoBuilder.buildAutoChooser())
 
+        autoChooser.addDefaultOption("None", Commands.none())
+        autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
         autoChooser.addOption("SysId quasistatic", DrivetrainFeedforwardSysId.get())
         autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
     }

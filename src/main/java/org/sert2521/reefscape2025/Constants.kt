@@ -11,14 +11,18 @@ object SetpointConstants{
     const val WRIST_L1 = 0.0
     const val WRIST_ALGAE = 0.0
 
-    const val ELEVATOR_STOW = -0.01
-    const val ELEVATOR_L2 = 0.28
-    const val ELEVATOR_L3 = 0.76
-    const val ELEVATOR_L4 = 1.32
-    const val ELEVATOR_ALGAE = 0.0
+    const val ELEVATOR_STOW = -0.02
+    const val ELEVATOR_L2 = 0.17
+    const val ELEVATOR_L3 = 0.37
+    const val ELEVATOR_L4 = 0.67
+    const val ELEVATOR_ALGAE = 0.25
 
-    const val DISPENSER_INTAKE_SPEED = 0.4
-    const val DISPENSER_OUTTAKE_SPEED = 0.7
+    const val DISPENSER_INTAKE_SPEED = 0.55
+    const val DISPENSER_OUTTAKE_SPEED = 0.65
+    const val DISPENSER_OUTTAKE_L4 = 0.5
+    const val DISPENSER_OUTTAKE_SLOW_SPEED = 0.2
+    const val DISPENSER_STOP_VOLTAGE = -0.01
+    const val DISPENSER_RECENTER_SPEED = 0.1
 
     const val GROUND_INTAKE_SPEED = 0.7
     const val GROUND_OUTTAKE_SPEED = -0.5
@@ -47,12 +51,12 @@ object TuningConstants{
     const val ELEVATOR_P = 50.0
     const val ELEVATOR_I = 0.0
     const val ELEVATOR_D = 0.0
-    val ELEVATOR_PROFILE = TrapezoidProfile.Constraints(1.0, 3.0)
+    val ELEVATOR_PROFILE = TrapezoidProfile.Constraints(1.0, 1.0)
 
-    const val ELEVATOR_S = 0.15
+    const val ELEVATOR_S = 0.05
 
     const val ELEVATOR_V = 5.115
-    const val ELEVATOR_G = 0.37
+    const val ELEVATOR_G = 0.6
     const val ELEVATOR_A = 0.0
 
     //Wrist Values

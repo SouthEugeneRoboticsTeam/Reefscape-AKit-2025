@@ -86,18 +86,18 @@ object SwerveConstants {
     const val MAX_SPEED_MPS = 4.571
 
     const val DRIVE_SPEED = 3.0
-    const val ROT_SPEED = 4.0
+    const val ROT_SPEED = 5.0
 
 
     val moduleTranslations = arrayOf(
-        Translation2d(11.35, 11.35),
-        Translation2d(11.35, -11.35),
-        Translation2d(-11.35, 11.35),
-        Translation2d(-11.35, -11.35)
+        Translation2d(0.28829, 0.28829),
+        Translation2d(0.28829, -0.28829),
+        Translation2d(-0.28829, 0.28829),
+        Translation2d(-0.28829, -0.28829)
     )
 
-    val autoTranslationPID = PIDConstants(0.0, 0.0, 0.0)
-    val autoRotationPID = PIDConstants(0.0, 0.0, 0.0)
+    val autoTranslationPID = PIDConstants(2.0, 0.0, 0.0)
+    val autoRotationPID = PIDConstants(2.0, 0.0, 0.0)
 
     const val WHEEL_COF = 1.54
 

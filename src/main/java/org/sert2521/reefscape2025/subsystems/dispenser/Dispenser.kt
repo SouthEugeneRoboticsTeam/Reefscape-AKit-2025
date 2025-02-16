@@ -6,8 +6,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean
+import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_INTAKE_SPEED
+import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_L4
+import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_SLOW_SPEED
 import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_SPEED
+import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_RECENTER_SPEED
+import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_STOP_VOLTAGE
+import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 
 object Dispenser : SubsystemBase() {
     private val io = DispenserIOSpark()
@@ -24,7 +30,7 @@ object Dispenser : SubsystemBase() {
         Pair(true, true) to idleCommand(),
         Pair(true, false) to idleDispenserBeambreakNonfunctional(),
         Pair(false, true) to idleCommand(),
-        Pair(false, false) to run{ stop() }
+        Pair(false, false) to run{ setVoltage(DISPENSER_STOP_VOLTAGE) }
     )
 
     init{
@@ -68,8 +74,8 @@ object Dispenser : SubsystemBase() {
     }
 
     fun getBlocked():Boolean{
-        return (ioInputs.beambreakRampClear && currentBeambreakFunctionality.first)
-                && (ioInputs.beambreakDispenserClear && currentBeambreakFunctionality.second)
+        return (!ioInputs.beambreakRampClear && currentBeambreakFunctionality.first)
+                || (!ioInputs.beambreakDispenserClear && currentBeambreakFunctionality.second)
     }
 
     fun getVelocity():Double{
@@ -81,9 +87,13 @@ object Dispenser : SubsystemBase() {
     fun idleCommand():Command{
         return run{
             if (getBlocked()) {
-                setMotor(DISPENSER_INTAKE_SPEED)
+                if (getRampBeambreakBlocked()){
+                    setMotor(DISPENSER_INTAKE_SPEED)
+                } else {
+                    setMotor(DISPENSER_RECENTER_SPEED)
+                }
             } else {
-                stop()
+                setVoltage(DISPENSER_STOP_VOLTAGE)
             }
         }
     }
@@ -121,7 +131,23 @@ object Dispenser : SubsystemBase() {
 
     fun outtakeCommand():Command{
         return run{
-            setMotor(DISPENSER_OUTTAKE_SPEED)
+            if (Elevator.goal == SetpointConstants.ELEVATOR_L4){
+                setMotor(DISPENSER_OUTTAKE_L4)
+            } else {
+                setMotor(DISPENSER_OUTTAKE_SPEED)
+            }
+        }
+    }
+
+    fun outtakeSlowCommand():Command{
+        return run{
+            setMotor(DISPENSER_OUTTAKE_SLOW_SPEED)
+        }
+    }
+
+    fun stopCommand():Command{
+        return run{
+            setMotor(0.0)
         }
     }
 

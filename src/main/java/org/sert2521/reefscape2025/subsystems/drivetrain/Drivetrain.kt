@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
@@ -139,9 +140,9 @@ object Drivetrain : SubsystemBase() {
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
 
-        if (!visionInputs.rejectEstimation){
-            addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV)
-        }
+//        if (!visionInputs.rejectEstimation){
+//            addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV)
+//        }
         Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds())
         Logger.recordOutput("SwerveModuleStates/Measured", *getModuleStates())
         Logger.recordOutput("Odometry/Robot Pose", getPose())
