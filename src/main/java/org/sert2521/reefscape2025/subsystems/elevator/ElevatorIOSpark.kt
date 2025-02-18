@@ -37,8 +37,8 @@ class ElevatorIOSpark:ElevatorIO {
             .smartCurrentLimit(40)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
         .encoder
-            .positionConversionFactor(0.02328333333)
-            .velocityConversionFactor(0.02328333333/60.0)
+            .positionConversionFactor(0.02328333333/2)
+            .velocityConversionFactor(0.02328333333/120.0)
 
         leftConfig.closedLoop
             .pidf(
@@ -51,8 +51,8 @@ class ElevatorIOSpark:ElevatorIO {
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
             .follow(leftMotor, true)
         .encoder
-            .positionConversionFactor(0.02328333333)
-            .velocityConversionFactor(0.02328333333/60.0)
+            .positionConversionFactor(0.02328333333/2)
+            .velocityConversionFactor(0.02328333333/120.0)
 
         rightConfig.closedLoop
             .pidf(

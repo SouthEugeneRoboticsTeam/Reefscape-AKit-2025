@@ -2,6 +2,7 @@ package org.sert2521.reefscape2025.commands.elevator
 
 import edu.wpi.first.math.controller.ElevatorFeedforward
 import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj2.command.Command
 import org.sert2521.reefscape2025.TuningConstants
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_G
@@ -20,11 +21,11 @@ class HoldElevator : Command() {
     }
 
     override fun initialize() {
-        elevatorSetPoint = Elevator.getPosition()
+        elevatorSetPoint = Elevator.goal
     }
 
     override fun execute() {
         elevatorPosition = Elevator.getPosition()
-        Elevator.setVoltage(motorPID.calculate(Elevator.getPosition(), elevatorSetPoint) + ELEVATOR_G)
+        Elevator.setVoltage(motorPID.calculate(Elevator.getPosition(), elevatorSetPoint.position) + ELEVATOR_G)
     }
 }

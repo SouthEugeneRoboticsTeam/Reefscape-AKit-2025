@@ -74,7 +74,7 @@ object Elevator : SubsystemBase() {
         }
     }
 
-    fun holdElevatorCommand():Command{
+    private fun holdElevatorCommand():Command{
         return run{
             io.setReference(currentState)
             Logger.recordOutput("Elevator/At Setpoint",

@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.reefscape2025.commands.elevator.RemoveAlgae
-import org.sert2521.reefscape2025.commands.elevator.Elevator.setElevatorCommand()
 import org.sert2521.reefscape2025.commands.wrist.SetWrist
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain

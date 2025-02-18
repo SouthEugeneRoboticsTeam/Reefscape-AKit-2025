@@ -131,7 +131,7 @@ object Dispenser : SubsystemBase() {
 
     fun outtakeCommand():Command{
         return run{
-            if (Elevator.goal == SetpointConstants.ELEVATOR_L4){
+            if (Elevator.goal.position == SetpointConstants.ELEVATOR_L4){
                 setMotor(DISPENSER_OUTTAKE_L4)
             } else {
                 setMotor(DISPENSER_OUTTAKE_SPEED)
