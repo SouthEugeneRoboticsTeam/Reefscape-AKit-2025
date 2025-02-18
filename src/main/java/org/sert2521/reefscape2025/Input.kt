@@ -8,10 +8,11 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.reefscape2025.commands.elevator.RemoveAlgae
-import org.sert2521.reefscape2025.commands.elevator.SetElevator
+import org.sert2521.reefscape2025.commands.elevator.Elevator.setElevatorCommand()
 import org.sert2521.reefscape2025.commands.wrist.SetWrist
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
+import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 
 // Bindings:
@@ -100,19 +101,23 @@ object Input {
         // Elevator
             elevatorStow.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
                 .andThen(
-                    SetElevator(SetpointConstants.ELEVATOR_STOW)
+                    Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_STOW)
                         .until{ Dispenser.getBlocked() }))
+
             elevatorL2.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-                .andThen(SetElevator(SetpointConstants.ELEVATOR_L2)
+                .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L2)
                     .until { Dispenser.getBlocked() }))
+
             elevatorL3.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-                .andThen(SetElevator(SetpointConstants.ELEVATOR_L3)
+                .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L3)
                     .until { Dispenser.getBlocked() }))
+
             elevatorL4.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-                .andThen(SetElevator(SetpointConstants.ELEVATOR_L4)
+                .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L4)
                     .until { Dispenser.getBlocked() }))
+
             elevatorAlgae.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-                .andThen(SetElevator(SetpointConstants.ELEVATOR_ALGAE))
+                .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_ALGAE))
                     .until { Dispenser.getBlocked() }.andThen(RemoveAlgae())
                     .until { Dispenser.getBlocked() })
             // toggleElevatorSafe.onTrue(runOnce({Elevator.toggleSafeMode()}))

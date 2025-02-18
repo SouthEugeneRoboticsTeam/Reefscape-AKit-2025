@@ -1,5 +1,6 @@
 package org.sert2521.reefscape2025.subsystems.elevator
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile
 import org.team9432.annotation.Logged
 
 interface ElevatorIO {
@@ -20,5 +21,7 @@ interface ElevatorIO {
     fun setVoltage(voltage:Double)
 
     fun setEncoder(encoderValue:Double)
+
+    fun setReference(setpoint:TrapezoidProfile.State)
 
 }
