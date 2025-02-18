@@ -45,6 +45,8 @@ object ElectronicIDs{
     const val WRIST_ABS_ENCODER = 18
 
     const val LASER_ID = 19
+
+    const val LED_PORT = -1
 }
 
 object TuningConstants{
@@ -79,6 +81,8 @@ object PhysicalConstants {
 
     val robotMass = Pounds.of(115.0)
     val momentOfInertia = Units.KilogramSquareMeters.of(0.0)
+
+    const val LED_STRIP_LENGTH = 10
 }
 
 object MetaConstants{
