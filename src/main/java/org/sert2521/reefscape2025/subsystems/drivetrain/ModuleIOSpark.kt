@@ -14,46 +14,45 @@ import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Rotation2d
 import org.sert2521.reefscape2025.utils.SparkUtil
 import org.sert2521.reefscape2025.utils.SparkUtil.ifOk
-import org.sert2521.reefscape2025.utils.SparkUtil.sparkStickyFault
 import java.util.function.DoubleSupplier
 import kotlin.math.PI
 
 //It was quite the fun exercise to translate this into kotlin
 
 class ModuleIOSpark(module:Int):ModuleIO {
-    val zeroRotation = SwerveConstants.moduleZeroRotations[module]
+    private val zeroRotation = SwerveConstants.moduleZeroRotations[module]
 
-    val driveMotor = SparkMax(SwerveConstants.driveIDs[module], MotorType.kBrushless)
-    val turnMotor = SparkMax(SwerveConstants.turnIDs[module], MotorType.kBrushless)
+    private val driveMotor = SparkMax(SwerveConstants.driveIDs[module], MotorType.kBrushless)
+    private val turnMotor = SparkMax(SwerveConstants.turnIDs[module], MotorType.kBrushless)
 
-    val driveEncoder = driveMotor.encoder
-    val turnEncoder = turnMotor.encoder
+    private val driveEncoder = driveMotor.encoder
+    private val turnEncoder = turnMotor.encoder
 
-    val driveFeedforward = SimpleMotorFeedforward(
+    private val driveFeedforward = SimpleMotorFeedforward(
         SwerveConstants.DRIVE_KS,
         SwerveConstants.DRIVE_KV,
         SwerveConstants.DRIVE_KA
     )
 
-    var lastVelocity = 0.0
+    private var lastVelocity = 0.0
 
-    val absEncoder = CANcoder(SwerveConstants.encoderIDs[module])
+    private val absEncoder = CANcoder(SwerveConstants.encoderIDs[module])
 
-    val driveController = driveMotor.closedLoopController
-    val turnController = turnMotor.closedLoopController
+    private val driveController = driveMotor.closedLoopController
+    private val turnController = turnMotor.closedLoopController
 
-    val timestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue()
-    val drivePositionQueue = SparkOdometryThread.getInstance().registerSignal(
+    private val timestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue()
+    private val drivePositionQueue = SparkOdometryThread.getInstance().registerSignal(
         driveMotor,
-        driveEncoder::getPosition
+        driveEncoder::position
     )
 
-    val turnPositionQueue = SparkOdometryThread.getInstance().registerSignal(
-        turnMotor, turnEncoder::getPosition
+    private val turnPositionQueue = SparkOdometryThread.getInstance().registerSignal(
+        turnMotor, turnEncoder::position
     )
 
-    val driveConnectedDebounce = Debouncer(0.5)
-    val turnConnectedDebounce = Debouncer(0.5)
+    private val driveConnectedDebounce = Debouncer(0.5)
+    private val turnConnectedDebounce = Debouncer(0.5)
 
 
     init {
@@ -147,35 +146,36 @@ class ModuleIOSpark(module:Int):ModuleIO {
     //MIGHT WANT TO CHANGE THIS TO MAKE SENSE
 
     override fun updateInputs(inputs: ModuleIO.ModuleIOInputs) {
-        sparkStickyFault = false
-        ifOk(driveMotor, driveEncoder::getPosition) {
+        SparkUtil.sparkStickyFault = false
+        ifOk(driveMotor, driveEncoder::position) {
             inputs.drivePositionRad = it
         }
-        ifOk(driveMotor, driveEncoder::getVelocity) {
+        ifOk(driveMotor, driveEncoder::velocity) {
             inputs.driveVelocityRadPerSec = it
         }
-        ifOk(driveMotor, driveEncoder::getPosition) {
+        ifOk(driveMotor, driveEncoder::position) {
             inputs.drivePositionRad = it
         }
         ifOk(driveMotor, arrayOf(DoubleSupplier{driveMotor.appliedOutput}, DoubleSupplier{driveMotor.busVoltage})) {
             inputs.driveAppliedVolts = it[0]*it[1]
         }
-        inputs.driveConnected = driveConnectedDebounce.calculate(!sparkStickyFault)
+        inputs.driveConnected = driveConnectedDebounce.calculate(!SparkUtil.sparkStickyFault)
 
-        sparkStickyFault=false
-        ifOk(turnMotor, turnEncoder::getPosition) {
-            inputs.turnPosition=Rotation2d(it).minus(zeroRotation)
+        SparkUtil.sparkStickyFault=false
+        ifOk(turnMotor, turnEncoder::position) {
+            inputs.turnPositionMotor=Rotation2d(it).minus(zeroRotation)
         }
-        ifOk(turnMotor, turnEncoder::getVelocity) {
+        inputs.turnPositionAbsolute=Rotation2d.fromRotations(absEncoder.position.valueAsDouble)
+        ifOk(turnMotor, turnEncoder::velocity) {
             inputs.turnVelocityRadPerSec = it
         }
-        ifOk(turnMotor, arrayOf(DoubleSupplier(turnMotor::getAppliedOutput), DoubleSupplier(turnMotor::getBusVoltage))){
+        ifOk(turnMotor, arrayOf(DoubleSupplier(turnMotor::appliedOutput), DoubleSupplier(turnMotor::busVoltage))){
             inputs.turnAppliedVolts = it[0]*it[1]
         }
-        ifOk(turnMotor, turnMotor::getOutputCurrent){
+        ifOk(turnMotor, turnMotor::outputCurrent){
             inputs.turnCurrentAmps = it
         }
-        inputs.turnConnected = turnConnectedDebounce.calculate(!sparkStickyFault)
+        inputs.turnConnected = turnConnectedDebounce.calculate(!SparkUtil.sparkStickyFault)
 
 
         inputs.odometryTimestamps =
@@ -220,7 +220,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
         turnController.setReference(setpoint, SparkBase.ControlType.kPosition)
     }
 
-    override fun updateTurnEncoder() {
+    override fun updateTurnEncoder(rotation: Rotation2d) {
 //        if (SwerveConstants.TURN_INVERTED) {
 //            turnEncoder.setPosition(
 //                SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
@@ -231,8 +231,8 @@ class ModuleIOSpark(module:Int):ModuleIO {
 //            )
 //        }
 
-        turnEncoder.setPosition(
-            SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
-        )
+        SparkUtil.tryUntilOk(turnMotor, 5){
+            turnEncoder.setPosition(rotation.radians)
+        }
     }
 }

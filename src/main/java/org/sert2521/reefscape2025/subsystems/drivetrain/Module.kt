@@ -1,5 +1,6 @@
 package org.sert2521.reefscape2025.subsystems.drivetrain
 
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.SwerveModulePosition
 import edu.wpi.first.math.kinematics.SwerveModuleState
@@ -19,8 +20,13 @@ class Module(val index:Int) {
         "Disconnected angle motor on "+indexToCorner[index]+" module.",
         Alert.AlertType.kError
     )
+    var turnInited = false
 
     private var odometryPositions = arrayOf<SwerveModulePosition>()
+
+    init{
+
+    }
 
     fun periodic(){
         io.updateInputs(inputs)
@@ -37,7 +43,13 @@ class Module(val index:Int) {
         driveDisconnectedAlert.set(!inputs.driveConnected)
         turnDisconnectedAlert.set(!inputs.turnConnected)
 
-        io.updateTurnEncoder()
+        if ((inputs.turnConnected &&
+            !MathUtil.isNear(inputs.turnPositionAbsolute.degrees,
+                inputs.turnPositionMotor.degrees, 0.5))
+            || !turnInited){
+
+            io.updateTurnEncoder(inputs.turnPositionAbsolute)
+        }
     }
 
     fun runSetpoint(state:SwerveModuleState):SwerveModuleState{
@@ -65,7 +77,7 @@ class Module(val index:Int) {
     }
 
     fun getAngle():Rotation2d{
-        return inputs.turnPosition
+        return inputs.turnPositionMotor
     }
 
     fun getPositionMeters():Double{

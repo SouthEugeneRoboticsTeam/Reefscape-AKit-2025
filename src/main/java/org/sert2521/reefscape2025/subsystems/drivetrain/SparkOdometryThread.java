@@ -41,7 +41,7 @@ public class SparkOdometryThread {
   private final List<Queue<Double>> timestampQueues = new ArrayList<>();
 
   private static SparkOdometryThread instance = null;
-  private Notifier notifier = new Notifier(this::run);
+  private final Notifier notifier = new Notifier(this::run);
 
   public static SparkOdometryThread getInstance() {
     if (instance == null) {
@@ -55,7 +55,7 @@ public class SparkOdometryThread {
   }
 
   public void start() {
-    if (timestampQueues.size() > 0) {
+    if (!timestampQueues.isEmpty()) {
       notifier.startPeriodic(1.0 / SwerveConstants.ODOMETRY_FREQUENCY);
     }
   }

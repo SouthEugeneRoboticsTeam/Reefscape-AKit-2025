@@ -16,7 +16,8 @@ interface ModuleIO {
         var driveCurrentAmps = 0.0
 
         var turnConnected = false
-        var turnPosition = Rotation2d()
+        var turnPositionMotor = Rotation2d()
+        var turnPositionAbsolute = Rotation2d()
         var turnVelocityRadPerSec = 0.0
         var turnAppliedVolts = 0.0
         var turnCurrentAmps = 0.0
@@ -36,5 +37,5 @@ interface ModuleIO {
 
     fun setTurnPosition(rotation:Rotation2d){}
 
-    fun updateTurnEncoder(){}
+    fun updateTurnEncoder(rotation:Rotation2d){}
 }
