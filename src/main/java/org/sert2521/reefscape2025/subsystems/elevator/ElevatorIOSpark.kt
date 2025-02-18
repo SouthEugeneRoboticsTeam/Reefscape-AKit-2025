@@ -49,7 +49,7 @@ class ElevatorIOSpark:ElevatorIO {
         rightConfig
             .smartCurrentLimit(40)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
-            .follow(leftMotor, true)
+            .inverted(true)
         .encoder
             .positionConversionFactor(0.02328333333/2.0)
             .velocityConversionFactor(0.02328333333/120.0)
@@ -76,6 +76,7 @@ class ElevatorIOSpark:ElevatorIO {
 
     override fun setVoltage(voltage: Double) {
         leftMotor.setVoltage(voltage)
+        rightMotor.setVoltage(voltage)
     }
 
     override fun setEncoder(encoderValue: Double) {
@@ -85,11 +86,21 @@ class ElevatorIOSpark:ElevatorIO {
 
     override fun setReference(setpoint: TrapezoidProfile.State) {
         val arbFF = setpoint.velocity * ELEVATOR_V + ELEVATOR_G
-        leftMotor.closedLoopController.setReference(
-            setpoint.position,
-            SparkBase.ControlType.kPosition,
-            ClosedLoopSlot.kSlot0,
-            arbFF
-        )
+//        leftMotor.closedLoopController.setReference(
+//            setpoint.position,
+//            SparkBase.ControlType.kPosition,
+//            ClosedLoopSlot.kSlot0,
+//            arbFF
+//        )
+//        rightMotor.closedLoopController.setReference(
+//            setpoint.position,
+//            SparkBase.ControlType.kPosition,
+//            ClosedLoopSlot.kSlot0,
+//            arbFF
+//        )
+        leftMotor.setVoltage(arbFF)
+        rightMotor.setVoltage(arbFF)
+
+
     }
 }

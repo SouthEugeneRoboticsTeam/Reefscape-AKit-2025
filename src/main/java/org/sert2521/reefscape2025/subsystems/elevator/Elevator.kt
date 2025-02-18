@@ -36,9 +36,9 @@ object Elevator : SubsystemBase() {
         rollingAverageOutput = rollingAverage.calculate(ioInputs.laserPosition*2 - 0.15)
         Logger.recordOutput("Elevator/Processed Laser", getPosition())
 
-        if (downFilter.calculate(ioInputs.laserPosition<0.03)){
-            io.setEncoder(0.0)
-        }
+//        if (downFilter.calculate(ioInputs.laserPosition<0.03)){
+//            io.setEncoder(0.0)
+//        }
     }
 
     fun setVoltage(voltage:Double){
@@ -50,7 +50,7 @@ object Elevator : SubsystemBase() {
     }
 
     fun getPosition():Double{
-        return ioInputs.laserPosition-0.07
+        return ioInputs.motorPosition
     }
 
     fun getMotorPosition():Double{
@@ -62,14 +62,19 @@ object Elevator : SubsystemBase() {
     }
 
     fun setElevatorCommand(goalMeters:Double): Command {
-        goal = TrapezoidProfile.State(goalMeters, 0.0)
-        return run{
-            currentState = profile.calculate(0.02, currentState, goal)
-            io.setReference(currentState)
+        return startRun({
+                goal = TrapezoidProfile.State(goalMeters, 0.0)
+            },
+            {
+                currentState = profile.calculate(0.02, currentState, goal)
+                Logger.recordOutput("Elevator/Reference Position", currentState.position)
+                Logger.recordOutput("Elevator/Reference Velocity", currentState.velocity)
+                io.setReference(currentState)
 
-            Logger.recordOutput("Elevator/At Setpoint",
-                MathUtil.isNear(currentState.position, getPosition(), 0.05))
-        }.until{
+                Logger.recordOutput("Elevator/At Setpoint",
+                    MathUtil.isNear(currentState.position, getPosition(), 0.05))
+            }
+        ).until{
             profile.isFinished(0.0)
         }
     }
