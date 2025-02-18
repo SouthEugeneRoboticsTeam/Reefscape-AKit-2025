@@ -49,6 +49,7 @@ class Module(val index:Int) {
             || !turnInited){
 
             io.updateTurnEncoder(inputs.turnPositionAbsolute)
+            turnInited = true
         }
     }
 
