@@ -2,32 +2,21 @@ package org.sert2521.reefscape2025
 
 import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
-import com.pathplanner.lib.commands.PathPlannerAuto
 import com.pathplanner.lib.config.ModuleConfig
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
-import com.pathplanner.lib.path.PathPlannerPath
-import com.pathplanner.lib.pathfinding.Pathfinding
-import com.pathplanner.lib.util.PathPlannerLogging
-import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.math.kinematics.SwerveModuleState
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.sert2521.reefscape2025.commands.drivetrain.DrivetrainFeedforwardSysId
-import org.sert2521.reefscape2025.commands.elevator.SetElevator
 import org.sert2521.reefscape2025.commands.wrist.SetWrist
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
+import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
-import org.sert2521.reefscape2025.utils.LocalADStarAK
-import java.sql.Array
 
 object Autos
 {
@@ -42,10 +31,10 @@ object Autos
         "Ground Intake" to GroundIntake.intakeCommand().withTimeout(3.0).asProxy(),
         "Ground Outtake" to GroundIntake.outtakeCommand().withTimeout(0.2).asProxy(),
 
-        "Elevator Stow" to SetElevator(SetpointConstants.ELEVATOR_STOW).asProxy(),
-        "Elevator L2" to SetElevator(SetpointConstants.ELEVATOR_L2).asProxy(),
-        "Elevator L3" to SetElevator(SetpointConstants.ELEVATOR_L3).asProxy(),
-        "Elevator L4" to SetElevator(SetpointConstants.ELEVATOR_L4).asProxy(),
+        "Elevator Stow" to Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_STOW).asProxy(),
+        "Elevator L2" to Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L2).asProxy(),
+        "Elevator L3" to Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L3).asProxy(),
+        "Elevator L4" to Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L4).asProxy(),
 
         "Dispenser Intake" to Commands.none(),
         "Dispenser Outtake" to Dispenser.outtakeCommand().withTimeout(0.2).asProxy(),

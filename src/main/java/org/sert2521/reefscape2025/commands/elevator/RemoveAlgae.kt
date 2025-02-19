@@ -24,7 +24,7 @@ class RemoveAlgae : Command() {
 
     override fun end(interrupted: Boolean) {
         if (!interrupted) {
-            SetElevator(SetpointConstants.ELEVATOR_STOW).schedule()
+            Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_STOW).schedule()
         }
     }
 }
