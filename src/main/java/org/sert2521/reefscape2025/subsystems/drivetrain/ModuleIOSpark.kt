@@ -44,11 +44,11 @@ class ModuleIOSpark(module:Int):ModuleIO {
     private val timestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue()
     private val drivePositionQueue = SparkOdometryThread.getInstance().registerSignal(
         driveMotor,
-        driveEncoder::position
+        driveEncoder::getPosition
     )
 
     private val turnPositionQueue = SparkOdometryThread.getInstance().registerSignal(
-        turnMotor, turnEncoder::position
+        turnMotor, turnEncoder::getPosition
     )
 
     private val driveConnectedDebounce = Debouncer(0.5)
@@ -147,13 +147,13 @@ class ModuleIOSpark(module:Int):ModuleIO {
 
     override fun updateInputs(inputs: ModuleIO.ModuleIOInputs) {
         SparkUtil.sparkStickyFault = false
-        ifOk(driveMotor, driveEncoder::position) {
+        ifOk(driveMotor, driveEncoder::getPosition) {
             inputs.drivePositionRad = it
         }
-        ifOk(driveMotor, driveEncoder::velocity) {
+        ifOk(driveMotor, driveEncoder::getVelocity) {
             inputs.driveVelocityRadPerSec = it
         }
-        ifOk(driveMotor, driveEncoder::position) {
+        ifOk(driveMotor, driveEncoder::getPosition) {
             inputs.drivePositionRad = it
         }
         ifOk(driveMotor, arrayOf(DoubleSupplier{driveMotor.appliedOutput}, DoubleSupplier{driveMotor.busVoltage})) {
@@ -162,17 +162,17 @@ class ModuleIOSpark(module:Int):ModuleIO {
         inputs.driveConnected = driveConnectedDebounce.calculate(!SparkUtil.sparkStickyFault)
 
         SparkUtil.sparkStickyFault=false
-        ifOk(turnMotor, turnEncoder::position) {
+        ifOk(turnMotor, turnEncoder::getPosition) {
             inputs.turnPositionMotor=Rotation2d(it).minus(zeroRotation)
         }
         inputs.turnPositionAbsolute=Rotation2d.fromRotations(absEncoder.position.valueAsDouble)
-        ifOk(turnMotor, turnEncoder::velocity) {
+        ifOk(turnMotor, turnEncoder::getVelocity) {
             inputs.turnVelocityRadPerSec = it
         }
-        ifOk(turnMotor, arrayOf(DoubleSupplier(turnMotor::appliedOutput), DoubleSupplier(turnMotor::busVoltage))){
+        ifOk(turnMotor, arrayOf(DoubleSupplier(turnMotor::getAppliedOutput), DoubleSupplier(turnMotor::getBusVoltage))){
             inputs.turnAppliedVolts = it[0]*it[1]
         }
-        ifOk(turnMotor, turnMotor::outputCurrent){
+        ifOk(turnMotor, turnMotor::getOutputCurrent){
             inputs.turnCurrentAmps = it
         }
         inputs.turnConnected = turnConnectedDebounce.calculate(!SparkUtil.sparkStickyFault)
