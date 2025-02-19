@@ -1,3 +1,4 @@
 We moved all the commands to be command factories in the Dispenser subsystem,
 as the commands were simple enough that we didn't really need whole files for them.
 Most of them are like 5 lines each as a command factory function.
+If you want to find them, look in the Dispenser file near the bottom.

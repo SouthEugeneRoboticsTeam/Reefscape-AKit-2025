@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj.RobotBase
 import kotlin.math.PI
 
 object SetpointConstants{
-    const val WRIST_STOW = 0.0
-    const val WRIST_GROUND = 0.0
+    const val WRIST_STOW = 0.23
+    const val WRIST_GROUND = -0.08
     const val WRIST_L1 = 0.0
-    const val WRIST_ALGAE = 0.0
+    const val WRIST_ALGAE = 0.089
 
-    const val ELEVATOR_STOW = 0.05
+    const val ELEVATOR_STOW = 0.0
     const val ELEVATOR_L2 = 0.17
     const val ELEVATOR_L3 = 0.37
-    const val ELEVATOR_L4 = 0.67-0.1
+    const val ELEVATOR_L4 = 0.67-0.02
     const val ELEVATOR_ALGAE = 0.25
 
     const val DISPENSER_INTAKE_SPEED = 0.55
@@ -61,23 +61,23 @@ object DrivetrainConstants {
 }
 
 object TuningConstants{
-    const val ELEVATOR_P = 1.0
+    const val ELEVATOR_P = 4.0
     const val ELEVATOR_I = 0.0
-    const val ELEVATOR_D = 0.0
-    val ELEVATOR_PROFILE = TrapezoidProfile.Constraints(0.1, 0.5)
+    const val ELEVATOR_D = 0.1
+    val ELEVATOR_PROFILE = TrapezoidProfile.Constraints(1.0, 2.0)
 
     const val ELEVATOR_S = 0.05
 
-    const val ELEVATOR_V = 5.115
+    const val ELEVATOR_V = 10.23
     const val ELEVATOR_G = 0.3
     const val ELEVATOR_A = 0.0
 
     //Wrist Values
     const val WRIST_CURRENT_LIMIT = 30
 
-    const val WRIST_P = 0.0
+    const val WRIST_P = 4.0
     const val WRIST_I = 0.0
-    const val WRIST_D = 0.0
+    const val WRIST_D = 0.2
 
     const val WRIST_S = 0.0
     const val WRIST_V = 0.0
@@ -87,7 +87,7 @@ object TuningConstants{
 
 object PhysicalConstants {
     const val WRIST_ENCODER_MULTIPLIER = 1.0
-    const val WRIST_ENCODER_TRANSFORM = 0.1
+    const val WRIST_ENCODER_TRANSFORM = 0.95
     const val WRIST_MOTOR_MULTIPLIER = 1.0
 
     val robotMass = Pounds.of(115.0)

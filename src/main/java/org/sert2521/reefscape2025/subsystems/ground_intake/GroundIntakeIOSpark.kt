@@ -22,7 +22,7 @@ class GroundIntakeIOSpark:GroundIntakeIO {
     init {
         //Intake settings
         intakeConfig
-            .inverted(false)
+            .inverted(true)
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(30)
 

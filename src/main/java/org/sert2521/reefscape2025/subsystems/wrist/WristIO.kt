@@ -15,4 +15,6 @@ interface WristIO {
     fun updateInputs(inputs:WristIOInputs)
 
     fun setVoltage(voltage:Double)
+
+    fun setReference(targetPosition:Double)
 }

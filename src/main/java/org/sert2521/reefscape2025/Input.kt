@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import org.sert2521.reefscape2025.commands.elevator.RemoveAlgae
-import org.sert2521.reefscape2025.commands.wrist.SetWrist
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
+import org.sert2521.reefscape2025.subsystems.wrist.Wrist
 
 // Bindings:
 // Gunner:
@@ -87,15 +87,15 @@ object Input {
             // visionAlign.whileTrue(VisionAlign())
 
         // Wrist
-//            wristStow.onTrue(SetWrist(SetpointConstants.WRIST_STOW))
-//            wristL1.onTrue(SetWrist(SetpointConstants.WRIST_L1))
-//            wristAlgae.onTrue(SetWrist(SetpointConstants.WRIST_ALGAE))
-//            wristGround.onTrue(SetWrist(SetpointConstants.WRIST_GROUND))
+            wristStow.onTrue(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
+            wristL1.onTrue(Wrist.setWristCommand(SetpointConstants.WRIST_L1))
+            wristAlgae.onTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE))
+            wristGround.onTrue(Wrist.setWristCommand(SetpointConstants.WRIST_GROUND))
 
         // Wrist Rollers
-//            wristRollerIntake.whileTrue(GroundIntake.intakeCommand())
-//            wristRollerOuttakeDriver.whileTrue(GroundIntake.outtakeCommand())
-//            wristRollerOuttakeGunner.whileTrue(GroundIntake.outtakeCommand())
+            wristRollerIntake.whileTrue(GroundIntake.intakeCommand())
+            wristRollerOuttakeDriver.whileTrue(GroundIntake.outtakeCommand())
+            wristRollerOuttakeGunner.whileTrue(GroundIntake.outtakeCommand())
 
         // Elevator
             elevatorStow.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}

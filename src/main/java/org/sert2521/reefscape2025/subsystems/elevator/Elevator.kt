@@ -15,15 +15,11 @@ import org.sert2521.reefscape2025.commands.elevator.HoldElevator
 object Elevator : SubsystemBase() {
     private val io = ElevatorIOSpark()
     private val ioInputs = LoggedElevatorIOInputs()
-    private val downFilter = Debouncer(0.4)
 
-    val rollingAverage = LinearFilter.movingAverage(4)
-    var rollingAverageOutput = 0.0
-
-    val profile = TrapezoidProfile(ELEVATOR_PROFILE)
+    private val profile = TrapezoidProfile(ELEVATOR_PROFILE)
 
     var goal  = TrapezoidProfile.State(0.0, 0.0)
-    var currentState = TrapezoidProfile.State(0.0, 0.0)
+    private var currentState = TrapezoidProfile.State(0.0, 0.0)
 
     init{
         defaultCommand = holdElevatorCommand()
@@ -33,7 +29,6 @@ object Elevator : SubsystemBase() {
         io.updateInputs(ioInputs)
         Logger.processInputs("Elevator", ioInputs)
 
-        rollingAverageOutput = rollingAverage.calculate(ioInputs.laserPosition*2 - 0.15)
         Logger.recordOutput("Elevator/Processed Laser", getPosition())
 
 //        if (downFilter.calculate(ioInputs.laserPosition<0.03)){
@@ -81,9 +76,16 @@ object Elevator : SubsystemBase() {
 
     private fun holdElevatorCommand():Command{
         return run{
-            io.setReference(currentState)
+            if (goal.position == SetpointConstants.ELEVATOR_STOW){
+                io.setVoltage(0.0)
+            } else {
+                io.setReference(currentState)
+            }
+
             Logger.recordOutput("Elevator/At Setpoint",
                 MathUtil.isNear(currentState.position, getPosition(), 0.05))
+            Logger.recordOutput("Elevator/Reference Position", currentState.position)
+            Logger.recordOutput("Elevator/Reference Velocity", currentState.velocity)
         }
     }
 }

@@ -86,6 +86,7 @@ class ElevatorIOSpark:ElevatorIO {
 
     override fun setReference(setpoint: TrapezoidProfile.State) {
         val arbFF = setpoint.velocity * ELEVATOR_V + ELEVATOR_G
+
         leftMotor.closedLoopController.setReference(
             setpoint.position,
             SparkBase.ControlType.kPosition,
@@ -98,7 +99,5 @@ class ElevatorIOSpark:ElevatorIO {
             ClosedLoopSlot.kSlot0,
             arbFF
         )
-
-
     }
 }
