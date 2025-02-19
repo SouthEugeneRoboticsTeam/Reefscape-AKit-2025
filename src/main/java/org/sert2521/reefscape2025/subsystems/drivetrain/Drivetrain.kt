@@ -107,9 +107,7 @@ object Drivetrain : SubsystemBase() {
 
         val sampleTimestamps = modules[0].getOdometryTimestamps()
         val sampleCount = sampleTimestamps.size
-        val gyroSampleCount = gyroInputs.odometryYawTimestamps.size
-        //println(sampleCount)
-        //println(Array(sampleCount){sampleTimestamps[it]-gyroInputs.odometryYawTimestamps[min(it, gyroSampleCount)]})
+
         for (i in 0..<sampleCount){
             val modulePositions = Array(4){SwerveModulePosition()}
             val moduleDeltas = Array(4){SwerveModulePosition()}

@@ -5,9 +5,9 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.util.Units
 
 class GyroIONavX:GyroIO {
-    val imu = AHRS(AHRS.NavXComType.kMXP_SPI, SwerveConstants.ODOMETRY_FREQUENCY)
-    val yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue()
-    val yawPositionQueue = SparkOdometryThread.getInstance().registerSignal{imu.angle}
+    private val imu = AHRS(AHRS.NavXComType.kMXP_SPI, SwerveConstants.ODOMETRY_FREQUENCY)
+    private val yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue()
+    private val yawPositionQueue = SparkOdometryThread.getInstance().registerSignal{imu.angle}
 
     override fun updateInputs(inputs:GyroIO.GyroIOInputs){
         inputs.connected = imu.isConnected

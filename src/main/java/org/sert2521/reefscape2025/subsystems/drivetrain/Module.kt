@@ -7,20 +7,20 @@ import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.Alert
 import org.littletonrobotics.junction.Logger
 
-class Module(val index:Int) {
-    val io = ModuleIOSpark(index)
-    val inputs = LoggedModuleIOInputs()
+class Module(private val index:Int) {
+    private val io = ModuleIOSpark(index)
+    private val inputs = LoggedModuleIOInputs()
     private val indexToCorner = SwerveConstants.indexToCorner
 
-    val driveDisconnectedAlert = Alert(
+    private val driveDisconnectedAlert = Alert(
         "Disconnected drive motor on "+indexToCorner[index]+" module.",
         Alert.AlertType.kError
     )
-    val turnDisconnectedAlert = Alert(
+    private val turnDisconnectedAlert = Alert(
         "Disconnected angle motor on "+indexToCorner[index]+" module.",
         Alert.AlertType.kError
     )
-    var turnInited = false
+    private var turnInited = false
 
     private var odometryPositions = arrayOf<SwerveModulePosition>()
 
