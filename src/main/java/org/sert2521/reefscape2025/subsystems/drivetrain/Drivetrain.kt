@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.MetaConstants
+import org.sert2521.reefscape2025.VisionTargetPositions
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
 import org.sert2521.reefscape2025.utils.LimelightHelpers
 import java.util.concurrent.locks.ReentrantLock
@@ -260,5 +261,9 @@ object Drivetrain : SubsystemBase() {
 
     fun getGyroConnected():Boolean{
         return gyroInputs.connected
+    }
+
+    fun getNearestTarget(): Pose2d {
+        return getPose().nearest(VisionTargetPositions.reefPositions)
     }
 }
