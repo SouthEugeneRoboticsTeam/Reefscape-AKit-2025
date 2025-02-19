@@ -9,7 +9,8 @@ interface WristIO {
         var wristAppliedVolts = 0.0
         var wristCurrentAmps = 0.0
         var wristVelocityRadPerSec = 0.0
-        var wristPosition = 0.0
+        var wristAbsPosition = 0.0
+        var wristMotorPosition = 0.0
     }
 
     fun updateInputs(inputs:WristIOInputs)
@@ -17,4 +18,6 @@ interface WristIO {
     fun setVoltage(voltage:Double)
 
     fun setReference(targetPosition:Double)
+
+    fun resetMotorEncoder()
 }

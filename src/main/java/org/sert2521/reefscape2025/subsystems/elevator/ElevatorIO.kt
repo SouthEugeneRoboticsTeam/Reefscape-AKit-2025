@@ -10,10 +10,10 @@ interface ElevatorIO {
         var appliedVolts = 0.0
         var currentAmps = 0.0
 
-        var laserPosition = 0.0
-        var laserVelocity = 0.0
+        var motorsPosition = 0.0
+        var motorsVelocity = 0.0
 
-        var motorPosition = 0.0
+        var laserPosition = 0.0
     }
 
     fun updateInputs(inputs:ElevatorIOInputs)

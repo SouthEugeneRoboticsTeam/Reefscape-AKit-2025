@@ -1,21 +1,18 @@
 package org.sert2521.reefscape2025.subsystems.elevator
 
 import com.ctre.phoenix6.hardware.CANrange
-import com.pathplanner.lib.util.swerve.SwerveSetpoint
 import com.revrobotics.spark.ClosedLoopSlot
 import com.revrobotics.spark.SparkBase
 import com.revrobotics.spark.SparkLowLevel
 import com.revrobotics.spark.SparkMax
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor
 import com.revrobotics.spark.config.SparkBaseConfig
 import com.revrobotics.spark.config.SparkMaxConfig
-import edu.wpi.first.math.filter.Debouncer
-import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.units.Units
 import org.sert2521.reefscape2025.ElectronicIDs.ELEVATOR_LEFT_ID
 import org.sert2521.reefscape2025.ElectronicIDs.ELEVATOR_RIGHT_ID
 import org.sert2521.reefscape2025.ElectronicIDs.LASER_ID
+import org.sert2521.reefscape2025.PhysicalConstants.ELEVATOR_MOTOR_ENCODER_MULTIPLIER
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_D
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_G
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_P
@@ -37,8 +34,8 @@ class ElevatorIOSpark:ElevatorIO {
             .smartCurrentLimit(40)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
         .encoder
-            .positionConversionFactor(0.02328333333/2.0)
-            .velocityConversionFactor(0.02328333333/120.0)
+            .positionConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER)
+            .velocityConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER/60)
 
         leftConfig.closedLoop
             .pidf(
@@ -51,8 +48,8 @@ class ElevatorIOSpark:ElevatorIO {
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
             .inverted(true)
         .encoder
-            .positionConversionFactor(0.02328333333/2.0)
-            .velocityConversionFactor(0.02328333333/120.0)
+            .positionConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER)
+            .velocityConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER/60)
 
         rightConfig.closedLoop
             .pidf(
@@ -68,10 +65,8 @@ class ElevatorIOSpark:ElevatorIO {
         inputs.currentAmps = (leftMotor.outputCurrent + rightMotor.outputCurrent) / 2
         inputs.appliedVolts = (leftMotor.busVoltage * leftMotor.appliedOutput + rightMotor.busVoltage * rightMotor.appliedOutput)/2
         inputs.laserPosition = distanceSensor.distance.value.`in`(Units.Meters)
-        inputs.laserVelocity = (leftMotor.encoder.velocity + rightMotor.encoder.velocity) / 2
-        inputs.motorPosition = (leftMotor.encoder.position + rightMotor.encoder.position) / 2
-
-        //inputs.motorPosition = leftMotor.encoder.position
+        inputs.motorsVelocity = (leftMotor.encoder.velocity + rightMotor.encoder.velocity) / 2
+        inputs.motorsPosition = (leftMotor.encoder.position + rightMotor.encoder.position) / 2
     }
 
     override fun setVoltage(voltage: Double) {

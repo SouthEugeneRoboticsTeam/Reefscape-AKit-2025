@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.RobotBase
 import kotlin.math.PI
 
 object SetpointConstants{
+    const val WRIST_INIT = 0.28
     const val WRIST_STOW = 0.23
     const val WRIST_GROUND = -0.08
     const val WRIST_L1 = 0.0
@@ -87,8 +88,10 @@ object TuningConstants{
 
 object PhysicalConstants {
     const val WRIST_ENCODER_MULTIPLIER = 1.0
-    const val WRIST_ENCODER_TRANSFORM = 0.95
-    const val WRIST_MOTOR_MULTIPLIER = 1.0
+    const val WRIST_ABS_ENCODER_ZERO = 0.95
+    const val WRIST_MOTOR_ENCODER_MULTIPLIER = 1.0
+
+    const val ELEVATOR_MOTOR_ENCODER_MULTIPLIER = 0.02328333333/2.0
 
     val robotMass = Pounds.of(115.0)
     val momentOfInertia = Units.KilogramSquareMeters.of(0.0)

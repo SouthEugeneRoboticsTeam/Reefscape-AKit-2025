@@ -77,6 +77,10 @@ class Module(private val index:Int) {
         io.setTurnOpenLoop(0.0)
     }
 
+    fun setCurrentLimit(limit:Int){
+        io.setCurrentLimit(limit)
+    }
+
     fun getAngle():Rotation2d{
         return inputs.turnPositionMotor
     }

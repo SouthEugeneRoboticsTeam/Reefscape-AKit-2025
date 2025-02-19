@@ -27,15 +27,17 @@ interface ModuleIO {
         var odometryTurnPositions:Array<Rotation2d> = arrayOf()
     }
 
-    fun updateInputs(inputs:ModuleIOInputs){}
+    fun updateInputs(inputs:ModuleIOInputs)
 
-    fun setDriveOpenLoop(output:Double){}
+    fun setDriveOpenLoop(output:Double)
 
-    fun setTurnOpenLoop(output:Double){}
+    fun setTurnOpenLoop(output:Double)
 
-    fun setDriveVelocity(velocityRadPerSec:Double){}
+    fun setDriveVelocity(velocityRadPerSec:Double)
 
-    fun setTurnPosition(rotation:Rotation2d){}
+    fun setTurnPosition(rotation:Rotation2d)
 
-    fun updateTurnEncoder(rotation:Rotation2d){}
+    fun updateTurnEncoder(rotation:Rotation2d)
+
+    fun setCurrentLimit(limit:Int)
 }

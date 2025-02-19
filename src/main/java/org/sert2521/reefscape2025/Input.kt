@@ -140,7 +140,5 @@ object Input {
 
     fun getRotOffset(): Rotation2d { return rotationOffset }
 
-    fun getSlowMode():Boolean { return driverController.leftBumper().asBoolean}
-
     fun setRumble(amount: Double) { driverController.setRumble(GenericHID.RumbleType.kBothRumble, amount) }
 }

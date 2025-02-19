@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.util.Units
 
 class GyroIONavX:GyroIO {
+    /* If you're here and have a problem with the gyro, just call software lead */
     private val imu = AHRS(AHRS.NavXComType.kMXP_SPI, SwerveConstants.ODOMETRY_FREQUENCY)
     private val yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue()
     private val yawPositionQueue = SparkOdometryThread.getInstance().registerSignal{imu.angle}
@@ -21,6 +22,5 @@ class GyroIONavX:GyroIO {
                 .toArray().filterIsInstance<Rotation2d>().toTypedArray()
         yawTimestampQueue.clear()
         yawPositionQueue.clear()
-
     }
 }

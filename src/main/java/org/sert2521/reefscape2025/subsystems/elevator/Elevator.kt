@@ -1,16 +1,12 @@
 package org.sert2521.reefscape2025.subsystems.elevator
 
 import edu.wpi.first.math.MathUtil
-import edu.wpi.first.math.filter.Debouncer
-import edu.wpi.first.math.filter.LinearFilter
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants
-import org.sert2521.reefscape2025.TuningConstants
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_PROFILE
-import org.sert2521.reefscape2025.commands.elevator.HoldElevator
 
 object Elevator : SubsystemBase() {
     private val io = ElevatorIOSpark()
@@ -41,15 +37,15 @@ object Elevator : SubsystemBase() {
     }
 
     fun getVelocity():Double {
-        return ioInputs.laserVelocity
+        return ioInputs.motorsVelocity
     }
 
     fun getPosition():Double{
-        return ioInputs.motorPosition
+        return ioInputs.motorsPosition
     }
 
     fun getMotorPosition():Double{
-        return ioInputs.motorPosition
+        return ioInputs.motorsPosition
     }
 
     fun stop() {

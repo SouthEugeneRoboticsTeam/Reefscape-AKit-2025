@@ -11,8 +11,8 @@ import kotlin.math.PI
 
 object SwerveConstants {
 
-    //set value to IdleMode.kBrake when actually running drivetrain
-    //set value to IdleMode.kCoast when testing, makes modules easier to turn by hand
+    /* set value to IdleMode.kBrake when actually running drivetrain in match or on ground */
+    /* set value to IdleMode.kCoast when testing, makes modules easier to turn by hand */
     val moduleIdleMode = IdleMode.kBrake
 
     val moduleZeroRotations = arrayOf(
@@ -56,14 +56,10 @@ object SwerveConstants {
     const val TURN_REL_CONVERSION_POSITION = (2*PI) / TURN_GEAR_RATIO
     const val TURN_REL_CONVERSION_VELOCITY = TURN_REL_CONVERSION_POSITION
 
-    //FF is the same as V for SVA controller
     const val DRIVE_P = 0.0
     const val DRIVE_I = 0.0
     const val DRIVE_D = 0.0
-//kS: 0.27859
-//kV: 0.13335
-    //kS: 0.29108
-// kV: 0.13158
+
     const val DRIVE_KS = 0.29108
     const val DRIVE_KV = 0.13158
     const val DRIVE_KA = 0.0
@@ -82,6 +78,10 @@ object SwerveConstants {
     const val ALIGN_DRIVE_I = 0.0
     const val ALIGN_DRIVE_D = 0.0
 
+    const val ALIGN_ROT_P = 0.0
+    const val ALIGN_ROT_I = 0.0
+    const val ALIGN_ROT_D = 0.0
+
     const val TURN_ABS_ENCODER_CONVERSION_POSITION = 2 * PI
 
 
@@ -92,8 +92,12 @@ object SwerveConstants {
 
     const val MAX_SPEED_MPS = 4.571
 
+    //As opposed to the max speed, this is the speed you actually want the drivetrain to go at
     const val DRIVE_SPEED = 3.0
     const val ROT_SPEED = 5.0
+
+    const val DRIVE_ACCEL_FAST = 0.0
+    const val DRIVE_ACCEL_SLOW = 0.0
 
 
     val moduleTranslations = arrayOf(

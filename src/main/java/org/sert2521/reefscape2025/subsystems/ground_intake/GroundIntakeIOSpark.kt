@@ -5,14 +5,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType
 import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkMaxConfig
-import edu.wpi.first.wpilibj.DutyCycleEncoder
 import org.sert2521.reefscape2025.ElectronicIDs.GROUNDINTAKE_MOTOR_ID
-import org.sert2521.reefscape2025.ElectronicIDs.WRIST_ABS_ENCODER
-import org.sert2521.reefscape2025.ElectronicIDs.WRIST_MOTOR_ID
-import org.sert2521.reefscape2025.PhysicalConstants.WRIST_ENCODER_MULTIPLIER
-import org.sert2521.reefscape2025.PhysicalConstants.WRIST_ENCODER_TRANSFORM
-import org.sert2521.reefscape2025.PhysicalConstants.WRIST_MOTOR_MULTIPLIER
-import org.sert2521.reefscape2025.TuningConstants.WRIST_CURRENT_LIMIT
 
 class GroundIntakeIOSpark:GroundIntakeIO {
     //Intake

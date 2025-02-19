@@ -14,6 +14,7 @@ import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Rotation2d
 import org.sert2521.reefscape2025.utils.SparkUtil
 import org.sert2521.reefscape2025.utils.SparkUtil.ifOk
+import org.sert2521.reefscape2025.utils.SparkUtil.tryUntilOk
 import java.util.function.DoubleSupplier
 import kotlin.math.PI
 
@@ -54,10 +55,11 @@ class ModuleIOSpark(module:Int):ModuleIO {
     private val driveConnectedDebounce = Debouncer(0.5)
     private val turnConnectedDebounce = Debouncer(0.5)
 
+    private val driveConfig = SparkMaxConfig()
+    private val turnConfig = SparkMaxConfig()
+
 
     init {
-        val driveConfig = SparkMaxConfig()
-
         driveConfig
             .idleMode(SwerveConstants.moduleIdleMode)
             .smartCurrentLimit(SwerveConstants.DRIVE_CURRENT_LIMIT_TELE)
@@ -100,7 +102,6 @@ class ModuleIOSpark(module:Int):ModuleIO {
             driveEncoder.setPosition(0.0)
         }
 
-        val turnConfig = SparkMaxConfig()
         turnConfig
             .inverted(SwerveConstants.TURN_INVERTED)
             .idleMode(SwerveConstants.moduleIdleMode)
@@ -221,18 +222,16 @@ class ModuleIOSpark(module:Int):ModuleIO {
     }
 
     override fun updateTurnEncoder(rotation: Rotation2d) {
-//        if (SwerveConstants.TURN_INVERTED) {
-//            turnEncoder.setPosition(
-//                SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
-//            )
-//        } else {
-//            turnEncoder.setPosition(
-//                -SwerveConstants.TURN_ABS_ENCODER_CONVERSION_POSITION * absEncoder.absolutePosition.valueAsDouble
-//            )
-//        }
+        turnEncoder.setPosition(rotation.radians)
+    }
 
-        SparkUtil.tryUntilOk(turnMotor, 5){
-            turnEncoder.setPosition(rotation.radians)
+    override fun setCurrentLimit(limit: Int) {
+        driveConfig.smartCurrentLimit(limit)
+        /* Not resetting or persisting parameters
+           because we want it to go back to default when we lose power
+           and also its goofy to save to flash multiple times a match */
+        tryUntilOk(driveMotor, 5){
+            driveMotor.configure(driveConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters)
         }
     }
 }

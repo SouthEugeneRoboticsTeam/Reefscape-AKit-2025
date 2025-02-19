@@ -190,6 +190,12 @@ object Drivetrain : SubsystemBase() {
         driveRobotOriented(ChassisSpeeds())
     }
 
+    fun setCurrentLimit(limit:Int){
+        for (module in modules){
+            module.setCurrentLimit(limit)
+        }
+    }
+
     fun stopWithX(){
         val headings = Array(4){
             SwerveConstants.moduleTranslations[it].angle

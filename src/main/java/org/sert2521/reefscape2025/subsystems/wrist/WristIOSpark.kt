@@ -7,16 +7,13 @@ import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.ClosedLoopConfig
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkMaxConfig
-import edu.wpi.first.wpilibj.DutyCycleEncoder
-import org.sert2521.reefscape2025.ElectronicIDs.WRIST_ABS_ENCODER
 import org.sert2521.reefscape2025.ElectronicIDs.WRIST_MOTOR_ID
-import org.sert2521.reefscape2025.PhysicalConstants.WRIST_ENCODER_MULTIPLIER
-import org.sert2521.reefscape2025.PhysicalConstants.WRIST_ENCODER_TRANSFORM
+import org.sert2521.reefscape2025.PhysicalConstants.WRIST_ABS_ENCODER_ZERO
+import org.sert2521.reefscape2025.PhysicalConstants.WRIST_MOTOR_ENCODER_MULTIPLIER
 import org.sert2521.reefscape2025.TuningConstants.WRIST_CURRENT_LIMIT
 import org.sert2521.reefscape2025.TuningConstants.WRIST_G
 import org.sert2521.reefscape2025.TuningConstants.WRIST_P
 import org.sert2521.reefscape2025.TuningConstants.WRIST_D
-import kotlin.math.PI
 import kotlin.math.cos
 
 class WristIOSpark:WristIO {
@@ -30,20 +27,23 @@ class WristIOSpark:WristIO {
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit(WRIST_CURRENT_LIMIT)
 
-        wristConfig
-            .absoluteEncoder
-            .positionConversionFactor(WRIST_ENCODER_MULTIPLIER)
-            .velocityConversionFactor(WRIST_ENCODER_MULTIPLIER)
-            .zeroOffset(WRIST_ENCODER_TRANSFORM)
+        wristConfig.absoluteEncoder
+            .positionConversionFactor(1.0)
+            .velocityConversionFactor(1.0/60)
+            .zeroOffset(WRIST_ABS_ENCODER_ZERO)
             .zeroCentered(true)
             .inverted(true)
+
+        wristConfig.encoder
+            .positionConversionFactor(WRIST_MOTOR_ENCODER_MULTIPLIER)
+            .velocityConversionFactor(WRIST_MOTOR_ENCODER_MULTIPLIER/60)
 
         wristConfig.closedLoop
             .pidf(
                 WRIST_P, 0.0,
                 WRIST_D, 0.0
             )
-            .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder)
+            .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder)
 
         wristMotor.configure(wristConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
     }
@@ -53,11 +53,11 @@ class WristIOSpark:WristIO {
     }
 
     override fun updateInputs(inputs: WristIO.WristIOInputs) {
-        //Update Wrist Inputs
-        inputs.wristAppliedVolts = wristMotor.outputCurrent
-        inputs.wristCurrentAmps = wristMotor.busVoltage * wristMotor.appliedOutput
+        inputs.wristAppliedVolts = wristMotor.busVoltage * wristMotor.appliedOutput
+        inputs.wristCurrentAmps = wristMotor.outputCurrent
         inputs.wristVelocityRadPerSec = wristMotor.absoluteEncoder.velocity
-        inputs.wristPosition = wristMotor.absoluteEncoder.position
+        inputs.wristAbsPosition = wristMotor.absoluteEncoder.position
+        inputs.wristMotorPosition = wristMotor.encoder.position
     }
 
     override fun setReference(targetPosition: Double) {
@@ -68,5 +68,9 @@ class WristIOSpark:WristIO {
             ClosedLoopSlot.kSlot0,
             arbFF
         )
+    }
+
+    override fun resetMotorEncoder() {
+        wristMotor.encoder.position = wristMotor.absoluteEncoder.position
     }
 }

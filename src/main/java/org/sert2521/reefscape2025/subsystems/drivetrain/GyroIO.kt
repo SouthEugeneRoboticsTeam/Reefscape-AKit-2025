@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.AutoLog
 import org.team9432.annotation.Logged
 
 interface GyroIO {
+    /* If you're here and have a problem with the gyro, just call software lead */
     @Logged
     open class GyroIOInputs{
         var connected = false
