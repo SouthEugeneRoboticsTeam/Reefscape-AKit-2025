@@ -19,26 +19,27 @@ import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_P
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_V
 
 class ElevatorIOSpark:ElevatorIO {
-    val leftMotor = SparkMax(ELEVATOR_LEFT_ID, SparkLowLevel.MotorType.kBrushless)
-    val rightMotor = SparkMax(ELEVATOR_RIGHT_ID, SparkLowLevel.MotorType.kBrushless)
+    private val leftMotor = SparkMax(ELEVATOR_LEFT_ID, SparkLowLevel.MotorType.kBrushless)
+    private val rightMotor = SparkMax(ELEVATOR_RIGHT_ID, SparkLowLevel.MotorType.kBrushless)
 
-    val leftConfig = SparkMaxConfig()
-    val rightConfig = SparkMaxConfig()
-
-    val distanceSensor = CANrange(LASER_ID)
-
+    private val distanceSensor = CANrange(LASER_ID)
 
     init{
+        // Put the spark config into the init, so that java can garbage collect it
+        // It's a small optimization because now it doesn't have to store the value the whole code
+        val leftConfig = SparkMaxConfig()
+        val rightConfig = SparkMaxConfig()
+
         leftConfig
             .inverted(false)
             .smartCurrentLimit(40)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
-        .encoder
+        .encoder // Position and velocity are in m and m/s respectively
             .positionConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER)
             .velocityConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER/60)
 
         leftConfig.closedLoop
-            .pidf(
+            .pidf( // F stands for Feedforward, works like a V gain. The F isn't useful for our purposes
                 ELEVATOR_P, 0.0,
                 ELEVATOR_D, 0.0
             )
@@ -64,9 +65,9 @@ class ElevatorIOSpark:ElevatorIO {
     override fun updateInputs(inputs: ElevatorIO.ElevatorIOInputs) {
         inputs.currentAmps = (leftMotor.outputCurrent + rightMotor.outputCurrent) / 2
         inputs.appliedVolts = (leftMotor.busVoltage * leftMotor.appliedOutput + rightMotor.busVoltage * rightMotor.appliedOutput)/2
-        inputs.laserPosition = distanceSensor.distance.value.`in`(Units.Meters)
         inputs.motorsVelocity = (leftMotor.encoder.velocity + rightMotor.encoder.velocity) / 2
         inputs.motorsPosition = (leftMotor.encoder.position + rightMotor.encoder.position) / 2
+        inputs.laserPosition = distanceSensor.distance.value.`in`(Units.Meters)
     }
 
     override fun setVoltage(voltage: Double) {
@@ -80,13 +81,15 @@ class ElevatorIOSpark:ElevatorIO {
     }
 
     override fun setReference(setpoint: TrapezoidProfile.State) {
+        // Feedforward function
+        // Didn't feel like we needed the entire ElevatorFeedforward() class
         val arbFF = setpoint.velocity * ELEVATOR_V + ELEVATOR_G
 
-        leftMotor.closedLoopController.setReference(
-            setpoint.position,
-            SparkBase.ControlType.kPosition,
-            ClosedLoopSlot.kSlot0,
-            arbFF
+        leftMotor.closedLoopController.setReference( // closedLoopController is PID calculated on the sparks
+            setpoint.position, // The setpoint it's trying to reach
+            SparkBase.ControlType.kPosition, // Dimension of setpoint, e.g. position, velocity, voltage, current, etc.
+            ClosedLoopSlot.kSlot0, // Slot of PID, default is zero.
+            arbFF // Added voltage fed into the spark on top of PID, works like a feedforward result
         )
         rightMotor.closedLoopController.setReference(
             setpoint.position,

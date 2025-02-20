@@ -18,10 +18,14 @@ import kotlin.math.cos
 
 class WristIOSpark:WristIO {
     private val wristMotor = SparkMax(WRIST_MOTOR_ID, MotorType.kBrushless)
-    private val wristConfig = SparkMaxConfig()
+
 
     init {
-        //Wrist settings
+        // Put the spark config into the init, so that java can garbage collect it
+        // It's a small optimization because now it doesn't have to store the value the whole code
+        val wristConfig = SparkMaxConfig()
+
+        // Wrist settings
         wristConfig
             .inverted(false)
             .idleMode(IdleMode.kBrake)

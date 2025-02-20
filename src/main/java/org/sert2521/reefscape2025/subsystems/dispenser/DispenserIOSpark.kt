@@ -14,15 +14,17 @@ class DispenserIOSpark:DispenserIO {
     private val motor = SparkMax(DISPENSER_MOTOR_ID, MotorType.kBrushless)
     private val beambreakDispenser = DigitalInput(BEAMBREAK_DISPENSER)
     private val beambreakRamp = DigitalInput(BEAMBREAK_RAMP)
-    private val config = SparkMaxConfig()
 
 
     init {
+        // Put the spark config into the init, so that java can garbage collect it
+        // It's a small optimization because now it doesn't have to store the value the whole code
+        val config = SparkMaxConfig()
+
         config
             .inverted(true)
             .idleMode(IdleMode.kCoast)
             .smartCurrentLimit(30)
-
 
         motor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
     }

@@ -11,7 +11,7 @@ class VisionIOLimelight: VisionIO {
         var doRejectUpdate = false
 
         /*
-        Note: this code will almost NEVER use mega tag 1
+        Note: this code will almost NEVER use MegaTag1
         Especially given that I have NEVER seen the gyro be disconnected
          */
         if(!useMegaTag2) {

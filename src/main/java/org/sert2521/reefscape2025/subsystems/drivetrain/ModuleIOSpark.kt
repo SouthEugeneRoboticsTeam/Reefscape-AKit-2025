@@ -55,6 +55,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
     private val driveConnectedDebounce = Debouncer(0.5)
     private val turnConnectedDebounce = Debouncer(0.5)
 
+    // Here we don't put the spark config in the init because we need it later.
     private val driveConfig = SparkMaxConfig()
     private val turnConfig = SparkMaxConfig()
 

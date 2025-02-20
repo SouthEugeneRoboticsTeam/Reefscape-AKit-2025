@@ -53,6 +53,8 @@ object Elevator : SubsystemBase() {
     }
 
     fun setElevatorCommand(goalMeters:Double): Command {
+        /* Sets the goal of the motion profile, and then executes the calculations required
+            then sets the motor setpoint to the result */
         return startRun({
                 goal = TrapezoidProfile.State(goalMeters, 0.0)
             },
@@ -60,6 +62,7 @@ object Elevator : SubsystemBase() {
                 currentState = profile.calculate(0.02, currentState, goal)
                 Logger.recordOutput("Elevator/Reference Position", currentState.position)
                 Logger.recordOutput("Elevator/Reference Velocity", currentState.velocity)
+
                 io.setReference(currentState)
 
                 Logger.recordOutput("Elevator/At Setpoint",
@@ -71,6 +74,8 @@ object Elevator : SubsystemBase() {
     }
 
     private fun holdElevatorCommand():Command{
+        // If it's at stow, then set the voltage to 0
+        // Otherwise just run the profile without a new goal until another goal is set
         return run{
             if (goal.position == SetpointConstants.ELEVATOR_STOW){
                 io.setVoltage(0.0)
