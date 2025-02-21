@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_PROFILE
+import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 
 object Elevator : SubsystemBase() {
     private val io = ElevatorIOSpark()
@@ -46,6 +47,12 @@ object Elevator : SubsystemBase() {
 
     fun getMotorPosition():Double{
         return ioInputs.motorsPosition
+    }
+
+    fun getAccelLimit():Double{
+        return MathUtil.interpolate(
+            SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
+            getPosition()/SetpointConstants.ELEVATOR_L4)
     }
 
     fun stop() {

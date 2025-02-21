@@ -1,60 +1,69 @@
 package org.sert2521.reefscape2025.commands.drivetrain
 
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.geometry.Pose2d
+import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.wpilibj2.command.Command
-import org.sert2521.reefscape2025.DrivetrainConstants
+import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
+import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
+import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import kotlin.math.*
 
-class VisionAlign(): Command() {
+class VisionAlign() : ReadJoysticks() {
 
-    private val drivePID = PIDController(DrivetrainConstants.DRIVE_P, DrivetrainConstants.DRIVE_I, DrivetrainConstants.DRIVE_D)
-    private val anglePID = PIDController(DrivetrainConstants.ANGLE_P, DrivetrainConstants.ANGLE_I, DrivetrainConstants.ANGLE_D)
+    private val drivePID = PIDController(SwerveConstants.ALIGN_DRIVE_P, SwerveConstants.ALIGN_DRIVE_I, SwerveConstants.ALIGN_DRIVE_D)
+    private val anglePID = PIDController(SwerveConstants.ALIGN_ROT_P, SwerveConstants.ALIGN_ROT_I, SwerveConstants.ALIGN_ROT_D)
 
-    private var xTarget = 0.0
-    private var yTarget = 0.0
+    private var targetPose = Pose2d()
+
 
     private var xError = 0.0
     private var yError = 0.0
-    private var angleError = 0.0
-    private var error = 0.0
-
-    private var angleTarget = 0.0
 
     private var angle = 0.0
     private var pidResult = 0.0
-    private var xResult = 0.0
-    private var yResult = 0.0
     private var angleResult = 0.0
+
+    private var resetTarget = true
+
+    private var accelLimitedChassisSpeeds = ChassisSpeeds()
 
     init{
         addRequirements(Drivetrain)
     }
 
     override fun initialize() {
-        xTarget = Drivetrain.getNearestTarget().x
-        yTarget = Drivetrain.getNearestTarget().y
-        angleTarget = Drivetrain.getNearestTarget().rotation.radians
-
+        targetPose = Drivetrain.getNearestTarget()
     }
 
     override fun execute() {
-
-        xError = xTarget - Drivetrain.getPose().x
-        yError = yTarget - Drivetrain.getPose().y
-        angleError = angleTarget - Drivetrain.getPose().rotation.radians
+        if (super.joystickX() == 0.0 && super.joystickY()==0.0 && super.joystickZ()==0.0 && resetTarget){
+            targetPose = Drivetrain.getNearestTarget()
+        }
+        xError = targetPose.x - Drivetrain.getPose().x
+        yError = targetPose.y - Drivetrain.getPose().y
 
         angle = atan2(yError, xError)
-        error = sqrt( xError.pow(2) + yError.pow(2) )
 
-        pidResult = drivePID.calculate(error, 0.0)
-        angleResult = anglePID.calculate(Drivetrain.getPose().rotation.radians, angleTarget)
+        pidResult = drivePID.calculate(sqrt( xError.pow(2) + yError.pow(2)), 0.0)
+        angleResult = anglePID.calculate(Drivetrain.getPose().rotation.radians, targetPose.rotation.radians)
 
-        xResult = pidResult * cos(angle)
-        yResult = pidResult * sin(angle)
-
-        Drivetrain.driveRobotOriented(ChassisSpeeds(xResult, -yResult, angleResult))
-
+        if (super.joystickX() == 0.0 && super.joystickY()==0.0 && super.joystickZ()==0.0) {
+            accelLimitedChassisSpeeds = readChassisSpeeds(
+                ChassisSpeeds(pidResult*cos(angle),pidResult*sin(angle), angleResult),
+                MathUtil.interpolate(
+                    SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
+                    Elevator.getPosition() / SetpointConstants.ELEVATOR_L4
+                ),
+                Rotation2d()
+            )
+        } else {
+            accelLimitedChassisSpeeds = readJoysticks(
+                Elevator.getAccelLimit(),
+                Drivetrain.getPose().rotation.minus(super.inputRotOffset())
+            )
+        }
     }
 }
