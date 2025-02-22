@@ -145,13 +145,13 @@ object Drivetrain : SubsystemBase() {
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
 
-        if (!visionInputs.rejectEstimation){
-            if (visionInputs.megatagTwo){
-                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV)
-            } else {
-                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV_YAW_RESET)
-            }
-        }
+//        if (!visionInputs.rejectEstimation){
+//            if (visionInputs.megatagTwo){
+//                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV)
+//            } else {
+//                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV_YAW_RESET)
+//            }
+//        }
 
         field.robotPose = getPose()
 

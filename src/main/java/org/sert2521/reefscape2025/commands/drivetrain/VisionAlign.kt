@@ -39,7 +39,7 @@ class VisionAlign() : ReadJoysticks() {
     }
 
     override fun execute() {
-        targetPose = Pose2d(4.99, 5.23, Rotation2d((-2.0* PI)/3.0))
+        targetPose = Drivetrain.getNearestTarget()
         xError = Drivetrain.getPose().x - targetPose.x
         yError = Drivetrain.getPose().y - targetPose.y
 
@@ -48,29 +48,63 @@ class VisionAlign() : ReadJoysticks() {
         driveResult = drivePID.calculate(sqrt( xError.pow(2) + yError.pow(2)), 0.0)
         angleResult = anglePID.calculate(Drivetrain.getPose().rotation.radians, targetPose.rotation.radians)
 
-        if (super.joystickX() == 0.0 && super.joystickY()==0.0) {
+        Logger.recordOutput("Drive Result", driveResult)
+
+        //if angleResult
+
+        if (super.joystickX() == 0.0 && super.joystickY()==0.0 && super.joystickZ()==0.0) {
+            //TODO:Add angle result
             accelLimitedChassisSpeeds = readChassisSpeeds(
-                ChassisSpeeds(driveResult* cos(angle),-driveResult*sin(angle), angleResult),
+                ChassisSpeeds(driveResult*cos(angle),-driveResult*sin(angle), angleResult),
                 MathUtil.interpolate(
                     SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
                     Elevator.getPosition() / SetpointConstants.ELEVATOR_L4
                 ),
                 Rotation2d()
             )
+            if (accelLimitedChassisSpeeds.vxMetersPerSecond < 0.01){
+                accelLimitedChassisSpeeds.vxMetersPerSecond = 0.0
+            }
+            if (accelLimitedChassisSpeeds.vyMetersPerSecond < 0.01){
+                accelLimitedChassisSpeeds.vyMetersPerSecond = 0.0
+            }
+            Drivetrain.driveRobotOriented(ChassisSpeeds(
+                accelLimitedChassisSpeeds.vxMetersPerSecond,
+                accelLimitedChassisSpeeds.vyMetersPerSecond,
+                accelLimitedChassisSpeeds.omegaRadiansPerSecond))
+        } else if (super.joystickZ() == 0.0){
+            accelLimitedChassisSpeeds = readJoysticks(
+                Elevator.getAccelLimit(),
+                super.inputRotOffset(),
+                Elevator.getDeccelLimit(), Elevator.getSpeedLimit()
+            )
+
+            //TODO: add angle result
+            Drivetrain.driveRobotOriented(ChassisSpeeds(
+                accelLimitedChassisSpeeds.vxMetersPerSecond,
+                accelLimitedChassisSpeeds.vyMetersPerSecond, angleResult))
+        } else if (super.joystickX() == 0.0 && super.joystickY() == 0.0){
+            accelLimitedChassisSpeeds = readChassisSpeeds(
+                ChassisSpeeds(driveResult* cos(angle),-driveResult*sin(angle), joystickZ().pow(3)*SwerveConstants.ROT_SPEED),
+                MathUtil.interpolate(
+                    SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
+                    Elevator.getPosition() / SetpointConstants.ELEVATOR_L4
+                ),
+                Rotation2d()
+            )
+
+            //Drivetrain.driveRobotOriented(accelLimitedChassisSpeeds)
+
+            Drivetrain.stop()
         } else {
             accelLimitedChassisSpeeds = readJoysticks(
                 Elevator.getAccelLimit(),
-                super.inputRotOffset()
+                super.inputRotOffset(),
+                Elevator.getDeccelLimit(), Elevator.getSpeedLimit()
             )
+
+            Drivetrain.driveRobotOriented(accelLimitedChassisSpeeds)
         }
-        Logger.recordOutput("AnglePID Result", driveResult*sin(angle))
-        Logger.recordOutput("DrivePID Result", driveResult*cos(angle))
-        Logger.recordOutput("x error", xError)
-        Logger.recordOutput("y error", yError)
-        Logger.recordOutput("Angle", angle)
-        Drivetrain.driveRobotOriented(ChassisSpeeds(
-            0.0, //accelLimitedChassisSpeeds.vxMetersPerSecond,
-            0.0,//accelLimitedChassisSpeeds.vyMetersPerSecond,
-            0.0))
+        Logger.recordOutput("Angle Result", angleResult)
     }
 }

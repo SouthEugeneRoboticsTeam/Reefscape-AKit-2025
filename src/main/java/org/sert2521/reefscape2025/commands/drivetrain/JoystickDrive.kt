@@ -17,7 +17,8 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : ReadJoysticks() 
 
     override fun execute() {
         if (fieldOriented) {
-            joystickAccelLimited = readJoysticks(Elevator.getAccelLimit(), super.inputRotOffset(),
+            joystickAccelLimited = readJoysticks(
+                Elevator.getAccelLimit(), super.inputRotOffset(),
                 Elevator.getDeccelLimit(), Elevator.getSpeedLimit())
 
             if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0){

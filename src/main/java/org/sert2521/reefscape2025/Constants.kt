@@ -110,8 +110,8 @@ object VisionTargetPositions {
         Pose2d(5.78, 3.86, Rotation2d(PI)),
         Pose2d(5.78, 4.19, Rotation2d(PI)),
 
-        Pose2d(5.28, 5.07, Rotation2d((-2.0* PI)/3.0)),
-        Pose2d(4.99, 5.23, Rotation2d((-2.0* PI)/3.0)),
+        Pose2d(5.177958965301514, 5.048032760620117, Rotation2d((-2.0* PI)/3.0)),
+        Pose2d(4.91298770904541, 5.218371391296387, Rotation2d((-2.0* PI)/3.0)),
 
         Pose2d(3.99, 5.23, Rotation2d(-PI /3.0)),
         Pose2d(3.70, 5.07, Rotation2d(-PI /3.0)),

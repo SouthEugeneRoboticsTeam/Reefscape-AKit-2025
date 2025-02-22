@@ -73,9 +73,9 @@ object SwerveConstants {
     val autoTranslationPID = PIDConstants(2.0, 0.0, 0.0)
     val autoRotationPID = PIDConstants(2.0, 0.0, 0.0)
 
-    const val ALIGN_DRIVE_P = 0.2
+    const val ALIGN_DRIVE_P = 2.0
     const val ALIGN_DRIVE_I = 0.0
-    const val ALIGN_DRIVE_D = 0.0
+    const val ALIGN_DRIVE_D = 0.1
 
     const val ALIGN_ROT_P = 8.0
     const val ALIGN_ROT_I = 0.0

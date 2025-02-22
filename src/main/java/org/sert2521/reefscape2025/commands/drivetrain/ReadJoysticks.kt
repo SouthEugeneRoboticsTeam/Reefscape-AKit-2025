@@ -134,6 +134,6 @@ open class ReadJoysticks : Command() {
 
         // X and Y are swapped because Y is left in robot coordinates and X is up
         // It's the other way around in controller coordinates
-        return ChassisSpeeds(lastY, lastX, fieldChassisSpeeds.omegaRadiansPerSecond)
+        return ChassisSpeeds(lastX, lastY, fieldChassisSpeeds.omegaRadiansPerSecond)
     }
 }
