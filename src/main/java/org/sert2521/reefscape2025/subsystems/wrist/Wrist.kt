@@ -47,7 +47,7 @@ object Wrist : SubsystemBase() {
     }
 
     private fun holdWristCommand():Command{
-        return Commands.none()
+        return runOnce {}
     }
 
     fun initWristCommand():Command{
@@ -58,7 +58,7 @@ object Wrist : SubsystemBase() {
             .andThen(Commands.waitUntil{
                 MathUtil.isNear(WRIST_INIT, getRotations(), 0.1)
             })
-            .andThen(Commands.waitSeconds(1.0))
+            .andThen(Commands.waitSeconds(0.2))
             .andThen(runOnce{ io.resetMotorEncoder() })
             .andThen(setWristCommand(WRIST_STOW))
     }

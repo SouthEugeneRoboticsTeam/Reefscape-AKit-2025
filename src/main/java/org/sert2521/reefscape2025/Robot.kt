@@ -13,6 +13,8 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
+import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
+import org.sert2521.reefscape2025.subsystems.wrist.Wrist
 
 
 /**
@@ -56,6 +58,7 @@ object Robot : LoggedRobot()
         // Access the RobotContainer object so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
         Autos
+        Drivetrain
 
         when (MetaConstants.currentMode) {
             MetaConstants.Mode.REAL -> {
@@ -81,6 +84,10 @@ object Robot : LoggedRobot()
 
         // Start AdvantageKit logger
         Logger.start();
+    }
+
+    override fun disabledExit() {
+        Wrist.initWristCommand().schedule()
     }
 
 

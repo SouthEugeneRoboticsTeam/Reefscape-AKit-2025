@@ -2,15 +2,12 @@ package org.sert2521.reefscape2025.commands.drivetrain
 
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Rotation2d
-import edu.wpi.first.math.geometry.Twist2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import org.sert2521.reefscape2025.ConfigConstants
 import org.sert2521.reefscape2025.Input
-import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
-import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import kotlin.math.*
 
 open class ReadJoysticks : Command() {
@@ -48,18 +45,28 @@ open class ReadJoysticks : Command() {
     private var magChange = 0.0
     private var magFraction = 0.0
 
+    private var appliedAccelLimit = 0.0
+
     init{
-        addRequirements(Elevator)
+        addRequirements(Drivetrain)
     }
 
     // Oh man I bet this could be optimized but I'm eeeepy...
-    fun readJoysticks(accelLimit:Double, rotOffset: Rotation2d):ChassisSpeeds{
+    fun readJoysticks(accelLimit:Double, rotOffset: Rotation2d,
+                      deccelLimit:Double = accelLimit,
+                      maxSpeed:Double = SwerveConstants.MAX_SPEED_MPS):ChassisSpeeds{
         /**
          * Returns the desired directions as a triplet of X, Y, and Rotation in robot coordinates
          * Should be called periodically.
          */
         x = joystickX()
         y = joystickY()
+
+        if (x==0.0 && y==0.0){
+            appliedAccelLimit = deccelLimit
+        } else {
+            appliedAccelLimit = accelLimit
+        }
 
         angle = atan2(y, x)
         sqrMagnitude = x.pow(2) + y.pow(2)
@@ -72,8 +79,8 @@ open class ReadJoysticks : Command() {
         // X and Y are swapped because Y is left in robot coordinates and X is up
         // It's the other way around in controller coordinates
         cubicChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            sin(angle) * newMagnitude * SwerveConstants.DRIVE_SPEED,
-            cos(angle) * newMagnitude * SwerveConstants.DRIVE_SPEED,
+            sin(angle) * newMagnitude * maxSpeed,
+            cos(angle) * newMagnitude * maxSpeed,
             joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
             Drivetrain.getPose().rotation.minus(rotOffset)
         )
@@ -87,8 +94,8 @@ open class ReadJoysticks : Command() {
 
         // Applies maximum magnitude of change of x and y
         // (divide by 50 so that currAccel can be in m/s^2)
-        if (magChange > accelLimit/50.0){
-            magFraction = (accelLimit/50.0)/magChange
+        if (magChange > appliedAccelLimit/50.0){
+            magFraction = (appliedAccelLimit/50.0)/magChange
         }
 
         lastX = MathUtil.interpolate(lastX, cubicChassisSpeeds.vxMetersPerSecond, magFraction)
@@ -98,7 +105,7 @@ open class ReadJoysticks : Command() {
     }
 
     fun readChassisSpeeds(fieldChassisSpeeds: ChassisSpeeds,
-                          accelLimit: Double, totalRotOffset:Rotation2d):ChassisSpeeds{
+                          accelLimit: Double, rotOffset:Rotation2d):ChassisSpeeds{
         /**
          * Same as [readJoysticks] but has the speeds passed in through ChassisSpeeds.
          * Outputs calculated ChassisSpeeds once the acceleration limit has been calculated
@@ -106,7 +113,7 @@ open class ReadJoysticks : Command() {
 
         cubicChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             fieldChassisSpeeds,
-            totalRotOffset
+            Drivetrain.getPose().rotation.minus(rotOffset)
         )
 
         // Total magnitude of change since last cycle

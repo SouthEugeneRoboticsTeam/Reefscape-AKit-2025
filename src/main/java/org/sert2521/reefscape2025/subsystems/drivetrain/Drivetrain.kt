@@ -13,24 +13,21 @@ import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.math.util.Units
-import edu.wpi.first.networktables.NetworkTable
 import edu.wpi.first.units.Units.Volts
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.DriverStation
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
-import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
-import org.littletonrobotics.junction.networktables.LoggedNetworkInput
+import org.sert2521.reefscape2025.Input
 import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.VisionTargetPositions
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
-import org.sert2521.reefscape2025.utils.LimelightHelpers
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.math.PI
 import kotlin.math.abs
 
 
@@ -64,7 +61,7 @@ object Drivetrain : SubsystemBase() {
 
     private val lastModulePositions = Array(4){SwerveModulePosition()}
 
-    private var rawGyroRotation = Rotation2d()
+    private var rawGyroRotation = Rotation2d(PI/2)
 
     private val poseEstimator = SwerveDrivePoseEstimator(
         kinematics,
@@ -148,14 +145,20 @@ object Drivetrain : SubsystemBase() {
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
 
-//        if (!visionInputs.rejectEstimation){
-//            addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV)
-//        }
+        if (!visionInputs.rejectEstimation){
+            if (visionInputs.megatagTwo){
+                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV)
+            } else {
+                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV_YAW_RESET)
+            }
+        }
+
         field.robotPose = getPose()
 
         Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds())
         Logger.recordOutput("SwerveModuleStates/Measured", *getModuleStates())
         Logger.recordOutput("Odometry/Robot Pose", getPose())
+        Logger.recordOutput("Odometry/Robot Rotations", getPose().rotation.rotations)
     }
 
     /* === Setters === */

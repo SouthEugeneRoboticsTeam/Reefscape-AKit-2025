@@ -1,5 +1,6 @@
 package org.sert2521.reefscape2025
 
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Joystick
@@ -7,12 +8,14 @@ import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
+import org.sert2521.reefscape2025.commands.drivetrain.VisionAlign
 import org.sert2521.reefscape2025.commands.elevator.RemoveAlgae
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 import org.sert2521.reefscape2025.subsystems.wrist.Wrist
+import kotlin.math.PI
 
 // Bindings:
 // Gunner:
@@ -48,7 +51,9 @@ object Input {
 
     // Button Assignment:
     // Drivetrain:
-    private val resetDrivetrain = driverController.y()
+    private val resetRotOffset = driverController.y()
+    private val resetGyroRawYaw = driverController.start()
+    private val resetGyroVision = driverController.back()
     private val visionAlign = driverController.a()
 
     // Wrist:
@@ -83,8 +88,11 @@ object Input {
 
         // Command Assignment
         // Drivetrain
-        resetDrivetrain.onTrue(runOnce({ rotationOffset=Drivetrain.getPose().rotation }))
-            // visionAlign.whileTrue(VisionAlign())
+        resetRotOffset.onTrue(runOnce({ rotationOffset=Drivetrain.getPose().rotation }))
+        resetGyroRawYaw.onTrue(runOnce({ Drivetrain.setPose(
+            Pose2d(Drivetrain.getPose().x, Drivetrain.getPose().y, Rotation2d())
+        )}))
+        visionAlign.whileTrue(VisionAlign())
 
         // Wrist
             wristStow.onTrue(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
@@ -139,6 +147,10 @@ object Input {
     fun getJoystickZ():Double { return -driverController.rightX }
 
     fun getRotOffset(): Rotation2d { return rotationOffset }
+
+    fun getGyroReset():Boolean{
+        return resetGyroVision.asBoolean
+    }
 
     fun setRumble(amount: Double) { driverController.setRumble(GenericHID.RumbleType.kBothRumble, amount) }
 }

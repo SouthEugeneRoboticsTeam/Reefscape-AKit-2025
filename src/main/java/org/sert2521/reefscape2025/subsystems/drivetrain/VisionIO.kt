@@ -10,6 +10,7 @@ interface VisionIO {
         var estimatedPosition = Pose2d()
         var timestamp = 0.0
         var rejectEstimation = false
+        var megatagTwo = false
     }
 
     fun updateInputs(inputs: VisionIOInputs)

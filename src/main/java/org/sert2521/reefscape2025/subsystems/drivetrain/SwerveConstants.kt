@@ -3,7 +3,6 @@ package org.sert2521.reefscape2025.subsystems.drivetrain
 import com.pathplanner.lib.config.PIDConstants
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import edu.wpi.first.math.VecBuilder
-import edu.wpi.first.math.Vector
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.system.plant.DCMotor
@@ -60,7 +59,7 @@ object SwerveConstants {
     const val DRIVE_I = 0.0
     const val DRIVE_D = 0.0
 
-    const val DRIVE_KS = 0.29108
+    const val DRIVE_KS = 0.1
     const val DRIVE_KV = 0.13158
     const val DRIVE_KA = 0.0
 
@@ -74,13 +73,13 @@ object SwerveConstants {
     val autoTranslationPID = PIDConstants(2.0, 0.0, 0.0)
     val autoRotationPID = PIDConstants(2.0, 0.0, 0.0)
 
-    const val ALIGN_DRIVE_P = 0.0
+    const val ALIGN_DRIVE_P = 0.2
     const val ALIGN_DRIVE_I = 0.0
     const val ALIGN_DRIVE_D = 0.0
 
-    const val ALIGN_ROT_P = 0.0
+    const val ALIGN_ROT_P = 8.0
     const val ALIGN_ROT_I = 0.0
-    const val ALIGN_ROT_D = 0.0
+    const val ALIGN_ROT_D = 0.47
 
     const val TURN_ABS_ENCODER_CONVERSION_POSITION = 2 * PI
 
@@ -93,11 +92,15 @@ object SwerveConstants {
     const val MAX_SPEED_MPS = 4.571
 
     //As opposed to the max speed, this is the speed you actually want the drivetrain to go at
-    const val DRIVE_SPEED = 3.0
+    const val DRIVE_SPEED_FAST = 3.0
+    const val DRIVE_SPEED_SLOW = 1.0
     const val ROT_SPEED = 5.0
 
-    const val DRIVE_ACCEL_FAST = 3.0
-    const val DRIVE_ACCEL_SLOW = 0.5
+    const val DRIVE_ACCEL_FAST = 20.0
+    const val DRIVE_DECCEL_FAST = 25.0
+
+    const val DRIVE_ACCEL_SLOW = 8.0
+    const val DRIVE_DECCEL_SLOW = 8.0
 
 
     val moduleTranslations = arrayOf(
@@ -113,5 +116,6 @@ object SwerveConstants {
 
     const val FF_RAMP_RATE = 1.0
 
-    val LIMELIGHT_STDV = VecBuilder.fill(0.7, 0.7, 9999999.9)
+    val LIMELIGHT_STDV = VecBuilder.fill(0.7, 0.7, 1.0E99)
+    val LIMELIGHT_STDV_YAW_RESET = VecBuilder.fill(0.7, 0.7, 1.0)
 }

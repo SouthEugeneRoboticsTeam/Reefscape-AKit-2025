@@ -12,11 +12,11 @@ object SetpointConstants{
     const val WRIST_INIT = 0.28
     const val WRIST_STOW = 0.23
     const val WRIST_GROUND = -0.08
-    const val WRIST_L1 = 0.0
+    const val WRIST_L1 = 0.17
     const val WRIST_ALGAE = 0.089
 
     const val ELEVATOR_STOW = 0.0
-    const val ELEVATOR_L2 = 0.17
+    const val ELEVATOR_L2 = 0.15
     const val ELEVATOR_L3 = 0.37
     const val ELEVATOR_L4 = 0.67-0.02
     const val ELEVATOR_ALGAE = 0.25
@@ -87,9 +87,8 @@ object TuningConstants{
 }
 
 object PhysicalConstants {
-    const val WRIST_ENCODER_MULTIPLIER = 1.0
     const val WRIST_ABS_ENCODER_ZERO = 0.95
-    const val WRIST_MOTOR_ENCODER_MULTIPLIER = 1.0
+    const val WRIST_MOTOR_ENCODER_MULTIPLIER = 3.0/200
 
     const val ELEVATOR_MOTOR_ENCODER_MULTIPLIER = 0.02328333333/2.0
 

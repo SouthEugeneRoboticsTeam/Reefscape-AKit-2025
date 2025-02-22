@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
@@ -23,15 +24,14 @@ class VisionAlign() : ReadJoysticks() {
     private var yError = 0.0
 
     private var angle = 0.0
-    private var pidResult = 0.0
+    private var driveResult = 0.0
     private var angleResult = 0.0
-
-    private var resetTarget = true
 
     private var accelLimitedChassisSpeeds = ChassisSpeeds()
 
     init{
         addRequirements(Drivetrain)
+        anglePID.enableContinuousInput(PI, -PI)
     }
 
     override fun initialize() {
@@ -39,20 +39,18 @@ class VisionAlign() : ReadJoysticks() {
     }
 
     override fun execute() {
-        if (super.joystickX() == 0.0 && super.joystickY()==0.0 && super.joystickZ()==0.0 && resetTarget){
-            targetPose = Drivetrain.getNearestTarget()
-        }
-        xError = targetPose.x - Drivetrain.getPose().x
-        yError = targetPose.y - Drivetrain.getPose().y
+        targetPose = Pose2d(4.99, 5.23, Rotation2d((-2.0* PI)/3.0))
+        xError = Drivetrain.getPose().x - targetPose.x
+        yError = Drivetrain.getPose().y - targetPose.y
 
-        angle = atan2(yError, xError)
+        angle = -atan2(yError, xError)
 
-        pidResult = drivePID.calculate(sqrt( xError.pow(2) + yError.pow(2)), 0.0)
+        driveResult = drivePID.calculate(sqrt( xError.pow(2) + yError.pow(2)), 0.0)
         angleResult = anglePID.calculate(Drivetrain.getPose().rotation.radians, targetPose.rotation.radians)
 
-        if (super.joystickX() == 0.0 && super.joystickY()==0.0 && super.joystickZ()==0.0) {
+        if (super.joystickX() == 0.0 && super.joystickY()==0.0) {
             accelLimitedChassisSpeeds = readChassisSpeeds(
-                ChassisSpeeds(pidResult*cos(angle),pidResult*sin(angle), angleResult),
+                ChassisSpeeds(driveResult* cos(angle),-driveResult*sin(angle), angleResult),
                 MathUtil.interpolate(
                     SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
                     Elevator.getPosition() / SetpointConstants.ELEVATOR_L4
@@ -62,8 +60,17 @@ class VisionAlign() : ReadJoysticks() {
         } else {
             accelLimitedChassisSpeeds = readJoysticks(
                 Elevator.getAccelLimit(),
-                Drivetrain.getPose().rotation.minus(super.inputRotOffset())
+                super.inputRotOffset()
             )
         }
+        Logger.recordOutput("AnglePID Result", driveResult*sin(angle))
+        Logger.recordOutput("DrivePID Result", driveResult*cos(angle))
+        Logger.recordOutput("x error", xError)
+        Logger.recordOutput("y error", yError)
+        Logger.recordOutput("Angle", angle)
+        Drivetrain.driveRobotOriented(ChassisSpeeds(
+            0.0, //accelLimitedChassisSpeeds.vxMetersPerSecond,
+            0.0,//accelLimitedChassisSpeeds.vyMetersPerSecond,
+            0.0))
     }
 }

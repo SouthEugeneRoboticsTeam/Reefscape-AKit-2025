@@ -16,20 +16,23 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : ReadJoysticks() 
     // Requirements are already passed through the ReadJoysticks class
 
     override fun execute() {
+        if (fieldOriented) {
+            joystickAccelLimited = readJoysticks(Elevator.getAccelLimit(), super.inputRotOffset(),
+                Elevator.getDeccelLimit(), Elevator.getSpeedLimit())
 
-        if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0){
-            Drivetrain.stop()
-        }
-        else if (fieldOriented) {
-            joystickAccelLimited = readJoysticks(Elevator.getAccelLimit(), super.inputRotOffset())
-
+            if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0){
+                Drivetrain.stop()
+            }
             Drivetrain.driveRobotOriented(
                 joystickAccelLimited
             )
         }
         else {
-            joystickAccelLimited = readJoysticks(Elevator.getAccelLimit(), Rotation2d())
-
+            if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0){
+                Drivetrain.stop()
+            }
+            joystickAccelLimited = readJoysticks(Elevator.getAccelLimit(), Rotation2d(),
+                Elevator.getDeccelLimit(), Elevator.getSpeedLimit())
             Drivetrain.driveRobotOriented(
                 joystickAccelLimited
             )
