@@ -1,5 +1,6 @@
 package org.sert2521.reefscape2025
 
+import edu.wpi.first.cameraserver.CameraServer
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
@@ -13,7 +14,9 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
+import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_STOW
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
+import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.wrist.Wrist
 
 
@@ -84,10 +87,13 @@ object Robot : LoggedRobot()
 
         // Start AdvantageKit logger
         Logger.start();
+
+        CameraServer.startAutomaticCapture()
     }
 
     override fun disabledExit() {
         Wrist.initWristCommand().schedule()
+        Elevator.setElevatorCommand(ELEVATOR_STOW)
     }
 
 

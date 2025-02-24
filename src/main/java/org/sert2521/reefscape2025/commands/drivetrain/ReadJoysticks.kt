@@ -54,7 +54,7 @@ open class ReadJoysticks : Command() {
     // Oh man I bet this could be optimized but I'm eeeepy...
     fun readJoysticks(accelLimit:Double, rotOffset: Rotation2d,
                       deccelLimit:Double = accelLimit,
-                      maxSpeed:Double = SwerveConstants.MAX_SPEED_MPS):ChassisSpeeds{
+                      maxSpeed:Double = SwerveConstants.MAX_SPEED_MPS, fieldOriented:Boolean=true):ChassisSpeeds{
         /**
          * Returns the desired directions as a triplet of X, Y, and Rotation in robot coordinates
          * Should be called periodically.
@@ -76,14 +76,25 @@ open class ReadJoysticks : Command() {
             MathUtil.applyDeadband(sqrMagnitude, ConfigConstants.POWER_DEADBAND.pow(2))
         ).pow(3)
 
+
+        if (fieldOriented){
+            cubicChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                sin(angle) * newMagnitude * maxSpeed,
+                cos(angle) * newMagnitude * maxSpeed,
+                joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
+                Drivetrain.getPose().rotation.minus(rotOffset)
+            )
+        } else {
+            cubicChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                sin(angle) * newMagnitude * maxSpeed,
+                cos(angle) * newMagnitude * maxSpeed,
+                joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
+                Rotation2d()
+            )
+        }
         // X and Y are swapped because Y is left in robot coordinates and X is up
         // It's the other way around in controller coordinates
-        cubicChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            sin(angle) * newMagnitude * maxSpeed,
-            cos(angle) * newMagnitude * maxSpeed,
-            joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
-            Drivetrain.getPose().rotation.minus(rotOffset)
-        )
+
 
         // Total magnitude of change since last cycle
         // NOTE: NOT change of total magnitude: it is magnitude of change in 2D coordinates

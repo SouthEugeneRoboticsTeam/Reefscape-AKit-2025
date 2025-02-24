@@ -11,9 +11,10 @@ import kotlin.math.PI
 object SetpointConstants{
     const val WRIST_INIT = 0.28
     const val WRIST_STOW = 0.23
-    const val WRIST_GROUND = -0.08
+    const val WRIST_GROUND = -0.086
     const val WRIST_L1 = 0.17
-    const val WRIST_ALGAE = 0.089
+    const val WRIST_ALGAE_LOW = 0.09
+    const val WRIST_ALGAE_HIGH = 0.12
 
     const val ELEVATOR_STOW = 0.0
     const val ELEVATOR_L2 = 0.15
@@ -29,7 +30,8 @@ object SetpointConstants{
     const val DISPENSER_RECENTER_SPEED = 0.1
 
     const val GROUND_INTAKE_SPEED = 0.7
-    const val GROUND_OUTTAKE_SPEED = -0.5
+    const val GROUND_OUTTAKE_SPEED_ALGAE = -0.5
+    const val GROUND_OUTTAKE_SPEED_CORAL = -0.2
 }
 
 object ConfigConstants{
@@ -51,16 +53,6 @@ object ElectronicIDs{
     const val LASER_ID = 19
 }
 
-object DrivetrainConstants {
-    const val DRIVE_P = 0.0
-    const val DRIVE_I = 0.0
-    const val DRIVE_D = 0.0
-
-    const val ANGLE_P = 0.0
-    const val ANGLE_I = 0.0
-    const val ANGLE_D = 0.0
-}
-
 object TuningConstants{
     const val ELEVATOR_P = 4.0
     const val ELEVATOR_I = 0.0
@@ -76,7 +68,7 @@ object TuningConstants{
     //Wrist Values
     const val WRIST_CURRENT_LIMIT = 30
 
-    const val WRIST_P = 4.0
+    const val WRIST_P = 7.0
     const val WRIST_I = 0.0
     const val WRIST_D = 0.2
 

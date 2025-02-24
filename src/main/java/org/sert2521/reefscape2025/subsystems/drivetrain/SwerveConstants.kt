@@ -3,6 +3,7 @@ package org.sert2521.reefscape2025.subsystems.drivetrain
 import com.pathplanner.lib.config.PIDConstants
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import edu.wpi.first.math.VecBuilder
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.system.plant.DCMotor
@@ -70,8 +71,8 @@ object SwerveConstants {
     const val TURN_PID_MIN_INPUT = 0.0
     const val TURN_PID_MAX_INPUT = 2 * PI
 
-    val autoTranslationPID = PIDConstants(2.0, 0.0, 0.0)
-    val autoRotationPID = PIDConstants(2.0, 0.0, 0.0)
+    val autoTranslationPID = PIDConstants(0.0, 0.0, 0.0)
+    val autoRotationPID = PIDConstants(0.4, 0.01, 0.0, 0.7)
 
     const val ALIGN_DRIVE_P = 2.0
     const val ALIGN_DRIVE_I = 0.0

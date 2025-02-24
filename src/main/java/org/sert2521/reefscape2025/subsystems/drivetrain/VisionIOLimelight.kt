@@ -10,20 +10,19 @@ class VisionIOLimelight: VisionIO {
 
     override fun updateInputs(inputs: VisionIO.VisionIOInputs) {
         val useMegaTag2 = Drivetrain.getGyroConnected() && !Input.getGyroReset() && !DriverStation.isDisabled() //set to false to use MegaTag1
-        var doRejectUpdate = false
+        var doRejectUpdate = true
 
         /*
         Note: this code will almost NEVER use MegaTag1
         Especially given that I have NEVER seen the gyro be disconnected
          */
-        if (DriverStation.isDisabled() || DriverStation.isAutonomous()){
-            doRejectUpdate = true
-        }
 
         if(!useMegaTag2) {
             val mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight")
 
-            if(mt1.tagCount == 1 && mt1.rawFiducials.size == 1) {
+            if (mt1 == null){
+                doRejectUpdate = true
+            } else if(mt1.tagCount == 1 && mt1.rawFiducials.size == 1) {
                 if (mt1.rawFiducials[0].ambiguity > .7) {
                     doRejectUpdate = true
                 }
@@ -31,11 +30,9 @@ class VisionIOLimelight: VisionIO {
                 if (mt1.rawFiducials[0].distToCamera > 3) {
                     doRejectUpdate = true
                 }
-            }
-            if (mt1.tagCount == 0) {
+            } else if (mt1.tagCount == 0) {
                 doRejectUpdate = true
             }
-
             if (!doRejectUpdate) {
                 inputs.estimatedPosition = mt1.pose
                 inputs.timestamp = mt1.timestampSeconds

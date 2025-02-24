@@ -29,11 +29,13 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : ReadJoysticks() 
             )
         }
         else {
+            joystickAccelLimited = readJoysticks(Elevator.getAccelLimit(), Rotation2d(),
+                Elevator.getDeccelLimit(), Elevator.getSpeedLimit(), false)
+
             if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0){
                 Drivetrain.stop()
             }
-            joystickAccelLimited = readJoysticks(Elevator.getAccelLimit(), Rotation2d(),
-                Elevator.getDeccelLimit(), Elevator.getSpeedLimit())
+
             Drivetrain.driveRobotOriented(
                 joystickAccelLimited
             )

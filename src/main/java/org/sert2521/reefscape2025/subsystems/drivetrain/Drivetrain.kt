@@ -145,13 +145,13 @@ object Drivetrain : SubsystemBase() {
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
 
-//        if (!visionInputs.rejectEstimation){
-//            if (visionInputs.megatagTwo){
-//                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV)
-//            } else {
-//                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV_YAW_RESET)
-//            }
-//        }
+        if (!visionInputs.rejectEstimation){
+            if (visionInputs.megatagTwo){
+                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV)
+            } else {
+                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV_YAW_RESET)
+            }
+        }
 
         field.robotPose = getPose()
 
@@ -181,6 +181,14 @@ object Drivetrain : SubsystemBase() {
         Logger.recordOutput("SwerveModuleStates/Optimized Setpoints", *optimizedStates)
 
 
+    }
+
+    fun setGyroYaw(gyroRotation2d: Rotation2d){
+        setPose(Pose2d(poseEstimator.estimatedPosition.x, poseEstimator.estimatedPosition.y, gyroRotation2d))
+    }
+
+    fun setPoseAuto(pose:Pose2d){
+        setGyroYaw(pose.rotation)
     }
 
     fun runCharacterization(output:Double){

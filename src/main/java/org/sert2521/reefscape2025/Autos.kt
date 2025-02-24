@@ -26,7 +26,7 @@ object Autos
         "Wrist L1" to Wrist.setWristCommand(SetpointConstants.WRIST_L1).asProxy(),
         "Wrist Ground" to Wrist.setWristCommand(SetpointConstants.WRIST_GROUND).asProxy(),
         "Wrist Stow" to Wrist.setWristCommand(SetpointConstants.WRIST_STOW).asProxy(),
-        "Wrist Algae" to Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE).asProxy(),
+        "Wrist Algae" to Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW).asProxy(),
 
         "Ground Intake" to GroundIntake.intakeCommand().withTimeout(3.0).asProxy(),
         "Ground Outtake" to GroundIntake.outtakeCommand().withTimeout(0.2).asProxy(),
@@ -57,8 +57,6 @@ object Autos
             {
                 value:ChassisSpeeds ->
                 Drivetrain.driveRobotOriented(value)
-                println(value.vxMetersPerSecond)
-                println(value.vyMetersPerSecond)
             },
             PPHolonomicDriveController(
                 SwerveConstants.autoTranslationPID,
@@ -95,6 +93,7 @@ object Autos
 
         autoChooser.addDefaultOption("None", Commands.none())
         autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
+        autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
         autoChooser.addOption("SysId quasistatic", DrivetrainFeedforwardSysId.get())
         autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
     }

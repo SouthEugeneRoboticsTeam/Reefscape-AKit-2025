@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants.GROUND_INTAKE_SPEED
-import org.sert2521.reefscape2025.SetpointConstants.GROUND_OUTTAKE_SPEED
+import org.sert2521.reefscape2025.SetpointConstants.GROUND_OUTTAKE_SPEED_ALGAE
+import org.sert2521.reefscape2025.SetpointConstants.GROUND_OUTTAKE_SPEED_CORAL
 
 object GroundIntake : SubsystemBase() {
 
@@ -50,7 +51,13 @@ object GroundIntake : SubsystemBase() {
 
     fun outtakeCommand():Command{
         return run{
-            setMotor(GROUND_OUTTAKE_SPEED)
+            setMotor(GROUND_OUTTAKE_SPEED_ALGAE)
+        }
+    }
+
+    fun outtakeCoralCommand():Command{
+        return run{
+            setMotor(GROUND_OUTTAKE_SPEED_CORAL)
         }
     }
 }
