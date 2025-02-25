@@ -29,6 +29,8 @@ object SetpointConstants{
     const val DISPENSER_STOP_VOLTAGE = -0.01
     const val DISPENSER_RECENTER_SPEED = 0.1
 
+    const val RAMP_INTAKE_SPEED = 0.0
+
     const val GROUND_INTAKE_SPEED = 0.7
     const val GROUND_OUTTAKE_SPEED_ALGAE = -0.5
     const val GROUND_OUTTAKE_SPEED_CORAL = -0.2
@@ -42,6 +44,8 @@ object ElectronicIDs{
     const val DISPENSER_MOTOR_ID = 15
     const val BEAMBREAK_DISPENSER = 9
     const val BEAMBREAK_RAMP = 1
+
+    const val RAMP_MOTOR_ID = -1
 
     const val ELEVATOR_LEFT_ID = 13
     const val ELEVATOR_RIGHT_ID = 14

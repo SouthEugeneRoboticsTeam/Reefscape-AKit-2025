@@ -17,6 +17,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_STOW
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
+import org.sert2521.reefscape2025.subsystems.ramp.Ramp
 import org.sert2521.reefscape2025.subsystems.wrist.Wrist
 
 
@@ -89,6 +90,8 @@ object Robot : LoggedRobot()
         Logger.start();
 
         CameraServer.startAutomaticCapture()
+
+        Ramp
     }
 
     override fun disabledExit() {

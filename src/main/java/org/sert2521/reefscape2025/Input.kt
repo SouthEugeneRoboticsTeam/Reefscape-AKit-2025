@@ -18,7 +18,6 @@ import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 import org.sert2521.reefscape2025.subsystems.wrist.Wrist
-import kotlin.math.PI
 
 // Bindings:
 // Gunner:
@@ -61,15 +60,14 @@ object Input {
     private val stopJoystickFieldOrientation = Trigger{driverController.leftTriggerAxis>0.3}
 
     // Wrist:
-    private val wristGround = JoystickButton(gunnerController, 12)
-    private val wristAlgae = JoystickButton(gunnerController, 13)
-    private val wristL1 = JoystickButton(gunnerController, 15)
+    private val wristIntakeCoral = JoystickButton(gunnerController, 12)
+    private val wristIntakeAlgae = JoystickButton(gunnerController, 13)
+    private val wristOuttakeCoral = JoystickButton(gunnerController, 15)
+    private val wristOuttakeAlgae = JoystickButton(gunnerController, 14)
     private val wristStow = JoystickButton(gunnerController, 3)
 
     // Wrist Rollers:
-    private val wristRollerIntake = JoystickButton(gunnerController, 14)
-    private val wristRollerOuttakeDriver = driverController.leftBumper()
-    private val wristRollerOuttakeGunner = JoystickButton(gunnerController, 2)
+    private val wristCoralOuttakeDriver = driverController.leftBumper()
 
     // Elevator:
     private val elevatorStow = JoystickButton(gunnerController, 10)
@@ -101,24 +99,23 @@ object Input {
 
         // Wrist
             wristStow.onTrue(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
-            wristL1.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_L1)
+            wristOuttakeCoral.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_L1)
                 .andThen(GroundIntake.outtakeCoralCommand()))
                 .onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
-            wristAlgae.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
+            wristIntakeAlgae.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
                 .andThen(GroundIntake.outtakeCommand()))
-            wristAlgae.onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_HIGH)
+            wristIntakeAlgae.onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_HIGH)
                 .raceWith(GroundIntake.outtakeCommand()))
-            wristGround.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_GROUND)
+            wristIntakeCoral.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_GROUND)
                 .andThen(GroundIntake.intakeCommand()))
                 .onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
-            wristRollerIntake.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
+            wristOuttakeAlgae.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
                 .andThen(GroundIntake.intakeCommand()))
                 .onFalse(Wrist.setWristCommand(WRIST_STOW))
 
         // Wrist Rollers
-            wristRollerIntake.whileTrue(GroundIntake.intakeCommand())
-            wristRollerOuttakeDriver.whileTrue(GroundIntake.outtakeCoralCommand())
-            wristRollerOuttakeGunner.whileTrue(GroundIntake.outtakeCoralCommand())
+            wristOuttakeAlgae.whileTrue(GroundIntake.intakeCommand())
+            wristCoralOuttakeDriver.whileTrue(GroundIntake.outtakeCoralCommand())
 
         // Elevator
             elevatorStow.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
