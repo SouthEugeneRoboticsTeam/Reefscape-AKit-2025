@@ -150,11 +150,6 @@ tasks.register('eventDeploy') {
 
             exec{
                 workingDir(projectDir)
-                executable 'py'
-                args 'MirrorChoreo.py'
-            }
-            exec{
-                workingDir(projectDir)
                 executable 'git'
                 args 'add', '-A'
             }
