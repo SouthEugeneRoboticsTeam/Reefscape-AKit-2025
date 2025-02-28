@@ -77,11 +77,11 @@ object Input {
     private val elevatorL2 = JoystickButton(gunnerController, 7)
     private val elevatorL3 = JoystickButton(gunnerController, 6)
     private val elevatorL4 = JoystickButton(gunnerController, 5)
-    private val elevatorAlgae = JoystickButton(gunnerController, 9)
+    private val elevatorAlgaeLow = JoystickButton(gunnerController, 8)
+    private val elevatorAlgaeHigh = JoystickButton(gunnerController, 9)
     private val toggleElevatorSafe = JoystickButton(gunnerController, 15)
 
     // Dispenser:
-    private val toggleAutomaticIntake = JoystickButton(gunnerController, 14)
     private val dispenserManualIntake = JoystickButton(gunnerController, 11)
     private val dispenserOuttake = driverController.rightBumper()
     private val dispenserReset = JoystickButton(gunnerController, 14)
@@ -145,10 +145,15 @@ object Input {
             .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L4)
                 .until { Dispenser.getBlocked() }))
 
-        elevatorAlgae.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_ALGAE))
+        elevatorAlgaeLow.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_ALGAE_LOW))
                 .until { Dispenser.getBlocked() }.andThen(RemoveAlgae())
                 .until { Dispenser.getBlocked() })
+
+        elevatorAlgaeHigh.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_ALGAE_HIGH))
+            .until { Dispenser.getBlocked() }.andThen(RemoveAlgae())
+            .until { Dispenser.getBlocked() })
         // toggleElevatorSafe.onTrue(runOnce({Elevator.toggleSafeMode()}))
 
         /* Dispenser */
