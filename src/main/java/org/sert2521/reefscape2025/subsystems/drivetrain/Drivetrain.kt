@@ -231,11 +231,12 @@ object Drivetrain : SubsystemBase() {
 
     fun addVisionMeasurement(visionEstimationMeters:Pose2d, timestampSeconds:Double,
                              visionMeasurementsStDev: Matrix<N3, N1>){
-        poseEstimator.addVisionMeasurement(
-            visionEstimationMeters,
-            timestampSeconds,
-            visionMeasurementsStDev
-        )
+//        TODO:RESET THIS
+    //        poseEstimator.addVisionMeasurement(
+//            visionEstimationMeters,
+//            timestampSeconds,
+//            visionMeasurementsStDev
+//        )
     }
 
     /* == Getters == */

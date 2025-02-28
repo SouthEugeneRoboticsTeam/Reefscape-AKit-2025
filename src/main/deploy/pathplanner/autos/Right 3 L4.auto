@@ -59,6 +59,12 @@
           "data": {
             "name": "Ramp Intake"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": []
+          }
         }
       ]
     }

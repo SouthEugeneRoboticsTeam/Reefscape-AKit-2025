@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_L4
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_STOW
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
@@ -86,6 +87,9 @@ object Input {
     private val dispenserOuttake = driverController.rightBumper()
     private val dispenserReset = JoystickButton(gunnerController, 14)
     private val rampIntake = JoystickButton(gunnerController, 13)
+
+    private val increaseSpeed = JoystickButton(gunnerController, 1)
+    private val decreaseSpeed = JoystickButton(gunnerController, 2)
 
     private val endOuttakeCoralTrigger = Trigger{
         DriverStation.getMatchTime() < 0.5 && Robot.isTeleop && Elevator.goal.position != ELEVATOR_STOW
