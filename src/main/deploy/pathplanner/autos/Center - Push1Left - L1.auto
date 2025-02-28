@@ -7,26 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center - Push1Left - L1.0"
+            "pathName": "Left Push 1"
           }
         },
         {
-          "type": "parallel",
+          "type": "wait",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Wrist L1"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Center - Push1Left - L1.1"
-                }
-              }
-            ]
+            "waitTime": 1.0
           }
         },
         {

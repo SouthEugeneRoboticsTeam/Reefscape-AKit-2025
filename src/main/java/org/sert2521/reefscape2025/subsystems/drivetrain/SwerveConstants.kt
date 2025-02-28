@@ -60,7 +60,7 @@ object SwerveConstants {
     const val DRIVE_D = 0.0
 
     const val DRIVE_KS = 0.1
-    const val DRIVE_KV = 0.13158
+    const val DRIVE_KV = 0.133
     const val DRIVE_KA = 0.0
 
     const val TURN_P = 1.0
@@ -70,7 +70,7 @@ object SwerveConstants {
     const val TURN_PID_MIN_INPUT = 0.0
     const val TURN_PID_MAX_INPUT = 2 * PI
 
-    val autoTranslationPID = PIDConstants(0.4, 0.0, 0.01)
+    val autoTranslationPID = PIDConstants(1.6, 0.0, 0.01)
     val autoRotationPID = PIDConstants(0.4, 0.01, 0.01, 0.7)
 
     const val VISION_ALIGN_DRIVE_P = 2.0

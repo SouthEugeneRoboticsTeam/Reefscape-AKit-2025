@@ -43,7 +43,6 @@ object Wrist : SubsystemBase() {
     fun setWristCommand(goal:Double): Command {
 
         return runOnce{
-            println(goal)
             this.goal = goal
             io.setReference(goal)
         }.andThen(Commands.waitUntil{

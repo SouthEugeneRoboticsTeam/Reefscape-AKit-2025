@@ -5,12 +5,15 @@ import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.config.ModuleConfig
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
+import com.pathplanner.lib.util.PathPlannerLogging
+import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.sert2521.reefscape2025.commands.drivetrain.DrivetrainFeedforwardSysId
 import org.sert2521.reefscape2025.subsystems.wrist.Wrist
@@ -52,7 +55,14 @@ object Autos
         "Wait L2-4 Post-Outtake" to Commands.none(),
         "Wait Human Player" to Commands.waitSeconds(1.0),
         "Wait Dispenser" to Commands.waitSeconds(2.0)
-            .andThen(Commands.waitUntil{!Dispenser.getBlocked()})
+            .andThen(Commands.waitUntil{!Dispenser.getBlocked()}),
+
+        "Ramp Intake" to Ramp.intakeCommand()
+            .until{Dispenser.getBlocked()}
+            .andThen(
+                Ramp.intakeCommand()
+                    .until{!Dispenser.getBlocked()}
+            ).withTimeout(2.0)
     )
 
     init{
@@ -93,9 +103,9 @@ object Autos
 //            )
 //        }
 
-//        PathPlannerLogging.setLogTargetPoseCallback { targetPose: Pose2d ->
-//            Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose)
-//        }
+        PathPlannerLogging.setLogTargetPoseCallback { targetPose: Pose2d ->
+            Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose)
+        }
 
         autoChooser = LoggedDashboardChooser("Auto Chooser")//"Auto Chooser", AutoBuilder.buildAutoChooser())
 
@@ -103,9 +113,11 @@ object Autos
         autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
         autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
 
+
         autoChooser.addOption("SysId quasistatic", DrivetrainFeedforwardSysId.get())
         autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
         autoChooser.addOption("Leave + run or smth", AutoBuilder.buildAuto("Center - Push1Left - L1"))
+        autoChooser.addOption("Right 3", AutoBuilder.buildAuto("Right 3 L4"))
     }
 
 
