@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_STOW
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
 import org.sert2521.reefscape2025.commands.drivetrain.VisionAlign
@@ -87,7 +88,7 @@ object Input {
     private val rampIntake = JoystickButton(gunnerController, 13)
 
     private val endOuttakeCoralTrigger = Trigger{
-        DriverStation.getMatchTime() < 0.5 && Robot.isTeleop
+        DriverStation.getMatchTime() < 0.5 && Robot.isTeleop && Elevator.goal.position != ELEVATOR_STOW
     }
     private val endOuttakeAlgaeTrigger = Trigger{
         DriverStation.getMatchTime() < 1.5 && Robot.isTeleop && Wrist.goal != WRIST_STOW
@@ -158,9 +159,9 @@ object Input {
         // toggleAutomaticIntake.onTrue(runOnce({Dispenser.changeIntakeMode()}))
 
         /* End Triggers */
-//        endOuttakeAlgaeTrigger.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
-//            .alongWith(GroundIntake.intakeCommand()))
-//        endOuttakeCoralTrigger.whileTrue(Dispenser.outtakeCommand())
+        endOuttakeAlgaeTrigger.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
+            .alongWith(GroundIntake.intakeCommand()))
+        endOuttakeCoralTrigger.whileTrue(Dispenser.outtakeCommand())
     }
 
     private var rotationOffset = Rotation2d(0.0)

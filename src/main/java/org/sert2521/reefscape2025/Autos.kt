@@ -100,6 +100,7 @@ object Autos
         autoChooser.addDefaultOption("None", Commands.none())
         autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
         autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
+
         autoChooser.addOption("SysId quasistatic", DrivetrainFeedforwardSysId.get())
         autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
     }
