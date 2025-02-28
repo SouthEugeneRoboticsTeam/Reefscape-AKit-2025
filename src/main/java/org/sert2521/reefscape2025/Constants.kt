@@ -46,7 +46,7 @@ object ConfigConstants{
 object ElectronicIDs{
     const val DISPENSER_MOTOR_ID = 15
     const val BEAMBREAK_DISPENSER = 9
-    const val BEAMBREAK_RAMP = 1
+    const val BEAMBREAK_RAMP = 0
 
     const val RAMP_MOTOR_ID = 18
 
