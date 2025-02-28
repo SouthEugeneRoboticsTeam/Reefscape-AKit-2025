@@ -6,6 +6,7 @@ import com.pathplanner.lib.config.ModuleConfig
 import com.pathplanner.lib.config.RobotConfig
 import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand
@@ -19,6 +20,7 @@ import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 import org.sert2521.reefscape2025.subsystems.ramp.Ramp
+import kotlin.jvm.optionals.getOrElse
 
 object Autos
 {
@@ -81,7 +83,7 @@ object Autos
                 ),
                 *SwerveConstants.moduleTranslations
             ),
-            {false},
+            {DriverStation.getAlliance().getOrElse { DriverStation.Alliance.Blue } == DriverStation.Alliance.Red},
             Drivetrain
         )
         //Pathfinding.setPathfinder(LocalADStarAK())
