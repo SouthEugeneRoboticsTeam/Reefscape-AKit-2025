@@ -105,6 +105,7 @@ object Autos
 
         autoChooser.addOption("SysId quasistatic", DrivetrainFeedforwardSysId.get())
         autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
+        autoChooser.addOption("Leave + run or smth", AutoBuilder.buildAuto("Center - Push1Left - L1"))
     }
 
 
