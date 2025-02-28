@@ -14,8 +14,8 @@ import kotlin.math.*
 
 class VisionAlign() : ReadJoysticks() {
 
-    private val drivePID = PIDController(SwerveConstants.ALIGN_DRIVE_P, SwerveConstants.ALIGN_DRIVE_I, SwerveConstants.ALIGN_DRIVE_D)
-    private val anglePID = PIDController(SwerveConstants.ALIGN_ROT_P, SwerveConstants.ALIGN_ROT_I, SwerveConstants.ALIGN_ROT_D)
+    private val drivePID = PIDController(SwerveConstants.VISION_ALIGN_DRIVE_P, SwerveConstants.VISION_ALIGN_DRIVE_I, SwerveConstants.VISION_ALIGN_DRIVE_D)
+    private val anglePID = PIDController(SwerveConstants.VISION_ALIGN_ROT_P, SwerveConstants.VISION_ALIGN_ROT_I, SwerveConstants.VISION_ALIGN_ROT_D)
 
     private var targetPose = Pose2d()
 

@@ -17,6 +17,7 @@ import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
+import org.sert2521.reefscape2025.subsystems.ramp.Ramp
 import org.sert2521.reefscape2025.subsystems.wrist.Wrist
 
 // Bindings:
@@ -61,9 +62,9 @@ object Input {
 
     // Wrist:
     private val wristIntakeCoral = JoystickButton(gunnerController, 12)
-    private val wristIntakeAlgae = JoystickButton(gunnerController, 13)
+    private val wristIntakeAlgae = JoystickButton(gunnerController, 11)
     private val wristOuttakeCoral = JoystickButton(gunnerController, 15)
-    private val wristOuttakeAlgae = JoystickButton(gunnerController, 14)
+    private val wristOuttakeAlgae = JoystickButton(gunnerController, 16)
     private val wristStow = JoystickButton(gunnerController, 3)
 
     // Wrist Rollers:
@@ -81,7 +82,8 @@ object Input {
     private val toggleAutomaticIntake = JoystickButton(gunnerController, 14)
     private val dispenserManualIntake = JoystickButton(gunnerController, 11)
     private val dispenserOuttake = driverController.rightBumper()
-    private val dispenserReset = JoystickButton(gunnerController, 8)
+    private val dispenserReset = JoystickButton(gunnerController, 14)
+    private val rampIntake = JoystickButton(gunnerController, 13)
 
 
     init {
@@ -105,7 +107,7 @@ object Input {
             wristIntakeAlgae.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
                 .andThen(GroundIntake.outtakeCommand()))
             wristIntakeAlgae.onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_HIGH)
-                .raceWith(GroundIntake.outtakeCommand()))
+                .raceWith(GroundIntake.outtakeCommand()).andThen(GroundIntake.holdAlgaeCommand()))
             wristIntakeCoral.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_GROUND)
                 .andThen(GroundIntake.intakeCommand()))
                 .onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
@@ -145,7 +147,8 @@ object Input {
             // dispenserManualIntake.onTrue(DispenserManualIntake())
             dispenserOuttake.whileTrue(Dispenser.outtakeCommand().withTimeout(0.1)
                 .andThen(Dispenser.stopCommand().withTimeout(0.4)))
-            dispenserReset.onTrue(Dispenser.recenterCommand())
+            dispenserReset.onTrue(Dispenser.recenterCommand().alongWith(Ramp.recenterCommand()))
+            rampIntake.whileTrue(Ramp.intakeCommand())
             // toggleAutomaticIntake.onTrue(runOnce({Dispenser.changeIntakeMode()}))
 
     }

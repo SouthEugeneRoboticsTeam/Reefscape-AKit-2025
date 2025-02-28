@@ -11,7 +11,8 @@ import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_INTAKE_SPEED
 import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_L4
 import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_SLOW_SPEED
 import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_SPEED
-import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_RECENTER_SPEED
+import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_RECENTER_SPEED_BACKWARD
+import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_RECENTER_SPEED_FORWARD
 import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_STOP_VOLTAGE
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 
@@ -90,7 +91,7 @@ object Dispenser : SubsystemBase() {
                 if (getRampBeambreakBlocked()){
                     setMotor(DISPENSER_INTAKE_SPEED)
                 } else {
-                    setMotor(DISPENSER_RECENTER_SPEED)
+                    setMotor(DISPENSER_RECENTER_SPEED_FORWARD)
                 }
             } else {
                 setVoltage(DISPENSER_STOP_VOLTAGE)
@@ -153,7 +154,7 @@ object Dispenser : SubsystemBase() {
 
     fun recenterCommand():Command{
         return run{
-            setMotor(-DISPENSER_INTAKE_SPEED)
+            setMotor(DISPENSER_RECENTER_SPEED_BACKWARD)
         }.withTimeout(2.0).until { getBlocked() }
     }
 }

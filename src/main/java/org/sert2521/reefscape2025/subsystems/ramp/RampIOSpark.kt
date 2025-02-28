@@ -14,7 +14,7 @@ class RampIOSpark:RampIO {
         val config = SparkMaxConfig()
         config
             .inverted(false)
-            .smartCurrentLimit(30)
+            .smartCurrentLimit(20)
             .idleMode(SparkBaseConfig.IdleMode.kCoast)
 
         motor.configure(config,

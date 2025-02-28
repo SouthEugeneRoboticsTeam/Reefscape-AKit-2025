@@ -8,6 +8,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser
 import org.sert2521.reefscape2025.commands.drivetrain.DrivetrainFeedforwardSysId
@@ -17,6 +18,7 @@ import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
+import org.sert2521.reefscape2025.subsystems.ramp.Ramp
 
 object Autos
 {
@@ -37,6 +39,10 @@ object Autos
         "Elevator L4" to Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L4).asProxy(),
 
         "Dispenser Intake" to Commands.none(),
+//        "Dispenser Intake" to //Ramp.intakeCommand()
+//            .raceWith(Commands.waitUntil{Dispenser.getBlocked()}
+//                .andThen(Commands.waitUntil{!Dispenser.getBlocked()}))
+//            .withTimeout(3.0).asProxy(),
         "Dispenser Outtake" to Dispenser.outtakeCommand().withTimeout(0.2).asProxy(),
 
         "Wait L1 Post-Outtake" to Commands.none(),

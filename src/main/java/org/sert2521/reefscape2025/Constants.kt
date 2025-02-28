@@ -11,9 +11,9 @@ import kotlin.math.PI
 object SetpointConstants{
     const val WRIST_INIT = 0.28
     const val WRIST_STOW = 0.23
-    const val WRIST_GROUND = -0.086
+    const val WRIST_GROUND = -0.088
     const val WRIST_L1 = 0.17
-    const val WRIST_ALGAE_LOW = 0.09
+    const val WRIST_ALGAE_LOW = 0.04
     const val WRIST_ALGAE_HIGH = 0.12
 
     const val ELEVATOR_STOW = 0.0
@@ -22,18 +22,21 @@ object SetpointConstants{
     const val ELEVATOR_L4 = 0.67-0.02
     const val ELEVATOR_ALGAE = 0.25
 
-    const val DISPENSER_INTAKE_SPEED = 0.55
+    const val DISPENSER_INTAKE_SPEED = 0.7
     const val DISPENSER_OUTTAKE_SPEED = 0.65
     const val DISPENSER_OUTTAKE_L4 = 0.5
     const val DISPENSER_OUTTAKE_SLOW_SPEED = 0.2
     const val DISPENSER_STOP_VOLTAGE = -0.01
-    const val DISPENSER_RECENTER_SPEED = 0.1
+    const val DISPENSER_RECENTER_SPEED_FORWARD = 0.1
+    const val DISPENSER_RECENTER_SPEED_BACKWARD = -0.55
 
-    const val RAMP_INTAKE_SPEED = 0.0
+    const val RAMP_INTAKE_SPEED = 0.2
+    const val RAMP_RECENTER_SPEED = -0.2
 
-    const val GROUND_INTAKE_SPEED = 0.7
+    const val GROUND_INTAKE_SPEED = 0.9
     const val GROUND_OUTTAKE_SPEED_ALGAE = -0.5
     const val GROUND_OUTTAKE_SPEED_CORAL = -0.2
+    const val GROUND_HOLD_ALGAE_SPEED = -0.2
 }
 
 object ConfigConstants{
@@ -45,7 +48,7 @@ object ElectronicIDs{
     const val BEAMBREAK_DISPENSER = 9
     const val BEAMBREAK_RAMP = 1
 
-    const val RAMP_MOTOR_ID = -1
+    const val RAMP_MOTOR_ID = 18
 
     const val ELEVATOR_LEFT_ID = 13
     const val ELEVATOR_RIGHT_ID = 14

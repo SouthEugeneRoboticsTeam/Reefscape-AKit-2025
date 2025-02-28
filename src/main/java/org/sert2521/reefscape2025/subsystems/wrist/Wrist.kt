@@ -13,6 +13,8 @@ object Wrist : SubsystemBase() {
     private val io = WristIOSpark()
     private val ioInputs = LoggedWristIOInputs()
 
+    var goal = WRIST_STOW
+
     init{
         defaultCommand = holdWristCommand()
     }
@@ -39,7 +41,9 @@ object Wrist : SubsystemBase() {
     }
 
     fun setWristCommand(goal:Double): Command {
+
         return runOnce{
+            this.goal = goal
             io.setReference(goal)
         }.andThen(Commands.waitUntil{
             MathUtil.isNear(goal, getRotations(), 0.1)

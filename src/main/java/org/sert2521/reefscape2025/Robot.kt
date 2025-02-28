@@ -90,8 +90,6 @@ object Robot : LoggedRobot()
         Logger.start();
 
         CameraServer.startAutomaticCapture()
-
-        Ramp
     }
 
     override fun disabledExit() {

@@ -10,7 +10,7 @@ class VisionIOLimelight: VisionIO {
 
     override fun updateInputs(inputs: VisionIO.VisionIOInputs) {
         val useMegaTag2 = Drivetrain.getGyroConnected() && !Input.getGyroReset() && !DriverStation.isDisabled() //set to false to use MegaTag1
-        var doRejectUpdate = true
+        var doRejectUpdate = false
 
         /*
         Note: this code will almost NEVER use MegaTag1
