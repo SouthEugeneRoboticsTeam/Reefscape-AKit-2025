@@ -137,7 +137,7 @@ object Dispenser : SubsystemBase() {
             } else {
                 setMotor(DISPENSER_OUTTAKE_SPEED)
             }
-        }
+        }.withTimeout(0.1).andThen(stopCommand().withTimeout(0.4))
     }
 
     fun outtakeSlowCommand():Command{

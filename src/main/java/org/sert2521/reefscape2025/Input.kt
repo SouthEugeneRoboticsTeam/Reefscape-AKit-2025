@@ -2,6 +2,7 @@ package org.sert2521.reefscape2025
 
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj2.command.Commands
@@ -85,13 +86,20 @@ object Input {
     private val dispenserReset = JoystickButton(gunnerController, 14)
     private val rampIntake = JoystickButton(gunnerController, 13)
 
+    private val endOuttakeCoralTrigger = Trigger{
+        DriverStation.getMatchTime() < 0.5 && Robot.isTeleop
+    }
+    private val endOuttakeAlgaeTrigger = Trigger{
+        DriverStation.getMatchTime() < 1.5 && Robot.isTeleop && Wrist.goal != WRIST_STOW
+    }
+
 
     init {
 
         // rumble.onTrue(runOnce({setRumble(0.8)}).andThen(WaitCommand(0.2).andThen(runOnce({ setRumble(0.0) }))))
 
         // Command Assignment
-        // Drivetrain
+        /* Drivetrain */
         resetRotOffset.onTrue(runOnce({ rotationOffset=Drivetrain.getPose().rotation }))
         resetGyroRawYaw.onTrue(runOnce({ Drivetrain.setPose(
             Pose2d(Drivetrain.getPose().x, Drivetrain.getPose().y, Rotation2d())
@@ -99,58 +107,60 @@ object Input {
         visionAlign.whileTrue(VisionAlign())
         stopJoystickFieldOrientation.whileTrue(JoystickDrive(false))
 
-        // Wrist
-            wristStow.onTrue(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
-            wristOuttakeCoral.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_L1)
-                .andThen(GroundIntake.outtakeCoralCommand()))
-                .onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
-            wristIntakeAlgae.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
-                .andThen(GroundIntake.outtakeCommand()))
-            wristIntakeAlgae.onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_HIGH)
-                .raceWith(GroundIntake.outtakeCommand()).andThen(GroundIntake.holdAlgaeCommand()))
-            wristIntakeCoral.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_GROUND)
-                .andThen(GroundIntake.intakeCommand()))
-                .onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
-            wristOuttakeAlgae.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
-                .andThen(GroundIntake.intakeCommand()))
-                .onFalse(Wrist.setWristCommand(WRIST_STOW))
+        /* Wrist */
+        wristStow.onTrue(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
+        wristOuttakeCoral.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_L1)
+            .andThen(GroundIntake.outtakeCoralCommand()))
+            .onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
+        wristIntakeAlgae.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
+            .andThen(GroundIntake.outtakeCommand()))
+        wristIntakeAlgae.onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_HIGH)
+            .raceWith(GroundIntake.outtakeCommand()).andThen(GroundIntake.holdAlgaeCommand()))
+        wristIntakeCoral.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_GROUND)
+            .andThen(GroundIntake.intakeCommand()))
+            .onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
+        wristOuttakeAlgae.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
+            .alongWith(GroundIntake.intakeCommand()))
+            .onFalse(Wrist.setWristCommand(WRIST_STOW))
 
-        // Wrist Rollers
-            wristOuttakeAlgae.whileTrue(GroundIntake.intakeCommand())
-            wristCoralOuttakeDriver.whileTrue(GroundIntake.outtakeCoralCommand())
+        /* Ground Intake */
+        wristCoralOuttakeDriver.whileTrue(GroundIntake.outtakeCoralCommand())
 
-        // Elevator
-            elevatorStow.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-                .andThen(
-                    Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_STOW)
-                        .until{ Dispenser.getBlocked() }))
+        /* Elevator */
+        elevatorStow.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+            .andThen(
+                Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_STOW)
+                    .until{ Dispenser.getBlocked() }))
 
-            elevatorL2.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-                .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L2)
-                    .until { Dispenser.getBlocked() }))
+        elevatorL2.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L2)
+                .until { Dispenser.getBlocked() }))
 
-            elevatorL3.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-                .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L3)
-                    .until { Dispenser.getBlocked() }))
+        elevatorL3.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L3)
+                .until { Dispenser.getBlocked() }))
 
-            elevatorL4.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-                .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L4)
-                    .until { Dispenser.getBlocked() }))
+        elevatorL4.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L4)
+                .until { Dispenser.getBlocked() }))
 
-            elevatorAlgae.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-                .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_ALGAE))
-                    .until { Dispenser.getBlocked() }.andThen(RemoveAlgae())
-                    .until { Dispenser.getBlocked() })
-            // toggleElevatorSafe.onTrue(runOnce({Elevator.toggleSafeMode()}))
+        elevatorAlgae.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
+            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_ALGAE))
+                .until { Dispenser.getBlocked() }.andThen(RemoveAlgae())
+                .until { Dispenser.getBlocked() })
+        // toggleElevatorSafe.onTrue(runOnce({Elevator.toggleSafeMode()}))
 
-        // Dispenser
-            // dispenserManualIntake.onTrue(DispenserManualIntake())
-            dispenserOuttake.whileTrue(Dispenser.outtakeCommand().withTimeout(0.1)
-                .andThen(Dispenser.stopCommand().withTimeout(0.4)))
-            dispenserReset.onTrue(Dispenser.recenterCommand().alongWith(Ramp.recenterCommand()))
-            rampIntake.whileTrue(Ramp.intakeCommand())
-            // toggleAutomaticIntake.onTrue(runOnce({Dispenser.changeIntakeMode()}))
+        /* Dispenser */
+        // dispenserManualIntake.onTrue(DispenserManualIntake())
+        dispenserOuttake.whileTrue(Dispenser.outtakeCommand())
+        dispenserReset.onTrue(Dispenser.recenterCommand().alongWith(Ramp.recenterCommand()))
+        rampIntake.whileTrue(Ramp.intakeCommand())
+        // toggleAutomaticIntake.onTrue(runOnce({Dispenser.changeIntakeMode()}))
 
+        /* End Triggers */
+//        endOuttakeAlgaeTrigger.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
+//            .alongWith(GroundIntake.intakeCommand()))
+//        endOuttakeCoralTrigger.whileTrue(Dispenser.outtakeCommand())
     }
 
     private var rotationOffset = Rotation2d(0.0)
