@@ -164,9 +164,7 @@ object Input {
         // toggleAutomaticIntake.onTrue(runOnce({Dispenser.changeIntakeMode()}))
 
         /* End Triggers */
-        endOuttakeAlgaeTrigger.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
-            .alongWith(GroundIntake.intakeCommand()))
-        endOuttakeCoralTrigger.whileTrue(Dispenser.outtakeCommand())
+        
     }
 
     private var rotationOffset = Rotation2d(0.0)

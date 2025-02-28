@@ -11,7 +11,7 @@ import kotlin.math.PI
 object SetpointConstants{
     const val WRIST_INIT = 0.28
     const val WRIST_STOW = 0.23
-    const val WRIST_GROUND = -0.2
+    const val WRIST_GROUND = -0.088
     const val WRIST_L1 = 0.17
     const val WRIST_ALGAE_LOW = 0.04
     const val WRIST_ALGAE_HIGH = 0.12
