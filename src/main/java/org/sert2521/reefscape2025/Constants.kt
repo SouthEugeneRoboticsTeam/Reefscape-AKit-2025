@@ -35,7 +35,7 @@ object SetpointConstants{
     const val DISPENSER_RECENTER_SPEED_FORWARD = 0.1
     const val DISPENSER_RECENTER_SPEED_BACKWARD = -0.55
 
-    const val RAMP_INTAKE_SPEED = 0.2
+    const val RAMP_INTAKE_SPEED = 0.8
     const val RAMP_RECENTER_SPEED = -0.2
 
     const val GROUND_INTAKE_SPEED = 0.9

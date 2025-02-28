@@ -164,7 +164,7 @@ object Input {
         // toggleAutomaticIntake.onTrue(runOnce({Dispenser.changeIntakeMode()}))
 
         /* End Triggers */
-        
+
     }
 
     private var rotationOffset = Rotation2d(0.0)
