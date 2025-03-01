@@ -114,7 +114,8 @@ object Autos
 //        autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
 
         autoChooser.addOption("Center L1", AutoBuilder.buildAuto("Center - L1"))
-//
+        autoChooser.addOption("Left L1", AutoBuilder.buildAuto("Left - L1"))
+    //
 //        autoChooser.addOption("SysId quasistatic", DrivetrainFeedforwardSysId.get())
 //        autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
 //        autoChooser.addOption("Leave + run or smth", AutoBuilder.buildAuto("Center - Push1Left - L1"))
