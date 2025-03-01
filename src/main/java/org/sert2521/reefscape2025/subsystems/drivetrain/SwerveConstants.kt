@@ -60,7 +60,7 @@ object SwerveConstants {
     const val DRIVE_D = 0.0
 
     const val DRIVE_KS = 0.1
-    const val DRIVE_KV = 0.115
+    const val DRIVE_KV = 0.13
     const val DRIVE_KA = 0.0
 
     const val TURN_P = 1.0
@@ -93,7 +93,7 @@ object SwerveConstants {
 
     //As opposed to the max speed, this is the speed you actually want the drivetrain to go at
     const val DRIVE_SPEED_FAST = 3.0
-    const val DRIVE_SPEED_SLOW = 1.0
+    const val DRIVE_SPEED_SLOW = 0.5
     const val ROT_SPEED = 5.0
 
     const val DRIVE_ACCEL_FAST = 20.0
