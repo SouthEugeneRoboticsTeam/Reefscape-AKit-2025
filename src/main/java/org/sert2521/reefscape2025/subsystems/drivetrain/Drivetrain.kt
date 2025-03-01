@@ -238,6 +238,11 @@ object Drivetrain : SubsystemBase() {
 //        )
     }
 
+    fun printChassisSpeeds(speeds:ChassisSpeeds){
+        println(speeds.vxMetersPerSecond)
+        println(speeds.vyMetersPerSecond)
+    }
+
     /* == Getters == */
 
     private fun getModuleStates():Array<SwerveModuleState>{
