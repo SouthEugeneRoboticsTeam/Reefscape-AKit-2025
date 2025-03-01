@@ -62,7 +62,7 @@ object Autos
             .andThen(
                 Ramp.intakeCommand()
                     .until{!Dispenser.getBlocked()}
-            ).withTimeout(2.0)
+            ).withTimeout(2.0).asProxy()
     )
 
     init{
@@ -110,15 +110,15 @@ object Autos
         autoChooser = LoggedDashboardChooser("Auto Chooser")//"Auto Chooser", AutoBuilder.buildAutoChooser())
 
         autoChooser.addDefaultOption("None", Commands.none())
-        autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
-        autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
+//        autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
+//        autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
 
         autoChooser.addOption("Center L1", AutoBuilder.buildAuto("Center - L1"))
-
-        autoChooser.addOption("SysId quasistatic", DrivetrainFeedforwardSysId.get())
-        autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
-        autoChooser.addOption("Leave + run or smth", AutoBuilder.buildAuto("Center - Push1Left - L1"))
-        autoChooser.addOption("Right 3", AutoBuilder.buildAuto("Right 3 L4"))
+//
+//        autoChooser.addOption("SysId quasistatic", DrivetrainFeedforwardSysId.get())
+//        autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
+//        autoChooser.addOption("Leave + run or smth", AutoBuilder.buildAuto("Center - Push1Left - L1"))
+//        autoChooser.addOption("Right 3", AutoBuilder.buildAuto("Right 3 L4"))
     }
 
 
