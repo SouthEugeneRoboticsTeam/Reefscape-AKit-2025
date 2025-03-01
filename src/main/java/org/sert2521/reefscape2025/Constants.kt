@@ -40,7 +40,7 @@ object SetpointConstants{
 
     const val GROUND_INTAKE_SPEED = 0.9
     const val GROUND_OUTTAKE_SPEED_ALGAE = -0.5
-    const val GROUND_OUTTAKE_SPEED_CORAL = -0.13
+    const val GROUND_OUTTAKE_SPEED_CORAL = -0.1
     const val GROUND_HOLD_ALGAE_SPEED = -0.2
 }
 
