@@ -20,15 +20,15 @@ object SetpointConstants{
     const val ELEVATOR_L2 = 0.15
     const val ELEVATOR_L3 = 0.345
     const val ELEVATOR_L4 = 0.67-0.02
-    const val ELEVATOR_ALGAE_LOW = 0.205
-    const val ELEVATOR_ALGAE_HIGH = 0.42
+    const val ELEVATOR_ALGAE_LOW = 0.195
+    const val ELEVATOR_ALGAE_HIGH = 0.44
 
     //algae high 0.42
     //algae low 0.226
 
 
     const val DISPENSER_INTAKE_SPEED = 0.7
-    const val DISPENSER_OUTTAKE_SPEED = 0.4
+    const val DISPENSER_OUTTAKE_SPEED = 0.45
     const val DISPENSER_OUTTAKE_L4 = 0.3
     const val DISPENSER_OUTTAKE_SLOW_SPEED = 0.2
     const val DISPENSER_STOP_VOLTAGE = -0.01
