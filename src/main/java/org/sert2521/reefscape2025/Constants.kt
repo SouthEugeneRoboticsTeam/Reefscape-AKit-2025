@@ -28,7 +28,7 @@ object SetpointConstants{
 
 
     const val DISPENSER_INTAKE_SPEED = 0.7
-    const val DISPENSER_OUTTAKE_SPEED = 0.45
+    const val DISPENSER_OUTTAKE_SPEED = 0.3
     const val DISPENSER_OUTTAKE_L4 = 0.3
     const val DISPENSER_OUTTAKE_SLOW_SPEED = 0.2
     const val DISPENSER_STOP_VOLTAGE = -0.01
