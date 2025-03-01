@@ -72,10 +72,7 @@ object Autos
             Drivetrain::getPose,
             Drivetrain::setPose,
             Drivetrain::getChassisSpeeds,
-            {
-                value:ChassisSpeeds ->
-                Drivetrain.driveRobotOriented(value)
-            },
+            Drivetrain::driveRobotOriented,
             PPHolonomicDriveController(
                 SwerveConstants.autoTranslationPID,
                 SwerveConstants.autoRotationPID
