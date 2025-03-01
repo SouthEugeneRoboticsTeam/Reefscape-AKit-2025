@@ -90,7 +90,7 @@ object Autos
                 ),
                 *SwerveConstants.moduleTranslations
             ),
-            {DriverStation.getAlliance().getOrElse { DriverStation.Alliance.Blue } != DriverStation.Alliance.Red},
+            {DriverStation.getAlliance().getOrElse { DriverStation.Alliance.Blue } == DriverStation.Alliance.Red},
             Drivetrain
         )
         //Pathfinding.setPathfinder(LocalADStarAK())
@@ -110,6 +110,7 @@ object Autos
         autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
         autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
 
+        autoChooser.addOption("test", AutoBuilder.buildAuto("Test"))
         autoChooser.addOption("Center L1", AutoBuilder.buildAuto("Center - L1"))
         autoChooser.addOption("Left L1", AutoBuilder.buildAuto("Left - L1"))
     //
