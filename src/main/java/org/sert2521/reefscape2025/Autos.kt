@@ -90,7 +90,7 @@ object Autos
                 ),
                 *SwerveConstants.moduleTranslations
             ),
-            {DriverStation.getAlliance().getOrElse { DriverStation.Alliance.Blue } == DriverStation.Alliance.Red},
+            {DriverStation.getAlliance().getOrElse { DriverStation.Alliance.Blue } != DriverStation.Alliance.Red},
             Drivetrain
         )
         //Pathfinding.setPathfinder(LocalADStarAK())
