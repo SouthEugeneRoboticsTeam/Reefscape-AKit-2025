@@ -63,7 +63,88 @@
         {
           "type": "parallel",
           "data": {
-            "commands": []
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "mirrored_Left 3 L4.2"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "mirrored_Left 3 L4.3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dispenser Outtake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "mirrored_Left 3 L4.4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator Stow"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Ramp Intake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "mirrored_Left 3 L4.5"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "mirrored_Left 3 L4.6"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Elevator L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Dispenser Outtake"
           }
         }
       ]
