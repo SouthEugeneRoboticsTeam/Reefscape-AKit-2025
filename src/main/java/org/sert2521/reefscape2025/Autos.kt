@@ -110,8 +110,8 @@ object Autos
         autoChooser = LoggedDashboardChooser("Auto Chooser")//"Auto Chooser", AutoBuilder.buildAutoChooser())
 
         autoChooser.addDefaultOption("None", Commands.none())
-//        autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
-//        autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
+        autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
+        autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
 
         autoChooser.addOption("Center L1", AutoBuilder.buildAuto("Center - L1"))
         autoChooser.addOption("Left L1", AutoBuilder.buildAuto("Left - L1"))
