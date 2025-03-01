@@ -107,17 +107,12 @@ object Autos
             Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose)
         }
 
-        autoChooser = LoggedDashboardChooser("Auto Chooser")//"Auto Chooser", AutoBuilder.buildAutoChooser())
+        autoChooser = LoggedDashboardChooser("Auto Chooser", AutoBuilder.buildAutoChooser())//"Auto Chooser", AutoBuilder.buildAutoChooser())
 
         autoChooser.addDefaultOption("None", Commands.none())
-        autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
-        autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
-
 
         autoChooser.addOption("SysId quasistatic", DrivetrainFeedforwardSysId.get())
         autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
-        autoChooser.addOption("Leave + run or smth", AutoBuilder.buildAuto("Center - Push1Left - L1"))
-        autoChooser.addOption("Right 3", AutoBuilder.buildAuto("Right 3 L4"))
     }
 
 
