@@ -113,7 +113,7 @@ object Input {
         stopJoystickFieldOrientation.whileTrue(JoystickDrive(false))
 
         /* Wrist */
-        wristStow.onTrue(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
+        wristStow.onTrue(Wrist.initWristCommand())
         wristOuttakeCoral.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_L1)
             .andThen(GroundIntake.outtakeCoralCommand()))
             .onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
@@ -166,6 +166,7 @@ object Input {
         dispenserReset.onTrue(Dispenser.recenterCommand().alongWith(Ramp.recenterCommand()))
         rampIntake.whileTrue(Ramp.intakeCommand())
         // toggleAutomaticIntake.onTrue(runOnce({Dispenser.changeIntakeMode()}))
+
 
         /* End Triggers */
 
