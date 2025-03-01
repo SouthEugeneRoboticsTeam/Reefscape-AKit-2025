@@ -99,8 +99,8 @@ object SwerveConstants {
     const val DRIVE_ACCEL_FAST = 20.0
     const val DRIVE_DECCEL_FAST = 25.0
 
-    const val DRIVE_ACCEL_SLOW = 8.0
-    const val DRIVE_DECCEL_SLOW = 8.0
+    const val DRIVE_ACCEL_SLOW = 4.0
+    const val DRIVE_DECCEL_SLOW = 4.0
 
 
     val moduleTranslations = arrayOf(
