@@ -5,6 +5,8 @@ import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.util.sendable.SendableBuilder
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
@@ -32,6 +34,10 @@ class VisionAlign() : ReadJoysticks() {
     init{
         addRequirements(Drivetrain)
         anglePID.enableContinuousInput(PI, -PI)
+        Logger.recordOutput("Drive Result", 0.0)
+        Logger.recordOutput("Angle Result", 0.0)
+        SmartDashboard.putData("drivePID", drivePID)
+        SmartDashboard.putData("anglePID", anglePID)
     }
 
     override fun initialize() {
@@ -43,19 +49,20 @@ class VisionAlign() : ReadJoysticks() {
         xError = Drivetrain.getPose().x - targetPose.x
         yError = Drivetrain.getPose().y - targetPose.y
 
-        angle = -atan2(yError, xError)
+        angle = atan2(yError, xError)
 
         driveResult = drivePID.calculate(sqrt( xError.pow(2) + yError.pow(2)), 0.0)
         angleResult = anglePID.calculate(Drivetrain.getPose().rotation.radians, targetPose.rotation.radians)
 
         Logger.recordOutput("Drive Result", driveResult)
+        Logger.recordOutput("Angle Result", angleResult)
 
         //if angleResult
 
-        if (super.joystickX() == 0.0 && super.joystickY()==0.0 && super.joystickZ()==0.0) {
+        if (super.joystickX() == 0.0 && super.joystickY() ==0.0 && super.joystickZ()==0.0) {
             //TODO:Add angle result
             accelLimitedChassisSpeeds = readChassisSpeeds(
-                ChassisSpeeds(driveResult*cos(angle),-driveResult*sin(angle), angleResult),
+                ChassisSpeeds(driveResult*cos(angle),driveResult*sin(angle), angleResult),
                 MathUtil.interpolate(
                     SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
                     Elevator.getPosition() / SetpointConstants.ELEVATOR_L4
