@@ -20,7 +20,13 @@ open class ReadJoysticks : Command() {
     The acceleration limit you want for a cycle should be encoded into [currAccelLimit].
     If you want a constant acceleration limit just set that to a constant.
     Otherwise you can set it to whatever function produces your wanted acceleration limit.
-    The Genius Kai Dassonville strikes again
+    I tried to program it a different way but apparently this is the best
+    (The Genius Kai Dassonville strikes again)
+     */
+
+    /*
+    Lmao just realized this is super flawed because the limits are done in robot space
+    instead of field space where forces actually matter
      */
 
     val joystickX = Input::getJoystickX
@@ -29,8 +35,8 @@ open class ReadJoysticks : Command() {
 
     val inputRotOffset = Input::getRotOffset
 
-    private var lastX = 0.0
-    private var lastY = 0.0
+    var lastX = 0.0
+    var lastY = 0.0
 
     private var x = 0.0
     private var y = 0.0
@@ -40,7 +46,7 @@ open class ReadJoysticks : Command() {
 
     private var newMagnitude = 0.0
 
-    private var cubicChassisSpeeds = ChassisSpeeds()
+    private var curvedChassisSpeeds = ChassisSpeeds()
 
     private var magChange = 0.0
     private var magFraction = 0.0
@@ -78,14 +84,14 @@ open class ReadJoysticks : Command() {
 
 
         if (fieldOriented){
-            cubicChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+            curvedChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 sin(angle) * newMagnitude * maxSpeed,
                 cos(angle) * newMagnitude * maxSpeed,
                 joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
                 Drivetrain.getPose().rotation.minus(rotOffset)
             )
         } else {
-            cubicChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+            curvedChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 sin(angle) * newMagnitude * maxSpeed,
                 cos(angle) * newMagnitude * maxSpeed,
                 joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
@@ -98,7 +104,7 @@ open class ReadJoysticks : Command() {
 
         // Total magnitude of change since last cycle
         // NOTE: NOT change of total magnitude: it is magnitude of change in 2D coordinates
-        magChange = sqrt((lastX - cubicChassisSpeeds.vxMetersPerSecond).pow(2) + (lastY-cubicChassisSpeeds.vyMetersPerSecond).pow(2))
+        magChange = sqrt((lastX - curvedChassisSpeeds.vxMetersPerSecond).pow(2) + (lastY-curvedChassisSpeeds.vyMetersPerSecond).pow(2))
 
         // The fraction of the change in magnitude that should be applied
         magFraction = 1.0
@@ -109,10 +115,10 @@ open class ReadJoysticks : Command() {
             magFraction = (appliedAccelLimit/50.0)/magChange
         }
 
-        lastX = MathUtil.interpolate(lastX, cubicChassisSpeeds.vxMetersPerSecond, magFraction)
-        lastY = MathUtil.interpolate(lastY, cubicChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastX = MathUtil.interpolate(lastX, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
+        lastY = MathUtil.interpolate(lastY, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
 
-        return ChassisSpeeds(lastX, lastY, cubicChassisSpeeds.omegaRadiansPerSecond)
+        return ChassisSpeeds(lastX, lastY, curvedChassisSpeeds.omegaRadiansPerSecond)
     }
 
     fun readChassisSpeeds(fieldChassisSpeeds: ChassisSpeeds,
@@ -122,14 +128,14 @@ open class ReadJoysticks : Command() {
          * Outputs calculated ChassisSpeeds once the acceleration limit has been calculated
          */
 
-        cubicChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        curvedChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             fieldChassisSpeeds,
             Drivetrain.getPose().rotation.minus(rotOffset)
         )
 
         // Total magnitude of change since last cycle
         // NOTE: NOT change of total magnitude: it is magnitude of change in 2D coordinates
-        magChange = sqrt((lastX - cubicChassisSpeeds.vxMetersPerSecond).pow(2) + (lastY-cubicChassisSpeeds.vyMetersPerSecond).pow(2))
+        magChange = sqrt((lastX - curvedChassisSpeeds.vxMetersPerSecond).pow(2) + (lastY-curvedChassisSpeeds.vyMetersPerSecond).pow(2))
 
         // The fraction of the change in magnitude that should be applied
         magFraction = 1.0
@@ -140,8 +146,8 @@ open class ReadJoysticks : Command() {
             magFraction = (accelLimit/50.0)/magChange
         }
 
-        lastX = MathUtil.interpolate(lastX, cubicChassisSpeeds.vxMetersPerSecond, magFraction)
-        lastY = MathUtil.interpolate(lastY, cubicChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastX = MathUtil.interpolate(lastX, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
+        lastY = MathUtil.interpolate(lastY, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
 
         // X and Y are swapped because Y is left in robot coordinates and X is up
         // It's the other way around in controller coordinates

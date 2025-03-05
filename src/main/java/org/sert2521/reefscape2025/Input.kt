@@ -14,6 +14,7 @@ import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_L4
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_STOW
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
+import org.sert2521.reefscape2025.commands.drivetrain.SimpleVisionAlign
 import org.sert2521.reefscape2025.commands.drivetrain.VisionAlign
 import org.sert2521.reefscape2025.commands.elevator.RemoveAlgae
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
@@ -60,7 +61,8 @@ object Input {
     private val resetRotOffset = driverController.y()
     private val resetGyroRawYaw = driverController.start()
     private val resetGyroVision = driverController.back()
-    private val visionAlign = driverController.a()
+    private val visionAlign = driverController.b()
+    private val simpleVisionAlign = driverController.a()
     private val stopJoystickFieldOrientation = Trigger{driverController.leftTriggerAxis>0.3}
 
     // Wrist:
@@ -111,6 +113,7 @@ object Input {
         )}))
         visionAlign.whileTrue(VisionAlign())
         stopJoystickFieldOrientation.whileTrue(JoystickDrive(false))
+        simpleVisionAlign.whileTrue(SimpleVisionAlign().andThen(Dispenser.outtakeCommand()))
 
         /* Wrist */
         wristStow.onTrue(Wrist.initWristCommand())

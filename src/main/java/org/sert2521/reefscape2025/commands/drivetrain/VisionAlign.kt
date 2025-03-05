@@ -86,7 +86,6 @@ class VisionAlign() : ReadJoysticks() {
                 Elevator.getDeccelLimit(), Elevator.getSpeedLimit()
             )
 
-            //TODO: add angle result
             Drivetrain.driveRobotOriented(ChassisSpeeds(
                 accelLimitedChassisSpeeds.vxMetersPerSecond,
                 accelLimitedChassisSpeeds.vyMetersPerSecond, angleResult))
