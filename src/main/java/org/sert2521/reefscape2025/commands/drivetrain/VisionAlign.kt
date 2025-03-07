@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.util.sendable.SendableBuilder
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.networktables.LoggedNetworkInput
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
@@ -75,10 +76,7 @@ class VisionAlign() : ReadJoysticks() {
             if (accelLimitedChassisSpeeds.vyMetersPerSecond < 0.01){
                 accelLimitedChassisSpeeds.vyMetersPerSecond = 0.0
             }
-            Drivetrain.driveRobotOriented(ChassisSpeeds(
-                accelLimitedChassisSpeeds.vxMetersPerSecond,
-                accelLimitedChassisSpeeds.vyMetersPerSecond,
-                accelLimitedChassisSpeeds.omegaRadiansPerSecond))
+            Drivetrain.driveRobotOriented(accelLimitedChassisSpeeds)
         } else if (super.joystickZ() == 0.0){
             accelLimitedChassisSpeeds = readJoysticks(
                 Elevator.getAccelLimit(),

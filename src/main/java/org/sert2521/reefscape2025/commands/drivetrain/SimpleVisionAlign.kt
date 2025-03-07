@@ -63,6 +63,7 @@ class SimpleVisionAlign() : ReadJoysticks() {
     }
 
     override fun isFinished(): Boolean {
+        return false
         return alignDebouncer.calculate(drivePID.atSetpoint())
     }
 
