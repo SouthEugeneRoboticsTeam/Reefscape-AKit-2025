@@ -32,10 +32,11 @@ class SimpleVisionAlign() : ReadJoysticks() {
 
     private var accelLimitedChassisSpeeds = ChassisSpeeds()
 
-    private var alignDebouncer = Debouncer(1.0, Debouncer.DebounceType.kRising)
+    private var alignDebouncer = Debouncer(0.25, Debouncer.DebounceType.kRising)
 
     init {
         anglePID.enableContinuousInput(PI, -PI)
+        drivePID.setTolerance(0.03)
         addRequirements(Drivetrain)
 
         SmartDashboard.putData("Drive PID", drivePID)
@@ -47,7 +48,7 @@ class SimpleVisionAlign() : ReadJoysticks() {
         xError = Drivetrain.getPose().x - targetPose.x
         yError = Drivetrain.getPose().y - targetPose.y
         val test = cos(Drivetrain.getPose().rotation.radians)*hypot(Drivetrain.getChassisSpeeds().vxMetersPerSecond, Drivetrain.getChassisSpeeds().vyMetersPerSecond)
-        drivePID.reset(hypot(xError, yError), test)
+        drivePID.reset(hypot(xError, yError))
         anglePID.reset()
 
     }
@@ -59,7 +60,7 @@ class SimpleVisionAlign() : ReadJoysticks() {
         angle = atan2(yError, xError)
 
         driveResult = drivePID.calculate(hypot(xError, yError), 0.0)
-        if (driveResult < 0.03){
+        if (driveResult < 0.02){
             driveResult = 0.0
         }
         Logger.recordOutput("Drive PID result", driveResult)
@@ -83,6 +84,8 @@ class SimpleVisionAlign() : ReadJoysticks() {
     }
 
     override fun isFinished(): Boolean {
+        Logger.recordOutput("drivePID at goal", drivePID.atGoal())
+        Logger.recordOutput("drivePID error", drivePID.positionError)
         return false
         return alignDebouncer.calculate(drivePID.atGoal())
     }

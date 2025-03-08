@@ -112,7 +112,8 @@ object Input {
             Pose2d(Drivetrain.getPose().x, Drivetrain.getPose().y, Rotation2d())
         )}))
         visionAlign.whileTrue(VisionAlign())
-        stopJoystickFieldOrientation.whileTrue(JoystickDrive(false))
+        stopJoystickFieldOrientation.whileTrue(JoystickDrive(false)
+            .andThen(Dispenser.outtakeCommand()))
         simpleVisionAlign.whileTrue(SimpleVisionAlign().andThen(Dispenser.outtakeCommand()))
 
         /* Wrist */

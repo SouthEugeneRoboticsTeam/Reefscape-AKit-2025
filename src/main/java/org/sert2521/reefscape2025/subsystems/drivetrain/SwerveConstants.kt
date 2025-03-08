@@ -79,17 +79,17 @@ object SwerveConstants {
     val autoTranslationPID = PIDConstants(1.2, 0.0, 0.00)
     val autoRotationPID = PIDConstants(0.55, 0.00, 0.00, 0.7)
 
-    const val VISION_ALIGN_DRIVE_P = 2.0
+    const val VISION_ALIGN_DRIVE_P = 10.0
     const val VISION_ALIGN_DRIVE_I = 0.0
     const val VISION_ALIGN_DRIVE_D = 0.1
 
-    const val VISION_ALIGN_DRIVE_V = 0.9
+    const val VISION_ALIGN_DRIVE_V = 0.95
 
     const val VISION_ALIGN_ROT_P = 10.0
     const val VISION_ALIGN_ROT_I = 0.0
     const val VISION_ALIGN_ROT_D = 0.47
 
-    val visionAlignProfile = TrapezoidProfile.Constraints(1.0, 1.0)
+    val visionAlignProfile = TrapezoidProfile.Constraints(4.0, 2.0)
 
     const val TURN_ABS_ENCODER_CONVERSION_POSITION = 2 * PI
 

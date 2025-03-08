@@ -18,10 +18,10 @@ object SetpointConstants{
     const val WRIST_ALGAE_LOW = 0.04
     const val WRIST_ALGAE_HIGH = 0.12
 
-    const val ELEVATOR_STOW = 0.0
+    const val ELEVATOR_STOW = 0.005
     const val ELEVATOR_L2 = 0.15
     const val ELEVATOR_L3 = 0.345
-    const val ELEVATOR_L4 = 0.67-0.02
+    const val ELEVATOR_L4 = 0.67-0.01
     const val ELEVATOR_ALGAE_LOW = 0.195
     const val ELEVATOR_ALGAE_HIGH = 0.415
 
@@ -106,7 +106,7 @@ object VisionTargetPositions {
     private const val CX = 4.49
     private const val CY = 4.03
     private const val HD = PI/3
-    private const val RADIUS = 1.27
+    private const val RADIUS = 1.25
     private const val SHIFT = 0.175
 
     val reefPositions = mutableListOf(
