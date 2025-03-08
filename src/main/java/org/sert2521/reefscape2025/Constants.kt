@@ -7,6 +7,8 @@ import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Pounds
 import edu.wpi.first.wpilibj.RobotBase
 import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 object SetpointConstants{
     const val WRIST_INIT = 0.28
@@ -101,24 +103,42 @@ object PhysicalConstants {
 }
 
 object VisionTargetPositions {
+    private const val CX = 4.49
+    private const val CY = 4.03
+    private const val HD = PI/3
+    private const val RADIUS = 1.27
+    private const val SHIFT = 0.175
+
     val reefPositions = mutableListOf(
-        Pose2d(3.2, 4.19, Rotation2d(0.0)),
-        Pose2d(3.2, 3.86, Rotation2d(0.0)),
+        Pose2d(CX - cos(6*HD) * RADIUS + sin(6*HD) * SHIFT,
+            CY - sin(6*HD) * RADIUS - cos(6*HD) * SHIFT, Rotation2d(6* HD)),
+        Pose2d(CX - cos(6*HD) * RADIUS - sin(6*HD) * SHIFT,
+            CY - sin(6*HD) * RADIUS + cos(6*HD) * SHIFT, Rotation2d(6* HD)),
 
-        Pose2d(3.7, 2.99, Rotation2d(PI /3)),
-        Pose2d(3.99, 2.83, Rotation2d(PI /3)),
+        Pose2d(CX - cos(5*HD) * RADIUS + sin(5*HD) * SHIFT,
+            CY - sin(5*HD) * RADIUS - cos(5*HD) * SHIFT, Rotation2d(5* HD)),
+        Pose2d(CX - cos(5*HD) * RADIUS - sin(5*HD) * SHIFT,
+            CY - sin(5*HD) * RADIUS + cos(5*HD) * SHIFT, Rotation2d(5* HD)),
 
-        Pose2d(4.99, 2.83, Rotation2d((2.0* PI)/3.0)),
-        Pose2d(5.28, 2.98, Rotation2d((2.0* PI)/3.0)),
+        Pose2d(CX - cos(4*HD) * RADIUS + sin(4*HD) * SHIFT,
+            CY - sin(4*HD) * RADIUS - cos(4*HD) * SHIFT, Rotation2d(4* HD)),
+        Pose2d(CX - cos(4*HD) * RADIUS - sin(4*HD) * SHIFT,
+            CY - sin(4*HD) * RADIUS + cos(4*HD) * SHIFT, Rotation2d(4* HD)),
 
-        Pose2d(5.78, 3.86, Rotation2d(PI)),
-        Pose2d(5.78, 4.19, Rotation2d(PI)),
+        Pose2d(CX - cos(3*HD) * RADIUS + sin(3*HD) * SHIFT,
+            CY - sin(3*HD) * RADIUS - cos(3*HD) * SHIFT, Rotation2d(3* HD)),
+        Pose2d(CX - cos(3*HD) * RADIUS - sin(3*HD) * SHIFT,
+            CY - sin(3*HD) * RADIUS + cos(3*HD) * SHIFT, Rotation2d(3* HD)),
 
-        Pose2d(5.177958965301514, 5.048032760620117, Rotation2d((-2.0* PI)/3.0)),
-        Pose2d(4.91298770904541, 5.218371391296387, Rotation2d((-2.0* PI)/3.0)),
+        Pose2d(CX - cos(2*HD) * RADIUS + sin(2*HD) * SHIFT,
+            CY - sin(2*HD) * RADIUS - cos(2*HD) * SHIFT, Rotation2d(2* HD)),
+        Pose2d(CX - cos(2*HD) * RADIUS - sin(2*HD) * SHIFT,
+            CY - sin(2*HD) * RADIUS + cos(2*HD) * SHIFT, Rotation2d(2* HD)),
 
-        Pose2d(3.99, 5.23, Rotation2d(-PI /3.0)),
-        Pose2d(3.70, 5.07, Rotation2d(-PI /3.0)),
+        Pose2d(CX - cos(1*HD) * RADIUS + sin(1*HD) * SHIFT,
+            CY - sin(1*HD) * RADIUS - cos(1*HD) * SHIFT, Rotation2d(1* HD)),
+        Pose2d(CX - cos(1*HD) * RADIUS - sin(1*HD) * SHIFT,
+            CY - sin(1*HD) * RADIUS + cos(1*HD) * SHIFT, Rotation2d(1* HD)),
     )
 
 }

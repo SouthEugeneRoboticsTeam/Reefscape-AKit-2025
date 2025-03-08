@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.Logger
-import org.sert2521.reefscape2025.Input
 import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.VisionTargetPositions
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
@@ -40,7 +39,7 @@ object Drivetrain : SubsystemBase() {
     private val gyroIO = GyroIONavX()
 
     private val visionInputs = LoggedVisionIOInputs()
-    private val visionIO = VisionIOLimelight()
+    private val visionIOLeft = VisionIOLimelight("limelight-left")
 
     private val modules = arrayOf(Module(0), Module(1), Module(2), Module(3))
 
@@ -90,7 +89,7 @@ object Drivetrain : SubsystemBase() {
         odometryLock.lock()
 
         gyroIO.updateInputs(gyroInputs)
-        visionIO.updateInputs(visionInputs)
+        visionIOLeft.updateInputs(visionInputs)
         Logger.processInputs("Drive/Gyro", gyroInputs)
         Logger.processInputs("Drive/Vision", visionInputs)
 

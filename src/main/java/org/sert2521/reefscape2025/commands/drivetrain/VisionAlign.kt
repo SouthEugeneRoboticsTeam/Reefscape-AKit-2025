@@ -37,8 +37,8 @@ class VisionAlign() : ReadJoysticks() {
         anglePID.enableContinuousInput(PI, -PI)
         Logger.recordOutput("Drive Result", 0.0)
         Logger.recordOutput("Angle Result", 0.0)
-        SmartDashboard.putData("drivePID", drivePID)
-        SmartDashboard.putData("anglePID", anglePID)
+//        SmartDashboard.putData("drivePID", drivePID)
+//        SmartDashboard.putData("anglePID", anglePID)
     }
 
     override fun initialize() {

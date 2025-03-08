@@ -6,7 +6,7 @@ import org.sert2521.reefscape2025.Input
 import org.sert2521.reefscape2025.utils.LimelightHelpers
 
 
-class VisionIOLimelight: VisionIO {
+class VisionIOLimelight(private val name:String): VisionIO {
 
     override fun updateInputs(inputs: VisionIO.VisionIOInputs) {
         val useMegaTag2 = Drivetrain.getGyroConnected() && !Input.getGyroReset() && !DriverStation.isDisabled() //set to false to use MegaTag1
@@ -18,7 +18,7 @@ class VisionIOLimelight: VisionIO {
          */
 
         if(!useMegaTag2) {
-            val mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight")
+            val mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(name)
 
             if (mt1 == null){
                 doRejectUpdate = true
@@ -47,9 +47,9 @@ class VisionIOLimelight: VisionIO {
             }
         } else {
             /* NOTE: This block of code will very nearly always be the one that we use */
-            LimelightHelpers.SetRobotOrientation("limelight", Drivetrain.getPose().rotation.degrees, 0.0, 0.0, 0.0, 0.0, 0.0)
-            val mt2:LimelightHelpers.PoseEstimate? = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight")
-            if(Drivetrain.getGyroRateDegrees() > 720) { /* if our angular velocity is greater than 720 degrees per second, ignore vision updates */
+            LimelightHelpers.SetRobotOrientation(name, Drivetrain.getPose().rotation.degrees, Drivetrain.getGyroRateDegrees(), 0.0, 0.0, 0.0, 0.0)
+            val mt2:LimelightHelpers.PoseEstimate? = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name)
+            if(Drivetrain.getGyroRateDegrees() > 100) { /* if our angular velocity is greater than 100 degrees per second, ignore vision updates */
                 doRejectUpdate = true
             }
 

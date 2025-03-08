@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.math.system.plant.DCMotor
+import edu.wpi.first.math.trajectory.TrapezoidProfile
 import org.ejml.simple.SimpleMatrix
 import kotlin.math.PI
 
@@ -82,9 +83,13 @@ object SwerveConstants {
     const val VISION_ALIGN_DRIVE_I = 0.0
     const val VISION_ALIGN_DRIVE_D = 0.1
 
-    const val VISION_ALIGN_ROT_P = 8.0
+    const val VISION_ALIGN_DRIVE_V = 0.9
+
+    const val VISION_ALIGN_ROT_P = 10.0
     const val VISION_ALIGN_ROT_I = 0.0
     const val VISION_ALIGN_ROT_D = 0.47
+
+    val visionAlignProfile = TrapezoidProfile.Constraints(1.0, 1.0)
 
     const val TURN_ABS_ENCODER_CONVERSION_POSITION = 2 * PI
 
