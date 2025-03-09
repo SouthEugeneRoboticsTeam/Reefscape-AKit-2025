@@ -13,7 +13,7 @@ import kotlin.math.sin
 object SetpointConstants{
     const val WRIST_INIT = 0.28
     const val WRIST_STOW = 0.23
-    const val WRIST_GROUND = -0.088
+    const val WRIST_GROUND = -0.09
     const val WRIST_L1 = 0.17
     const val WRIST_ALGAE_LOW = 0.04
     const val WRIST_ALGAE_HIGH = 0.12
@@ -42,7 +42,7 @@ object SetpointConstants{
 
     const val GROUND_INTAKE_SPEED = 0.9
     const val GROUND_OUTTAKE_SPEED_ALGAE = -0.5
-    const val GROUND_OUTTAKE_SPEED_CORAL = -0.1
+    const val GROUND_OUTTAKE_SPEED_CORAL = -0.2
     const val GROUND_HOLD_ALGAE_SPEED = -0.2
 }
 
@@ -109,36 +109,36 @@ object VisionTargetPositions {
     private const val RADIUS = 1.25
     private const val SHIFT = 0.175
 
-    val reefPositions = mutableListOf(
-        Pose2d(CX - cos(6*HD) * RADIUS + sin(6*HD) * SHIFT,
-            CY - sin(6*HD) * RADIUS - cos(6*HD) * SHIFT, Rotation2d(6* HD)),
+    val reefPositionsLeft = mutableListOf(
+        //Left I think
         Pose2d(CX - cos(6*HD) * RADIUS - sin(6*HD) * SHIFT,
             CY - sin(6*HD) * RADIUS + cos(6*HD) * SHIFT, Rotation2d(6* HD)),
-
-        Pose2d(CX - cos(5*HD) * RADIUS + sin(5*HD) * SHIFT,
-            CY - sin(5*HD) * RADIUS - cos(5*HD) * SHIFT, Rotation2d(5* HD)),
         Pose2d(CX - cos(5*HD) * RADIUS - sin(5*HD) * SHIFT,
             CY - sin(5*HD) * RADIUS + cos(5*HD) * SHIFT, Rotation2d(5* HD)),
-
-        Pose2d(CX - cos(4*HD) * RADIUS + sin(4*HD) * SHIFT,
-            CY - sin(4*HD) * RADIUS - cos(4*HD) * SHIFT, Rotation2d(4* HD)),
         Pose2d(CX - cos(4*HD) * RADIUS - sin(4*HD) * SHIFT,
             CY - sin(4*HD) * RADIUS + cos(4*HD) * SHIFT, Rotation2d(4* HD)),
-
-        Pose2d(CX - cos(3*HD) * RADIUS + sin(3*HD) * SHIFT,
-            CY - sin(3*HD) * RADIUS - cos(3*HD) * SHIFT, Rotation2d(3* HD)),
         Pose2d(CX - cos(3*HD) * RADIUS - sin(3*HD) * SHIFT,
             CY - sin(3*HD) * RADIUS + cos(3*HD) * SHIFT, Rotation2d(3* HD)),
-
-        Pose2d(CX - cos(2*HD) * RADIUS + sin(2*HD) * SHIFT,
-            CY - sin(2*HD) * RADIUS - cos(2*HD) * SHIFT, Rotation2d(2* HD)),
         Pose2d(CX - cos(2*HD) * RADIUS - sin(2*HD) * SHIFT,
             CY - sin(2*HD) * RADIUS + cos(2*HD) * SHIFT, Rotation2d(2* HD)),
-
-        Pose2d(CX - cos(1*HD) * RADIUS + sin(1*HD) * SHIFT,
-            CY - sin(1*HD) * RADIUS - cos(1*HD) * SHIFT, Rotation2d(1* HD)),
         Pose2d(CX - cos(1*HD) * RADIUS - sin(1*HD) * SHIFT,
             CY - sin(1*HD) * RADIUS + cos(1*HD) * SHIFT, Rotation2d(1* HD)),
+    )
+
+    val reefPositionsRight = mutableListOf(
+        //right I think
+        Pose2d(CX - cos(1*HD) * RADIUS + sin(1*HD) * SHIFT,
+            CY - sin(1*HD) * RADIUS - cos(1*HD) * SHIFT, Rotation2d(1* HD)),
+        Pose2d(CX - cos(2*HD) * RADIUS + sin(2*HD) * SHIFT,
+            CY - sin(2*HD) * RADIUS - cos(2*HD) * SHIFT, Rotation2d(2* HD)),
+        Pose2d(CX - cos(3*HD) * RADIUS + sin(3*HD) * SHIFT,
+            CY - sin(3*HD) * RADIUS - cos(3*HD) * SHIFT, Rotation2d(3* HD)),
+        Pose2d(CX - cos(4*HD) * RADIUS + sin(4*HD) * SHIFT,
+            CY - sin(4*HD) * RADIUS - cos(4*HD) * SHIFT, Rotation2d(4* HD)),
+        Pose2d(CX - cos(5*HD) * RADIUS + sin(5*HD) * SHIFT,
+            CY - sin(5*HD) * RADIUS - cos(5*HD) * SHIFT, Rotation2d(5* HD)),
+        Pose2d(CX - cos(6*HD) * RADIUS + sin(6*HD) * SHIFT,
+            CY - sin(6*HD) * RADIUS - cos(6*HD) * SHIFT, Rotation2d(6* HD)),
     )
 
 }

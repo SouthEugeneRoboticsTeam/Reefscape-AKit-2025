@@ -295,7 +295,11 @@ object Drivetrain : SubsystemBase() {
         return gyroInputs.connected
     }
 
-    fun getNearestTarget(): Pose2d {
-        return getPose().nearest(VisionTargetPositions.reefPositions)
+    fun getNearestTarget(left:Boolean): Pose2d {
+        if (left) {
+            return getPose().nearest(VisionTargetPositions.reefPositionsLeft)
+        } else {
+            return getPose().nearest(VisionTargetPositions.reefPositionsRight)
+        }
     }
 }

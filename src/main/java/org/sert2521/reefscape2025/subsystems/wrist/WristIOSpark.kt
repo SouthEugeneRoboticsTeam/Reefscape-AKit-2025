@@ -47,7 +47,7 @@ class WristIOSpark:WristIO {
                 WRIST_P, 0.0,
                 WRIST_D, 0.0
             )
-            .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kPrimaryEncoder)
+            .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder)
 
         wristMotor.configure(wristConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
     }

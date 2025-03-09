@@ -79,9 +79,9 @@ object SwerveConstants {
     val autoTranslationPID = PIDConstants(1.2, 0.0, 0.00)
     val autoRotationPID = PIDConstants(0.55, 0.00, 0.00, 0.7)
 
-    const val VISION_ALIGN_DRIVE_P = 10.0
+    const val VISION_ALIGN_DRIVE_P = 4.0
     const val VISION_ALIGN_DRIVE_I = 0.0
-    const val VISION_ALIGN_DRIVE_D = 0.1
+    const val VISION_ALIGN_DRIVE_D = 0.4
 
     const val VISION_ALIGN_DRIVE_V = 0.95
 
@@ -102,7 +102,7 @@ object SwerveConstants {
     const val MAX_SPEED_MPS = 4.571
 
     //As opposed to the max speed, this is the speed you actually want the drivetrain to go at
-    const val DRIVE_SPEED_FAST = 3.0
+    const val DRIVE_SPEED_FAST = 3.5
     const val DRIVE_SPEED_SLOW = 0.5
     const val ROT_SPEED = 5.0
 

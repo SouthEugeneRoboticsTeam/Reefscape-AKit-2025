@@ -10,12 +10,11 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_L4
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_STOW
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
 import org.sert2521.reefscape2025.commands.drivetrain.SimpleVisionAlign
-import org.sert2521.reefscape2025.commands.drivetrain.VisionAlign
+import org.sert2521.reefscape2025.commands.elevator.AlgaeAutoRemove
 import org.sert2521.reefscape2025.commands.elevator.RemoveAlgae
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
@@ -61,8 +60,9 @@ object Input {
     private val resetRotOffset = driverController.y()
     private val resetGyroRawYaw = driverController.start()
     private val resetGyroVision = driverController.back()
-    private val visionAlign = driverController.b()
-    private val simpleVisionAlign = driverController.a()
+    private val algaeRemoveLow = driverController.pov(180)
+    private val simpleVisionAlignLeft = driverController.x()
+    private val simpleVisionAlignRight = driverController.b()
     private val stopJoystickFieldOrientation = Trigger{driverController.leftTriggerAxis>0.3}
 
     // Wrist:
@@ -111,10 +111,11 @@ object Input {
         resetGyroRawYaw.onTrue(runOnce({ Drivetrain.setPose(
             Pose2d(Drivetrain.getPose().x, Drivetrain.getPose().y, Rotation2d())
         )}))
-        visionAlign.whileTrue(VisionAlign())
+        algaeRemoveLow.whileTrue(AlgaeAutoRemove())
         stopJoystickFieldOrientation.whileTrue(JoystickDrive(false)
             .andThen(Dispenser.outtakeCommand()))
-        simpleVisionAlign.whileTrue(SimpleVisionAlign().andThen(Dispenser.outtakeCommand()))
+        simpleVisionAlignLeft.whileTrue(SimpleVisionAlign(true).andThen(Dispenser.outtakeCommand()))
+        simpleVisionAlignRight.whileTrue(SimpleVisionAlign(false).andThen(Dispenser.outtakeCommand()))
 
         /* Wrist */
         wristStow.onTrue(Wrist.initWristCommand())
