@@ -38,8 +38,10 @@ object Drivetrain : SubsystemBase() {
     private val gyroInputs = LoggedGyroIOInputs()
     private val gyroIO = GyroIONavX()
 
-    private val visionInputs = LoggedVisionIOInputs()
+    private val visionInputsLeft = LoggedVisionIOInputs()
+    private val visionInputsRight = LoggedVisionIOInputs()
     private val visionIOLeft = VisionIOLimelight("limelight-left")
+    private val visionIORight = VisionIOLimelight("limelight-right")
 
     private val modules = arrayOf(Module(0), Module(1), Module(2), Module(3))
 
@@ -89,9 +91,12 @@ object Drivetrain : SubsystemBase() {
         odometryLock.lock()
 
         gyroIO.updateInputs(gyroInputs)
-        visionIOLeft.updateInputs(visionInputs)
+        visionIOLeft.updateInputs(visionInputsLeft)
+        visionIORight.updateInputs(visionInputsRight)
         Logger.processInputs("Drive/Gyro", gyroInputs)
-        Logger.processInputs("Drive/Vision", visionInputs)
+        Logger.processInputs("Drive/Limelight Left", visionInputsLeft)
+        Logger.processInputs("Drive/Limelight Right", visionInputsRight)
+
 
         for (module in modules){
             module.periodic()
@@ -144,11 +149,19 @@ object Drivetrain : SubsystemBase() {
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
 
-        if (!visionInputs.rejectEstimation){
-            if (visionInputs.megatagTwo){
-                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV)
+        if (!visionInputsLeft.rejectEstimation){
+            if (visionInputsLeft.megatagTwo){
+                addVisionMeasurement(visionInputsLeft.estimatedPosition, visionInputsLeft.timestamp, SwerveConstants.LIMELIGHT_STDV)
             } else {
-                addVisionMeasurement(visionInputs.estimatedPosition, visionInputs.timestamp, SwerveConstants.LIMELIGHT_STDV_YAW_RESET)
+                addVisionMeasurement(visionInputsLeft.estimatedPosition, visionInputsLeft.timestamp, SwerveConstants.LIMELIGHT_STDV_YAW_RESET)
+            }
+        }
+
+        if (!visionInputsRight.rejectEstimation){
+            if (visionInputsRight.megatagTwo){
+                addVisionMeasurement(visionInputsRight.estimatedPosition, visionInputsRight.timestamp, SwerveConstants.LIMELIGHT_STDV)
+            } else {
+                addVisionMeasurement(visionInputsRight.estimatedPosition, visionInputsRight.timestamp, SwerveConstants.LIMELIGHT_STDV_YAW_RESET)
             }
         }
 

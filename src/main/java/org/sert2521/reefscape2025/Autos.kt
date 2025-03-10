@@ -118,6 +118,7 @@ object Autos
 //        autoChooser.addOption("SysId dynamic", Drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward))
 //        autoChooser.addOption("Leave + run or smth", AutoBuilder.buildAuto("Center - Push1Left - L1"))
 //        autoChooser.addOption("Right 3", AutoBuilder.buildAuto("Right 3 L4"))
+        autoChooser.addOption("Left 3", AutoBuilder.buildAuto("Left 3 L4"))
     }
 
 

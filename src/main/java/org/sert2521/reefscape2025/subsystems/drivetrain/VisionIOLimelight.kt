@@ -3,13 +3,14 @@ package org.sert2521.reefscape2025.subsystems.drivetrain
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.wpilibj.DriverStation
 import org.sert2521.reefscape2025.Input
+import org.sert2521.reefscape2025.Robot
 import org.sert2521.reefscape2025.utils.LimelightHelpers
 
 
 class VisionIOLimelight(private val name:String): VisionIO {
 
     override fun updateInputs(inputs: VisionIO.VisionIOInputs) {
-        val useMegaTag2 = false//Drivetrain.getGyroConnected() && !Input.getGyroReset() && !DriverStation.isDisabled() //set to false to use MegaTag1
+        val useMegaTag2 = Robot.isAutonomous && Robot.isEnabled//set to false to use MegaTag1
         var doRejectUpdate = false
 
         /*

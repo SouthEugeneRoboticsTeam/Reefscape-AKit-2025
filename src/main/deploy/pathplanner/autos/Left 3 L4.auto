@@ -65,15 +65,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Left 3 L4.2"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left 3 L4.3"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Left 3 L4.2"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Left 3 L4.3"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -121,15 +128,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Left 3 L4.5"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left 3 L4.6"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Left 3 L4.5"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Left 3 L4.6"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -150,7 +164,7 @@
       ]
     }
   },
-  "resetOdom": false,
+  "resetOdom": true,
   "folder": null,
   "choreoAuto": true
 }
