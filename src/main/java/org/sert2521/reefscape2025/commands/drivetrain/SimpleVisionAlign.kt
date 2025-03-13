@@ -60,24 +60,32 @@ class SimpleVisionAlign(val alignLeft:Boolean) : ReadJoysticks() {
         angle = atan2(yError, xError)
 
         driveResult = drivePID.calculate(hypot(xError, yError), 0.0)
-        if (driveResult.absoluteValue < 0.06){
+        Logger.recordOutput("Drive PID result", driveResult)
+        if (drivePID.atGoal()){
             driveResult = 0.0
         }
-        Logger.recordOutput("Drive PID result", driveResult)
+
         driveResult += drivePID.setpoint.velocity * SwerveConstants.VISION_ALIGN_DRIVE_V
         angleResult = anglePID.calculate(Drivetrain.getPose().rotation.radians, targetPose.rotation.radians)
 
 
         Logger.recordOutput("Align Setpoint",
             Pose2d(targetPose.x+cos(angle)*drivePID.setpoint.position, targetPose.y+sin(angle)*drivePID.setpoint.position, Rotation2d(anglePID.setpoint)))
-        accelLimitedChassisSpeeds = readChassisSpeeds(
-            ChassisSpeeds(driveResult*cos(angle),driveResult*sin(angle), angleResult),
-            MathUtil.interpolate(
-                SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
-                Elevator.getPosition() / SetpointConstants.ELEVATOR_L4
-            ),
-            Rotation2d()
-        )
+        accelLimitedChassisSpeeds =
+          //ChassisSpeeds.fromFieldRelativeSpeeds(
+//            driveResult*cos(angle),
+//            driveResult*sin(angle),
+//            angleResult,
+//            Drivetrain.getPose().rotation
+//        )
+            readChassisSpeeds(
+                ChassisSpeeds(driveResult*cos(angle),driveResult*sin(angle), angleResult),
+                MathUtil.interpolate(
+                    SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
+                    Elevator.getPosition() / SetpointConstants.ELEVATOR_L4
+                ),
+                Rotation2d()
+            )
 
         Drivetrain.driveRobotOriented(accelLimitedChassisSpeeds)
     }
@@ -86,7 +94,6 @@ class SimpleVisionAlign(val alignLeft:Boolean) : ReadJoysticks() {
         Logger.recordOutput("drivePID at goal", drivePID.atGoal())
         Logger.recordOutput("drivePID error", drivePID.positionError)
         return false
-        return alignDebouncer.calculate(drivePID.atGoal())
     }
 
     override fun end(interrupted: Boolean) {}

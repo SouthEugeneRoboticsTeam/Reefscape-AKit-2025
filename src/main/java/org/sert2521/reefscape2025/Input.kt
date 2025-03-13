@@ -76,12 +76,12 @@ object Input {
     private val wristCoralOuttakeDriver = driverController.leftBumper()
 
     // Elevator:
-    private val elevatorStow = JoystickButton(gunnerController, 10)
+    private val elevatorStow = JoystickButton(gunnerController, 8)
     private val elevatorL2 = JoystickButton(gunnerController, 7)
     private val elevatorL3 = JoystickButton(gunnerController, 6)
     private val elevatorL4 = JoystickButton(gunnerController, 5)
-    private val elevatorAlgaeLow = JoystickButton(gunnerController, 8)
-    private val elevatorAlgaeHigh = JoystickButton(gunnerController, 9)
+    private val elevatorAlgaeLow = JoystickButton(gunnerController, 2)
+    private val elevatorAlgaeHigh = JoystickButton(gunnerController, 4)
     private val toggleElevatorSafe = JoystickButton(gunnerController, 15)
 
     // Dispenser:

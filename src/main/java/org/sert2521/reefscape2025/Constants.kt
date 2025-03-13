@@ -29,7 +29,7 @@ object SetpointConstants{
     //algae low 0.226
 
 
-    const val DISPENSER_INTAKE_SPEED = 0.7
+    const val DISPENSER_INTAKE_SPEED = 0.5
     const val DISPENSER_OUTTAKE_SPEED = 0.3
     const val DISPENSER_OUTTAKE_L4 = 0.3
     const val DISPENSER_OUTTAKE_SLOW_SPEED = 0.2
@@ -106,8 +106,8 @@ object VisionTargetPositions {
     private const val CX = 4.49
     private const val CY = 4.03
     private const val HD = PI/3
-    private const val RADIUS = 1.25
-    private const val SHIFT = 0.175
+    private const val RADIUS = 1.27
+    private const val SHIFT = 0.15
 
     val reefPositionsLeft = mutableListOf(
         //Left I think

@@ -110,7 +110,6 @@ object Autos
         autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
         autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
 
-        autoChooser.addOption("test", AutoBuilder.buildAuto("Test"))
         autoChooser.addOption("Center L1", AutoBuilder.buildAuto("Center - L1"))
         autoChooser.addOption("Left L1", AutoBuilder.buildAuto("Left - L1"))
     //
@@ -119,6 +118,7 @@ object Autos
 //        autoChooser.addOption("Leave + run or smth", AutoBuilder.buildAuto("Center - Push1Left - L1"))
 //        autoChooser.addOption("Right 3", AutoBuilder.buildAuto("Right 3 L4"))
         autoChooser.addOption("Left 3", AutoBuilder.buildAuto("Left 3 L4"))
+        autoChooser.addOption("Left 3 Test", AutoBuilder.buildAuto("Left 3 L4 Test"))
     }
 
 

@@ -91,12 +91,7 @@ object Drivetrain : SubsystemBase() {
         odometryLock.lock()
 
         gyroIO.updateInputs(gyroInputs)
-        visionIOLeft.updateInputs(visionInputsLeft)
-        visionIORight.updateInputs(visionInputsRight)
         Logger.processInputs("Drive/Gyro", gyroInputs)
-        Logger.processInputs("Drive/Limelight Left", visionInputsLeft)
-        Logger.processInputs("Drive/Limelight Right", visionInputsRight)
-
 
         for (module in modules){
             module.periodic()
@@ -146,6 +141,13 @@ object Drivetrain : SubsystemBase() {
                 modulePositions
             )
         }
+
+
+        visionIOLeft.updateInputs(visionInputsLeft)
+        visionIORight.updateInputs(visionInputsRight)
+
+        Logger.processInputs("Drive/Limelight Left", visionInputsLeft)
+        Logger.processInputs("Drive/Limelight Right", visionInputsRight)
 
         gyroDisconnectedAlert.set(!gyroInputs.connected && MetaConstants.currentMode != MetaConstants.Mode.SIM)
 

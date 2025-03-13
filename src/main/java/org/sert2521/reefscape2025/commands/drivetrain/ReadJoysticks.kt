@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj2.command.Command
+import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.ConfigConstants
 import org.sert2521.reefscape2025.Input
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
@@ -143,7 +144,10 @@ open class ReadJoysticks : Command() {
         // Applies maximum magnitude of change of x and y
         // (divide by 50 so that currAccel can be in m/s^2)
         if (magChange > accelLimit/50.0){
+            Logger.recordOutput("Accel Limited", true)
             magFraction = (accelLimit/50.0)/magChange
+        } else {
+            Logger.recordOutput("Accel Limited", false)
         }
 
         lastX = MathUtil.interpolate(lastX, curvedChassisSpeeds.vxMetersPerSecond, magFraction)

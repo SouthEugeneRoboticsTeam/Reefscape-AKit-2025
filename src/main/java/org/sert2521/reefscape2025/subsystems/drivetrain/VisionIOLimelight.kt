@@ -10,7 +10,7 @@ import org.sert2521.reefscape2025.utils.LimelightHelpers
 class VisionIOLimelight(private val name:String): VisionIO {
 
     override fun updateInputs(inputs: VisionIO.VisionIOInputs) {
-        val useMegaTag2 = Robot.isAutonomous && Robot.isEnabled//set to false to use MegaTag1
+        val useMegaTag2 = Robot.isAutonomous && Robot.isEnabled || !Input.getGyroReset()//set to false to use MegaTag1
         var doRejectUpdate = false
 
         /*

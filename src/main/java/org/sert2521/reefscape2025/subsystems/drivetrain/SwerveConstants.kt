@@ -66,7 +66,7 @@ object SwerveConstants {
     const val DRIVE_D = 0.0
 
     const val DRIVE_KS = 0.1
-    const val DRIVE_KV = 0.145
+    const val DRIVE_KV = 0.135
     const val DRIVE_KA = 0.0
 
     const val TURN_P = 1.0
@@ -76,20 +76,20 @@ object SwerveConstants {
     const val TURN_PID_MIN_INPUT = 0.0
     const val TURN_PID_MAX_INPUT = 2 * PI
 
-    val autoTranslationPID = PIDConstants(1.0, 0.0, 0.2)
+    val autoTranslationPID = PIDConstants(8.0, 0.0, 0.8) //1.0, 0.2
     val autoRotationPID = PIDConstants(0.55, 0.00, 0.00, 0.7)
 
     const val VISION_ALIGN_DRIVE_P = 4.0
     const val VISION_ALIGN_DRIVE_I = 0.0
     const val VISION_ALIGN_DRIVE_D = 0.4
 
-    const val VISION_ALIGN_DRIVE_V = 0.95
+    const val VISION_ALIGN_DRIVE_V = 1.0
 
     const val VISION_ALIGN_ROT_P = 10.0
     const val VISION_ALIGN_ROT_I = 0.0
     const val VISION_ALIGN_ROT_D = 0.47
 
-    val visionAlignProfile = TrapezoidProfile.Constraints(4.0, 2.0)
+    val visionAlignProfile = TrapezoidProfile.Constraints(4.0, 2.5)
 
     const val TURN_ABS_ENCODER_CONVERSION_POSITION = 2 * PI
 
@@ -109,8 +109,8 @@ object SwerveConstants {
     const val DRIVE_ACCEL_FAST = 20.0
     const val DRIVE_DECCEL_FAST = 25.0
 
-    const val DRIVE_ACCEL_SLOW = 4.0
-    const val DRIVE_DECCEL_SLOW = 4.0
+    const val DRIVE_ACCEL_SLOW = 8.0
+    const val DRIVE_DECCEL_SLOW = 8.0
 
 
     val moduleTranslations = arrayOf(
