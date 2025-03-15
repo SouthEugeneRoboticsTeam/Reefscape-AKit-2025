@@ -37,6 +37,7 @@ class SimpleVisionAlign(val alignLeft:Boolean) : ReadJoysticks() {
     init {
         anglePID.enableContinuousInput(PI, -PI)
         drivePID.setTolerance(0.03)
+        anglePID.setTolerance(0.02)
         addRequirements(Drivetrain)
 
         SmartDashboard.putData("Drive PID", drivePID)
@@ -68,6 +69,9 @@ class SimpleVisionAlign(val alignLeft:Boolean) : ReadJoysticks() {
         driveResult += drivePID.setpoint.velocity * SwerveConstants.VISION_ALIGN_DRIVE_V
         angleResult = anglePID.calculate(Drivetrain.getPose().rotation.radians, targetPose.rotation.radians)
 
+        if (anglePID.atSetpoint()){
+            angleResult = 0.0
+        }
 
         Logger.recordOutput("Align Setpoint",
             Pose2d(targetPose.x+cos(angle)*drivePID.setpoint.position, targetPose.y+sin(angle)*drivePID.setpoint.position, Rotation2d(anglePID.setpoint)))

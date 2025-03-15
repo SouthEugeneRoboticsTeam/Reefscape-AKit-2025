@@ -14,7 +14,8 @@ import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_STOW
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
 import org.sert2521.reefscape2025.commands.drivetrain.SimpleVisionAlign
-import org.sert2521.reefscape2025.commands.elevator.AlgaeAutoRemove
+import org.sert2521.reefscape2025.commands.elevator.AlgaeAutoRemoveHigh
+import org.sert2521.reefscape2025.commands.elevator.AlgaeAutoRemoveLow
 import org.sert2521.reefscape2025.commands.elevator.RemoveAlgae
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
@@ -61,9 +62,11 @@ object Input {
     private val resetGyroRawYaw = driverController.start()
     private val resetGyroVision = driverController.back()
     private val algaeRemoveLow = driverController.pov(180)
+    private val algaeRemoveHigh = driverController.pov(0)
     private val simpleVisionAlignLeft = driverController.x()
     private val simpleVisionAlignRight = driverController.b()
     private val stopJoystickFieldOrientation = Trigger{driverController.leftTriggerAxis>0.3}
+    //private val a = driverController.pov()
 
     // Wrist:
     private val wristIntakeCoral = JoystickButton(gunnerController, 12)
@@ -111,7 +114,10 @@ object Input {
         resetGyroRawYaw.onTrue(runOnce({ Drivetrain.setPose(
             Pose2d(Drivetrain.getPose().x, Drivetrain.getPose().y, Rotation2d())
         )}))
-        algaeRemoveLow.whileTrue(AlgaeAutoRemove())
+
+        algaeRemoveLow.onTrue(AlgaeAutoRemoveLow())
+        algaeRemoveHigh.onTrue(AlgaeAutoRemoveHigh())
+
         stopJoystickFieldOrientation.whileTrue(JoystickDrive(false)
             .andThen(Dispenser.outtakeCommand()))
         simpleVisionAlignLeft.whileTrue(SimpleVisionAlign(true).andThen(Dispenser.outtakeCommand()))

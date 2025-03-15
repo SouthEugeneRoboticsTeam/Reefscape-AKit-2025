@@ -119,6 +119,8 @@ object Autos
 //        autoChooser.addOption("Right 3", AutoBuilder.buildAuto("Right 3 L4"))
         autoChooser.addOption("Left 3", AutoBuilder.buildAuto("Left 3 L4"))
         autoChooser.addOption("Left 3 Test", AutoBuilder.buildAuto("Left 3 L4 Test"))
+        autoChooser.addOption("Left Rot Test", AutoBuilder.buildAuto("Test Rot"))
+        autoChooser.addOption("Left Rot Test Slow", AutoBuilder.buildAuto("Test Rot Slow"))
     }
 
 

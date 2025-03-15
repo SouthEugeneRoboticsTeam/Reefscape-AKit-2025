@@ -317,4 +317,11 @@ object Drivetrain : SubsystemBase() {
             return getPose().nearest(VisionTargetPositions.reefPositionsRight)
         }
     }
+
+    fun driveBackCommand():Command{
+        val speeds = ChassisSpeeds(-0.7, 0.0, 0.0)
+        return run{
+            driveRobotOriented(speeds)
+        }
+    }
 }

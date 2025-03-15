@@ -61,9 +61,9 @@ object SwerveConstants {
     const val TURN_REL_CONVERSION_POSITION = (2*PI) / TURN_GEAR_RATIO
     const val TURN_REL_CONVERSION_VELOCITY = TURN_REL_CONVERSION_POSITION
 
-    const val DRIVE_P = 0.0
+    const val DRIVE_P = 0.02
     const val DRIVE_I = 0.0
-    const val DRIVE_D = 0.0
+    const val DRIVE_D = 0.004
 
     const val DRIVE_KS = 0.1
     const val DRIVE_KV = 0.135
@@ -76,16 +76,16 @@ object SwerveConstants {
     const val TURN_PID_MIN_INPUT = 0.0
     const val TURN_PID_MAX_INPUT = 2 * PI
 
-    val autoTranslationPID = PIDConstants(8.0, 0.0, 0.8) //1.0, 0.2
-    val autoRotationPID = PIDConstants(0.55, 0.00, 0.00, 0.7)
+    val autoTranslationPID = PIDConstants(5.0, 0.0, 0.4)
+    val autoRotationPID = PIDConstants(5.5, 0.00, 0.4, 0.7)
 
-    const val VISION_ALIGN_DRIVE_P = 4.0
+    const val VISION_ALIGN_DRIVE_P = 6.0
     const val VISION_ALIGN_DRIVE_I = 0.0
     const val VISION_ALIGN_DRIVE_D = 0.4
 
     const val VISION_ALIGN_DRIVE_V = 1.0
 
-    const val VISION_ALIGN_ROT_P = 10.0
+    const val VISION_ALIGN_ROT_P = 8.0
     const val VISION_ALIGN_ROT_I = 0.0
     const val VISION_ALIGN_ROT_D = 0.47
 
@@ -126,6 +126,6 @@ object SwerveConstants {
 
     const val FF_RAMP_RATE = 1.0
 
-    val LIMELIGHT_STDV = VecBuilder.fill(0.7, 0.7, 1.0E99)
+    val LIMELIGHT_STDV = VecBuilder.fill(1.0, 1.0, 1.0E99)
     val LIMELIGHT_STDV_YAW_RESET = VecBuilder.fill(0.7, 0.7, 1.0)
 }

@@ -70,8 +70,8 @@ class ModuleIOSpark(module:Int):ModuleIO {
             .positionConversionFactor(SwerveConstants.DRIVE_CONVERSION_POSITION)
             .velocityConversionFactor(SwerveConstants.DRIVE_CONVERSION_VELOCITY)
             //does NOT say uwuMeasurementPeriod (Kona, I mean YOU)
-            .uvwMeasurementPeriod(10)
-            .uvwAverageDepth(2)
+            .uvwMeasurementPeriod(12)
+            .uvwAverageDepth(8)
 
         driveConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -90,6 +90,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
             .appliedOutputPeriodMs(20)
             .busVoltagePeriodMs(20)
             .outputCurrentPeriodMs(20)
+
 
         SparkUtil.tryUntilOk(driveMotor, 5) {
             driveMotor.configure(

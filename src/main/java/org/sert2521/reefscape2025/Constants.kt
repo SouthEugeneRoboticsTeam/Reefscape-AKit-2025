@@ -106,8 +106,8 @@ object VisionTargetPositions {
     private const val CX = 4.49
     private const val CY = 4.03
     private const val HD = PI/3
-    private const val RADIUS = 1.27
-    private const val SHIFT = 0.15
+    private const val RADIUS = 1.255
+    private const val SHIFT = 0.16
 
     val reefPositionsLeft = mutableListOf(
         //Left I think
