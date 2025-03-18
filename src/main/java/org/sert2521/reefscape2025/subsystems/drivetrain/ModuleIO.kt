@@ -1,6 +1,7 @@
 package org.sert2521.reefscape2025.subsystems.drivetrain
 
 import edu.wpi.first.math.geometry.Rotation2d
+import edu.wpi.first.wpilibj.MotorSafety
 import org.team9432.annotation.Logged
 
 //get translated idiot
@@ -33,7 +34,7 @@ interface ModuleIO {
 
     fun setTurnOpenLoop(output:Double)
 
-    fun setDriveVelocity(velocityRadPerSec:Double)
+    fun setDriveVelocity(velocityRadPerSec:Double, withPID:Boolean = true)
 
     fun setTurnPosition(rotation:Rotation2d)
 

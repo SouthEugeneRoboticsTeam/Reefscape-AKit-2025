@@ -126,6 +126,7 @@ object Robot : LoggedRobot()
 
     override fun autonomousInit()
     {
+
         autonomousCommand = Autos.getAutonomousCommand()
         autonomousCommand?.schedule()
     }

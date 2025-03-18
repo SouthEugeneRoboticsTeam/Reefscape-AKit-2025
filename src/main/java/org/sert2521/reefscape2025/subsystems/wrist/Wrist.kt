@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger
-import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_INIT
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
 
@@ -33,18 +32,27 @@ object Wrist : SubsystemBase() {
     }
 
     fun setReference(goal:Double){
-        io.setReference(goal)
+        io.setReferenceFast(goal)
     }
 
     fun stop(){
         io.setVoltage(0.0)
     }
 
-    fun setWristCommand(goal:Double): Command {
+    fun setWristCommandFast(goal:Double): Command {
 
         return runOnce{
             this.goal = goal
-            io.setReference(goal)
+            io.setReferenceFast(goal)
+        }.andThen(Commands.waitUntil{
+            MathUtil.isNear(goal, getRotations(), 0.1)
+        })
+    }
+
+    fun setWristCommandSlow(goal:Double):Command{
+        return runOnce{
+            this.goal = goal
+            io.setReferenceSlow(goal)
         }.andThen(Commands.waitUntil{
             MathUtil.isNear(goal, getRotations(), 0.1)
         })
@@ -57,13 +65,13 @@ object Wrist : SubsystemBase() {
     fun initWristCommand():Command{
         return runOnce{
             io.resetMotorEncoder()
-            io.setReference(WRIST_INIT)
+            io.setReferenceFast(WRIST_INIT)
         }
             .andThen(Commands.waitUntil{
                 MathUtil.isNear(WRIST_INIT, getRotations(), 0.1)
             })
             .andThen(Commands.waitSeconds(0.2))
             .andThen(runOnce{ io.resetMotorEncoder() })
-            .andThen(setWristCommand(WRIST_STOW))
+            .andThen(setWristCommandFast(WRIST_STOW))
     }
 }

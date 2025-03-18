@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "1 L4.0"
+                  "pathName": "Center 1 L4.0"
                 }
               },
               {
@@ -26,13 +26,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Wait L2-4 Pre-Outtake"
+            "name": "Dispenser Outtake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Dispenser Outtake"
+            "name": "Remove Algae Low"
           }
         }
       ]

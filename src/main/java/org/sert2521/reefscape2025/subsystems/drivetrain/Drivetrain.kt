@@ -16,10 +16,12 @@ import edu.wpi.first.math.util.Units
 import edu.wpi.first.units.Units.Volts
 import edu.wpi.first.wpilibj.Alert
 import edu.wpi.first.wpilibj.DriverStation
+import edu.wpi.first.wpilibj.MotorSafety
 import edu.wpi.first.wpilibj.smartdashboard.Field2d
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.MetaConstants
@@ -42,6 +44,8 @@ object Drivetrain : SubsystemBase() {
     private val visionInputsRight = LoggedVisionIOInputs()
     private val visionIOLeft = VisionIOLimelight("limelight-left")
     private val visionIORight = VisionIOLimelight("limelight-right")
+
+    private var fed = true
 
     private val modules = arrayOf(Module(0), Module(1), Module(2), Module(3))
 
@@ -70,6 +74,8 @@ object Drivetrain : SubsystemBase() {
         lastModulePositions,
         Pose2d()
     )
+
+    private val robotAuto = RobotModeTriggers.autonomous()
 
     val field = Field2d()
 
@@ -169,6 +175,11 @@ object Drivetrain : SubsystemBase() {
 
         field.robotPose = getPose()
 
+        if (!fed){
+            driveRobotOriented(ChassisSpeeds())
+        }
+        fed = false
+
         Logger.recordOutput("SwerveChassisSpeeds/Measured", getChassisSpeeds())
         Logger.recordOutput("SwerveModuleStates/Measured", *getModuleStates())
         Logger.recordOutput("Odometry/Robot Pose", getPose())
@@ -177,7 +188,7 @@ object Drivetrain : SubsystemBase() {
 
     /* === Setters === */
 
-    fun driveRobotOriented(speeds: ChassisSpeeds){
+    fun driveRobotOriented(speeds: ChassisSpeeds, withPID:Boolean = true){
         val discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02)
 
         val setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds)
@@ -189,12 +200,12 @@ object Drivetrain : SubsystemBase() {
         val optimizedStates = Array(4) { SwerveModuleState() }
 
         for (i in 0..<4){
-            optimizedStates[i] = modules[i].runSetpoint(setpointStates[i])
+            optimizedStates[i] = modules[i].runSetpoint(setpointStates[i], withPID)
         }
 
         Logger.recordOutput("SwerveModuleStates/Optimized Setpoints", *optimizedStates)
 
-
+        fed = true
     }
 
     fun setGyroYaw(gyroRotation2d: Rotation2d){
@@ -322,6 +333,12 @@ object Drivetrain : SubsystemBase() {
         val speeds = ChassisSpeeds(-0.7, 0.0, 0.0)
         return run{
             driveRobotOriented(speeds)
+        }
+    }
+
+    fun stopCommand():Command{
+        return runOnce{
+            driveRobotOriented(ChassisSpeeds())
         }
     }
 }

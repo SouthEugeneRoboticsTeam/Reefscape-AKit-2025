@@ -140,6 +140,16 @@ object Dispenser : SubsystemBase() {
         }.withTimeout(0.2).andThen(stopCommand().withTimeout(0.4))
     }
 
+    fun outtakeCommandNoWait():Command{
+        return run{
+            if (Elevator.goal.position == SetpointConstants.ELEVATOR_L4){
+                setMotor(DISPENSER_OUTTAKE_L4)
+            } else {
+                setMotor(DISPENSER_OUTTAKE_SPEED)
+            }
+        }.withTimeout(0.2)
+    }
+
     fun outtakeSlowCommand():Command{
         return run{
             setMotor(DISPENSER_OUTTAKE_SLOW_SPEED)

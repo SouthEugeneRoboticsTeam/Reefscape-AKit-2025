@@ -18,7 +18,7 @@ object SetpointConstants{
     const val WRIST_ALGAE_LOW = 0.04
     const val WRIST_ALGAE_HIGH = 0.12
 
-    const val ELEVATOR_STOW = 0.005
+    const val ELEVATOR_STOW = 0.02
     const val ELEVATOR_L2 = 0.15
     const val ELEVATOR_L3 = 0.345
     const val ELEVATOR_L4 = 0.67-0.01
@@ -41,7 +41,7 @@ object SetpointConstants{
     const val RAMP_RECENTER_SPEED = -0.2
 
     const val GROUND_INTAKE_SPEED = 0.9
-    const val GROUND_OUTTAKE_SPEED_ALGAE = -0.5
+    const val GROUND_OUTTAKE_SPEED_ALGAE = -0.8
     const val GROUND_OUTTAKE_SPEED_CORAL = -0.2
     const val GROUND_HOLD_ALGAE_SPEED = -0.2
 }
@@ -82,9 +82,13 @@ object TuningConstants{
     //Wrist Values
     const val WRIST_CURRENT_LIMIT = 30
 
-    const val WRIST_P = 7.0
-    const val WRIST_I = 0.0
-    const val WRIST_D = 0.2
+    const val WRIST_P_FAST = 7.0
+    const val WRIST_I_FAST = 0.0
+    const val WRIST_D_FAST = 0.2
+
+    const val WRIST_P_SLOW = 2.0
+    const val WRIST_I_SLOW = 0.0
+    const val WRIST_D_SLOW = 0.1
 
     const val WRIST_S = 0.0
     const val WRIST_V = 0.0

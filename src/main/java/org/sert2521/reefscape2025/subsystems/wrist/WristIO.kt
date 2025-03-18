@@ -17,7 +17,9 @@ interface WristIO {
 
     fun setVoltage(voltage:Double)
 
-    fun setReference(targetPosition:Double)
+    fun setReferenceFast(targetPosition:Double)
+
+    fun setReferenceSlow(targetPosition:Double)
 
     fun resetMotorEncoder()
 }

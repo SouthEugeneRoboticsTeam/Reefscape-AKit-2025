@@ -25,7 +25,7 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : ReadJoysticks() 
                 Drivetrain.stop()
             }
             Drivetrain.driveRobotOriented(
-                joystickAccelLimited
+                joystickAccelLimited, false
             )
         }
         else {
@@ -37,7 +37,7 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : ReadJoysticks() 
             }
 
             Drivetrain.driveRobotOriented(
-                joystickAccelLimited
+                joystickAccelLimited, false
             )
         }
     }

@@ -12,5 +12,5 @@ import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 class AlgaeAutoRemoveLow : ParallelDeadlineGroup(
     Commands.waitSeconds(0.0).andThen(Elevator.setElevatorCommand(ELEVATOR_STOW)),
     //Commands.waitSeconds(0.6).andThen(Commands.run({Drivetrain.driveRobotOriented(ChassisSpeeds(-0.7, 0.0, 0.0))}, Drivetrain))
-    Commands.waitUntil{Elevator.getPosition()<0.4}.andThen(Drivetrain.driveBackCommand())
+    Commands.waitUntil{Elevator.getPosition()<0.375}.andThen(Drivetrain.driveBackCommand())
 )

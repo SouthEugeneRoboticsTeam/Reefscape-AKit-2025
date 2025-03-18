@@ -12,7 +12,7 @@ object Ramp : SubsystemBase() {
     private val ioInputs = LoggedRampIOInputs()
 
     init{
-        defaultCommand = run {io.setSpeed(0.0)}
+        defaultCommand = idleCommand()
     }
 
     override fun periodic() {
@@ -28,18 +28,20 @@ object Ramp : SubsystemBase() {
         }
     }
 
+    fun idleCommand():Command{
+        return run{
+            if (Dispenser.getBlocked()){
+                setSpeed(RAMP_INTAKE_SPEED)
+            } else {
+                setSpeed(0.0)
+            }
+        }
+    }
+
     fun recenterCommand():Command{
         return run{
             setSpeed(RAMP_RECENTER_SPEED)
         }.until {
-            !Dispenser.getBlocked()
-        }.andThen(run{
-            setSpeed(RAMP_INTAKE_SPEED)
-        }).until {
-            Dispenser.getBlocked()
-        }.andThen(run{
-            setSpeed(RAMP_INTAKE_SPEED)
-        }).until{
             !Dispenser.getBlocked()
         }
     }

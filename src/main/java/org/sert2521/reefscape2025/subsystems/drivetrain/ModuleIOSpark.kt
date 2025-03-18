@@ -79,7 +79,14 @@ class ModuleIOSpark(module:Int):ModuleIO {
                 SwerveConstants.DRIVE_P,
                 SwerveConstants.DRIVE_I,
                 SwerveConstants.DRIVE_D,
-                0.0,
+                0.0, ClosedLoopSlot.kSlot0
+            )
+
+        driveConfig.closedLoop
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            .pidf(
+                0.0, 0.0, 0.0,
+                0.0, ClosedLoopSlot.kSlot1
             )
 
         driveConfig.signals
@@ -202,15 +209,25 @@ class ModuleIOSpark(module:Int):ModuleIO {
         turnMotor.setVoltage(output)
     }
 
-    override fun setDriveVelocity(velocityRadPerSec: Double) {
+    override fun setDriveVelocity(velocityRadPerSec: Double, withPID:Boolean) {
         val ffVolts = driveFeedforward.calculate(velocityRadPerSec)
-        driveController.setReference(
-            velocityRadPerSec,
-            SparkBase.ControlType.kVelocity,
-            ClosedLoopSlot.kSlot0,
-            ffVolts,
-            ArbFFUnits.kVoltage
-        )
+        if (withPID) {
+            driveController.setReference(
+                velocityRadPerSec,
+                SparkBase.ControlType.kVelocity,
+                ClosedLoopSlot.kSlot0,
+                ffVolts,
+                ArbFFUnits.kVoltage
+            )
+        } else {
+            driveController.setReference(
+                velocityRadPerSec,
+                SparkBase.ControlType.kVelocity,
+                ClosedLoopSlot.kSlot1,
+                ffVolts,
+                ArbFFUnits.kVoltage
+            )
+        }
     }
 
     override fun setTurnPosition(rotation: Rotation2d) {

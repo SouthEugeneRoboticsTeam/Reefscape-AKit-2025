@@ -24,7 +24,7 @@ class DispenserIOSpark:DispenserIO {
         config
             .inverted(true)
             .idleMode(IdleMode.kCoast)
-            .smartCurrentLimit(30)
+            .smartCurrentLimit(40)
 
         motor.configure(config, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
     }

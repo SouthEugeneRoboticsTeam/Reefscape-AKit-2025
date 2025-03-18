@@ -5,11 +5,15 @@ import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Joystick
+import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_L2
+import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_L3
+import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_L4
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_STOW
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
 import org.sert2521.reefscape2025.commands.drivetrain.JoystickDrive
@@ -83,7 +87,7 @@ object Input {
     private val elevatorL2 = JoystickButton(gunnerController, 7)
     private val elevatorL3 = JoystickButton(gunnerController, 6)
     private val elevatorL4 = JoystickButton(gunnerController, 5)
-    private val elevatorAlgaeLow = JoystickButton(gunnerController, 2)
+    private val groundIntakeWhileUp = JoystickButton(gunnerController, 10)
     private val elevatorAlgaeHigh = JoystickButton(gunnerController, 4)
     private val toggleElevatorSafe = JoystickButton(gunnerController, 15)
 
@@ -103,12 +107,16 @@ object Input {
         DriverStation.getMatchTime() < 1.5 && Robot.isTeleop && Wrist.goal != WRIST_STOW
     }
 
+    private val intakeRumble = Trigger{ Dispenser.getRampBeambreakBlocked() }
+
 
     init {
 
         // rumble.onTrue(runOnce({setRumble(0.8)}).andThen(WaitCommand(0.2).andThen(runOnce({ setRumble(0.0) }))))
 
         // Command Assignment
+        intakeRumble.onTrue(rumbleBlip())
+
         /* Drivetrain */
         resetRotOffset.onTrue(runOnce({ rotationOffset=Drivetrain.getPose().rotation }))
         resetGyroRawYaw.onTrue(runOnce({ Drivetrain.setPose(
@@ -125,50 +133,36 @@ object Input {
 
         /* Wrist */
         wristStow.onTrue(Wrist.initWristCommand())
-        wristOuttakeCoral.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_L1)
+        wristOuttakeCoral.whileTrue(Wrist.setWristCommandSlow(SetpointConstants.WRIST_L1)
             .andThen(GroundIntake.outtakeCoralCommand()))
-            .onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
-        wristIntakeAlgae.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
+            .onFalse(Wrist.setWristCommandFast(SetpointConstants.WRIST_STOW))
+        wristIntakeAlgae.whileTrue(Wrist.setWristCommandFast(SetpointConstants.WRIST_ALGAE_LOW)
             .andThen(GroundIntake.outtakeCommand()))
-        wristIntakeAlgae.onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_HIGH)
+        wristIntakeAlgae.onFalse(Wrist.setWristCommandSlow(SetpointConstants.WRIST_ALGAE_HIGH)
             .raceWith(GroundIntake.outtakeCommand()).andThen(GroundIntake.holdAlgaeCommand()))
-        wristIntakeCoral.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_GROUND)
+        wristIntakeCoral.whileTrue(Wrist.setWristCommandFast(SetpointConstants.WRIST_GROUND)
             .andThen(GroundIntake.intakeCommand()))
-            .onFalse(Wrist.setWristCommand(SetpointConstants.WRIST_STOW))
-        wristOuttakeAlgae.whileTrue(Wrist.setWristCommand(SetpointConstants.WRIST_ALGAE_LOW)
+            .onFalse(Wrist.setWristCommandSlow(SetpointConstants.WRIST_STOW)
+                .raceWith(GroundIntake.intakeCommand()))
+        wristOuttakeAlgae.whileTrue(Wrist.setWristCommandFast(SetpointConstants.WRIST_ALGAE_LOW)
             .alongWith(GroundIntake.intakeCommand()))
-            .onFalse(Wrist.setWristCommand(WRIST_STOW))
+            .onFalse(Wrist.setWristCommandFast(WRIST_STOW))
+
+        groundIntakeWhileUp.whileTrue(GroundIntake.intakeCommand())
+
 
         /* Ground Intake */
         wristCoralOuttakeDriver.whileTrue(GroundIntake.outtakeCoralCommand())
 
         /* Elevator */
-        elevatorStow.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-            .andThen(
-                Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_STOW)
-                    .until{ Dispenser.getBlocked() }))
+        elevatorStow.onTrue(Elevator.setElevatorSafeCommand(ELEVATOR_STOW))
 
-        elevatorL2.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L2)
-                .until { Dispenser.getBlocked() }))
+        elevatorL2.onTrue(Elevator.setElevatorSafeCommand(ELEVATOR_L2))
 
-        elevatorL3.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L3)
-                .until { Dispenser.getBlocked() }))
+        elevatorL3.onTrue(Elevator.setElevatorSafeCommand(ELEVATOR_L3))
 
-        elevatorL4.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_L4)
-                .until { Dispenser.getBlocked() }))
+        elevatorL4.onTrue(Elevator.setElevatorSafeCommand(ELEVATOR_L4))
 
-        elevatorAlgaeLow.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_ALGAE_LOW))
-                .until { Dispenser.getBlocked() }.andThen(RemoveAlgae())
-                .until { Dispenser.getBlocked() })
-
-        elevatorAlgaeHigh.onTrue(Commands.waitUntil{!Dispenser.getBlocked()}
-            .andThen(Elevator.setElevatorCommand(SetpointConstants.ELEVATOR_ALGAE_HIGH))
-            .until { Dispenser.getBlocked() }.andThen(RemoveAlgae())
-            .until { Dispenser.getBlocked() })
         // toggleElevatorSafe.onTrue(runOnce({Elevator.toggleSafeMode()}))
 
         /* Dispenser */
@@ -198,4 +192,9 @@ object Input {
     }
 
     fun setRumble(amount: Double) { driverController.setRumble(GenericHID.RumbleType.kBothRumble, amount) }
+
+    fun rumbleBlip(): Command {
+        return runOnce({ setRumble(0.8) }).andThen(Commands.waitSeconds(0.2))
+            .andThen(runOnce({ setRumble(0.0) }))
+    }
 }

@@ -12,8 +12,10 @@ import org.sert2521.reefscape2025.PhysicalConstants.WRIST_ABS_ENCODER_ZERO
 import org.sert2521.reefscape2025.PhysicalConstants.WRIST_MOTOR_ENCODER_MULTIPLIER
 import org.sert2521.reefscape2025.TuningConstants.WRIST_CURRENT_LIMIT
 import org.sert2521.reefscape2025.TuningConstants.WRIST_G
-import org.sert2521.reefscape2025.TuningConstants.WRIST_P
-import org.sert2521.reefscape2025.TuningConstants.WRIST_D
+import org.sert2521.reefscape2025.TuningConstants.WRIST_P_FAST
+import org.sert2521.reefscape2025.TuningConstants.WRIST_D_FAST
+import org.sert2521.reefscape2025.TuningConstants.WRIST_D_SLOW
+import org.sert2521.reefscape2025.TuningConstants.WRIST_P_SLOW
 import kotlin.math.cos
 
 class WristIOSpark:WristIO {
@@ -44,8 +46,15 @@ class WristIOSpark:WristIO {
 
         wristConfig.closedLoop
             .pidf(
-                WRIST_P, 0.0,
-                WRIST_D, 0.0
+                WRIST_P_FAST, 0.0,
+                WRIST_D_FAST, 0.0, ClosedLoopSlot.kSlot0
+            )
+            .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder)
+
+        wristConfig.closedLoop
+            .pidf(
+                WRIST_P_SLOW, 0.0,
+                WRIST_D_SLOW, 0.0, ClosedLoopSlot.kSlot1
             )
             .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder)
 
@@ -64,12 +73,22 @@ class WristIOSpark:WristIO {
         inputs.wristMotorPosition = wristMotor.encoder.position
     }
 
-    override fun setReference(targetPosition: Double) {
+    override fun setReferenceFast(targetPosition: Double) {
         val arbFF = WRIST_G * cos(targetPosition)
         wristMotor.closedLoopController.setReference(
             targetPosition,
             SparkBase.ControlType.kPosition,
             ClosedLoopSlot.kSlot0,
+            arbFF
+        )
+    }
+
+    override fun setReferenceSlow(targetPosition: Double) {
+        val arbFF = WRIST_G * cos(targetPosition)
+        wristMotor.closedLoopController.setReference(
+            targetPosition,
+            SparkBase.ControlType.kPosition,
+            ClosedLoopSlot.kSlot1,
             arbFF
         )
     }

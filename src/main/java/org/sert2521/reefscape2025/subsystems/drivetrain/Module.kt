@@ -53,7 +53,7 @@ class Module(private val index:Int) {
         }
     }
 
-    fun runSetpoint(state:SwerveModuleState):SwerveModuleState{
+    fun runSetpoint(state:SwerveModuleState, withPID:Boolean = true):SwerveModuleState{
         /**
          * Returns the optimized swerve module state for logging purposes
          **/
@@ -61,7 +61,7 @@ class Module(private val index:Int) {
         state.optimize(getAngle())
         state.cosineScale(getAngle())
 
-        io.setDriveVelocity(state.speedMetersPerSecond/SwerveConstants.WHEEL_RADIUS_METERS)
+        io.setDriveVelocity(state.speedMetersPerSecond/SwerveConstants.WHEEL_RADIUS_METERS, withPID)
         io.setTurnPosition(state.angle)
 
         return state
