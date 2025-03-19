@@ -116,7 +116,7 @@ object VisionTargetPositions {
     private const val RADIUS = 1.255
     private const val SHIFT = 0.16
 
-    val layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape)
+    val layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded)
 
     val reefPositionsLeft = mutableListOf(
         //Left I think
