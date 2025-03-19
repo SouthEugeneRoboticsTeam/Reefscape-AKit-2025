@@ -75,16 +75,12 @@ object Drivetrain : SubsystemBase() {
         Pose2d()
     )
 
-    private val robotAuto = RobotModeTriggers.autonomous()
-
     val field = Field2d()
 
     init{
         //while it's TECHNICALLY not just copy pasted, I'll still report this as swerve template whatevers
         //because I would NOT know how to program this on my own
         HAL.report(FRCNetComm.tResourceType.kResourceType_RobotDrive, FRCNetComm.tInstances.kRobotDriveSwerve_AdvantageKit)
-
-        SparkOdometryThread.getInstance().start()
 
         this.defaultCommand = JoystickDrive()
 
@@ -117,35 +113,25 @@ object Drivetrain : SubsystemBase() {
             Logger.recordOutput("SwerveModuleStates/Optimized Setpoints", *Array(4){SwerveModuleState()})
         }
 
-        val sampleTimestamps = modules[0].getOdometryTimestamps()
-        val sampleCount = sampleTimestamps.size
+        val modulePositions = Array(4){modules[it].getPosition()}
 
-        for (i in 0..<sampleCount){
-            val modulePositions = Array(4){SwerveModulePosition()}
-            val moduleDeltas = Array(4){SwerveModulePosition()}
-            for (moduleIndex in 0..<4){
-                modulePositions[moduleIndex] = modules[moduleIndex].getOdometryPositions()[i]
-                moduleDeltas[moduleIndex] =
-                    SwerveModulePosition(
-                        modulePositions[moduleIndex].distanceMeters- lastModulePositions[moduleIndex].distanceMeters,
-                        modulePositions[moduleIndex].angle
-                    )
-                lastModulePositions[moduleIndex] = modulePositions[moduleIndex]
+
+        if(gyroInputs.connected){
+            rawGyroRotation = gyroInputs.yawPosition
+        } else {
+            val moduleDeltas = Array(4) {
+                SwerveModulePosition(
+                    modulePositions[it].distanceMeters - lastModulePositions[it].distanceMeters,
+                    modulePositions[it].angle - lastModulePositions[it].angle)
             }
+            val twist = kinematics.toTwist2d(*moduleDeltas)
+            rawGyroRotation = rawGyroRotation.plus(Rotation2d(twist.dtheta))
+        }
 
-            if(gyroInputs.connected){
-                rawGyroRotation = gyroInputs.odometryYawPositions[i]
-            } else {
-                val twist = kinematics.toTwist2d(*moduleDeltas)
-                rawGyroRotation = rawGyroRotation.plus(Rotation2d(twist.dtheta))
-            }
+        poseEstimator.update(rawGyroRotation, modulePositions)
 
-
-            poseEstimator.updateWithTime(
-                sampleTimestamps[i],
-                rawGyroRotation,
-                modulePositions
-            )
+        for (moduleIndex in 0..<4){
+            lastModulePositions[moduleIndex] = modulePositions[moduleIndex]
         }
 
 

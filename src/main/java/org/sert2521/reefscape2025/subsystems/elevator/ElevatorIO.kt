@@ -22,6 +22,6 @@ interface ElevatorIO {
 
     fun setEncoder(encoderValue:Double)
 
-    fun setReference(setpoint:TrapezoidProfile.State)
+    fun setReference(setpointPosition:Double, setpointVelocity:Double)
 
 }

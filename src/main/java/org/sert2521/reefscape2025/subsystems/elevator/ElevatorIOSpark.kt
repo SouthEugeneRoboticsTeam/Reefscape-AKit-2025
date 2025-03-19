@@ -80,19 +80,19 @@ class ElevatorIOSpark:ElevatorIO {
         rightMotor.encoder.setPosition(encoderValue)
     }
 
-    override fun setReference(setpoint: TrapezoidProfile.State) {
+    override fun setReference(setpointPosition:Double, setpointVelocity:Double) {
         // Feedforward function
         // Didn't feel like we needed the entire ElevatorFeedforward() class
-        val arbFF = setpoint.velocity * ELEVATOR_V + ELEVATOR_G
+        val arbFF = setpointVelocity * ELEVATOR_V + ELEVATOR_G
 
         leftMotor.closedLoopController.setReference( // closedLoopController is PID calculated on the sparks
-            setpoint.position, // The setpoint it's trying to reach
+            setpointPosition, // The setpoint it's trying to reach
             SparkBase.ControlType.kPosition, // Dimension of setpoint, e.g. position, velocity, voltage, current, etc.
             ClosedLoopSlot.kSlot0, // Slot of PID, default is zero.
             arbFF // Added voltage fed into the spark on top of PID, works like a feedforward result
         )
         rightMotor.closedLoopController.setReference(
-            setpoint.position,
+            setpointPosition,
             SparkBase.ControlType.kPosition,
             ClosedLoopSlot.kSlot0,
             arbFF

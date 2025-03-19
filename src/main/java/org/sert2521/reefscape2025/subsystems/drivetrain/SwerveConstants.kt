@@ -94,7 +94,7 @@ object SwerveConstants {
     const val TURN_ABS_ENCODER_CONVERSION_POSITION = 2 * PI
 
 
-    const val ODOMETRY_PERIOD = 5
+    const val ODOMETRY_PERIOD = 20
     const val ODOMETRY_FREQUENCY = 1000 / ODOMETRY_PERIOD
 
 

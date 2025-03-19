@@ -22,8 +22,6 @@ class Module(private val index:Int) {
     )
     private var turnInited = false
 
-    private var odometryPositions = arrayOf<SwerveModulePosition>()
-
     init{
 
     }
@@ -31,14 +29,6 @@ class Module(private val index:Int) {
     fun periodic(){
         io.updateInputs(inputs)
         Logger.processInputs("Drive/"+indexToCorner[index]+" Module", inputs)
-
-        val sampleCount = inputs.odometryTimestamps.size
-        odometryPositions = Array<SwerveModulePosition>(sampleCount) {
-            SwerveModulePosition(
-                inputs.odometryDrivePositionsRad[it] * SwerveConstants.WHEEL_RADIUS_METERS,
-                inputs.odometryTurnPositions[it]
-            )
-        }
 
         driveDisconnectedAlert.set(!inputs.driveConnected)
         turnDisconnectedAlert.set(!inputs.turnConnected)
@@ -99,14 +89,6 @@ class Module(private val index:Int) {
 
     fun getState():SwerveModuleState{
         return SwerveModuleState(getVelocityMetersPerSec(), getAngle())
-    }
-
-    fun getOdometryPositions():Array<SwerveModulePosition>{
-        return odometryPositions
-    }
-
-    fun getOdometryTimestamps():DoubleArray{
-        return inputs.odometryTimestamps
     }
 
     fun getWheelRadiusCharacterizationPosition():Double{

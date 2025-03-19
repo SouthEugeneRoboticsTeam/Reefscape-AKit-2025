@@ -4,11 +4,13 @@ import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_PROFILE
+import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 
 object Elevator : SubsystemBase() {
@@ -77,14 +79,15 @@ object Elevator : SubsystemBase() {
         /* Sets the goal of the motion profile, and then executes the calculations required
             then sets the motor setpoint to the result */
         return startRun({
-                goal = TrapezoidProfile.State(goalMeters, 0.0)
+                goal.position = goalMeters
+                goal.velocity = 0.0
             },
             {
                 currentState = profile.calculate(0.02, currentState, goal)
                 Logger.recordOutput("Elevator/Reference Position", currentState.position)
                 Logger.recordOutput("Elevator/Reference Velocity", currentState.velocity)
 
-                io.setReference(currentState)
+                io.setReference(currentState.position, currentState.velocity)
 
                 Logger.recordOutput("Elevator/At Setpoint",
                     MathUtil.isNear(currentState.position, getPosition(), 0.05))
@@ -94,6 +97,12 @@ object Elevator : SubsystemBase() {
         }
     }
 
+    fun setElevatorSafeCommand(goalMeters: Double):Command{
+        return Commands.waitUntil{!Dispenser.getBlocked()}
+            .andThen(Elevator.setElevatorCommand(goalMeters))
+            .until{Dispenser.getBlocked()}
+    }
+
     private fun holdElevatorCommand():Command{
         // If it's at stow, then set the voltage to 0
         // Otherwise just run the profile without a new goal until another goal is set
@@ -101,7 +110,7 @@ object Elevator : SubsystemBase() {
             if (goal.position == SetpointConstants.ELEVATOR_STOW){
                 io.setVoltage(0.0)
             } else {
-                io.setReference(currentState)
+                io.setReference(currentState.position, currentState.velocity)
             }
 
             Logger.recordOutput("Elevator/At Setpoint",

@@ -38,10 +38,6 @@ object GroundIntake : SubsystemBase() {
         io.setIntakeMotor(0.0)
     }
 
-    fun getVelocity():Double{
-        return ioInputs.intakeVelocityRPM
-    }
-
     fun stopCommand():Command {
         return run{ stop() }
     }

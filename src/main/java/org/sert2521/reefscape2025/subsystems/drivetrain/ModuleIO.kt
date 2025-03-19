@@ -22,10 +22,6 @@ interface ModuleIO {
         var turnVelocityRadPerSec = 0.0
         var turnAppliedVolts = 0.0
         var turnCurrentAmps = 0.0
-
-        var odometryTimestamps = doubleArrayOf()
-        var odometryDrivePositionsRad = doubleArrayOf()
-        var odometryTurnPositions:Array<Rotation2d> = arrayOf()
     }
 
     fun updateInputs(inputs:ModuleIOInputs)

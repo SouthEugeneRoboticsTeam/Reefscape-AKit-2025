@@ -35,22 +35,10 @@ class ModuleIOSpark(module:Int):ModuleIO {
         SwerveConstants.DRIVE_KA
     )
 
-    private var lastVelocity = 0.0
-
     private val absEncoder = CANcoder(SwerveConstants.encoderIDs[module])
 
     private val driveController = driveMotor.closedLoopController
     private val turnController = turnMotor.closedLoopController
-
-    private val timestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue()
-    private val drivePositionQueue = SparkOdometryThread.getInstance().registerSignal(
-        driveMotor,
-        driveEncoder::getPosition
-    )
-
-    private val turnPositionQueue = SparkOdometryThread.getInstance().registerSignal(
-        turnMotor, turnEncoder::getPosition
-    )
 
     private val driveConnectedDebounce = Debouncer(0.5)
     private val turnConnectedDebounce = Debouncer(0.5)
@@ -186,19 +174,6 @@ class ModuleIOSpark(module:Int):ModuleIO {
             inputs.turnCurrentAmps = it
         }
         inputs.turnConnected = turnConnectedDebounce.calculate(!SparkUtil.sparkStickyFault)
-
-
-        inputs.odometryTimestamps =
-            timestampQueue.stream().mapToDouble { it }.toArray()
-        inputs.odometryDrivePositionsRad =
-            drivePositionQueue.stream().mapToDouble { it }.toArray()
-        inputs.odometryTurnPositions =
-            turnPositionQueue.stream()
-                .map { Rotation2d(it).minus(zeroRotation) }
-                    .toArray().filterIsInstance<Rotation2d>().toTypedArray()
-        timestampQueue.clear()
-        drivePositionQueue.clear()
-        turnPositionQueue.clear()
     }
 
     override fun setDriveOpenLoop(output: Double) {

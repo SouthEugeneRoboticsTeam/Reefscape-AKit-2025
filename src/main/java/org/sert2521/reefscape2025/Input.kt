@@ -88,8 +88,6 @@ object Input {
     private val elevatorL3 = JoystickButton(gunnerController, 6)
     private val elevatorL4 = JoystickButton(gunnerController, 5)
     private val groundIntakeWhileUp = JoystickButton(gunnerController, 10)
-    private val elevatorAlgaeHigh = JoystickButton(gunnerController, 4)
-    private val toggleElevatorSafe = JoystickButton(gunnerController, 15)
 
     // Dispenser:
     private val dispenserManualIntake = JoystickButton(gunnerController, 11)
@@ -99,13 +97,6 @@ object Input {
 
     private val increaseSpeed = JoystickButton(gunnerController, 1)
     private val decreaseSpeed = JoystickButton(gunnerController, 2)
-
-    private val endOuttakeCoralTrigger = Trigger{
-        DriverStation.getMatchTime() < 0.5 && Robot.isTeleop && Elevator.goal.position != ELEVATOR_STOW
-    }
-    private val endOuttakeAlgaeTrigger = Trigger{
-        DriverStation.getMatchTime() < 1.5 && Robot.isTeleop && Wrist.goal != WRIST_STOW
-    }
 
     private val intakeRumble = Trigger{ Dispenser.getRampBeambreakBlocked() }
 
