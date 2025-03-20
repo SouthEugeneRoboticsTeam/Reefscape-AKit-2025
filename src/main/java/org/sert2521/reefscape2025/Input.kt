@@ -1,5 +1,6 @@
 package org.sert2521.reefscape2025
 
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.wpilibj.DriverStation
@@ -23,10 +24,12 @@ import org.sert2521.reefscape2025.commands.elevator.AlgaeAutoRemoveLow
 import org.sert2521.reefscape2025.commands.elevator.RemoveAlgae
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
+import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 import org.sert2521.reefscape2025.subsystems.ramp.Ramp
 import org.sert2521.reefscape2025.subsystems.wrist.Wrist
+import kotlin.math.min
 
 // Bindings:
 // Gunner:
@@ -69,8 +72,8 @@ object Input {
     private val algaeRemoveHigh = driverController.pov(0)
     private val simpleVisionAlignLeft = driverController.x()
     private val simpleVisionAlignRight = driverController.b()
-    private val stopJoystickFieldOrientation = Trigger{driverController.leftTriggerAxis>0.3}
-    //private val a = driverController.pov()
+    private val stopJoystickFieldOrientation = Trigger{ driverController.leftTriggerAxis>0.3 }
+    private val slowMode = Trigger{ driverController.rightTriggerAxis>0.3 }
 
     // Wrist:
     private val wristIntakeCoral = JoystickButton(gunnerController, 12)
@@ -180,6 +183,27 @@ object Input {
 
     fun getGyroReset():Boolean{
         return resetGyroVision.asBoolean
+    }
+
+    fun getAccelLimit():Double{
+        val elevatorLimit = MathUtil.interpolate(
+            SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
+            Elevator.getPosition()/SetpointConstants.ELEVATOR_L4)
+        return MathUtil.interpolate(elevatorLimit, elevatorLimit, driverController.rightTriggerAxis)
+    }
+
+    fun getDeccelLimit():Double{
+        val elevatorLimit = MathUtil.interpolate(
+            SwerveConstants.DRIVE_DECCEL_FAST, SwerveConstants.DRIVE_DECCEL_SLOW,
+            Elevator.getPosition()/SetpointConstants.ELEVATOR_L4)
+        return MathUtil.interpolate(elevatorLimit, elevatorLimit, driverController.rightTriggerAxis)
+    }
+
+    fun getSpeedLimit():Double{
+        val elevatorLimit = MathUtil.interpolate(
+            SwerveConstants.DRIVE_SPEED_FAST, SwerveConstants.DRIVE_SPEED_SLOW,
+            Elevator.getPosition()/SetpointConstants.ELEVATOR_L4)
+        return MathUtil.interpolate(elevatorLimit, elevatorLimit/5.0, driverController.rightTriggerAxis)
     }
 
     fun setRumble(amount: Double) { driverController.setRumble(GenericHID.RumbleType.kBothRumble, amount) }

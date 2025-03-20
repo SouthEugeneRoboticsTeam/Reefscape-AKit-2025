@@ -53,24 +53,6 @@ object Elevator : SubsystemBase() {
         return ioInputs.motorsPosition
     }
 
-    fun getAccelLimit():Double{
-        return MathUtil.interpolate(
-            SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
-            getPosition()/SetpointConstants.ELEVATOR_L4)
-    }
-
-    fun getDeccelLimit():Double{
-        return MathUtil.interpolate(
-            SwerveConstants.DRIVE_DECCEL_FAST, SwerveConstants.DRIVE_DECCEL_SLOW,
-            getPosition()/SetpointConstants.ELEVATOR_L4)
-    }
-
-    fun getSpeedLimit():Double{
-        return MathUtil.interpolate(
-            SwerveConstants.DRIVE_SPEED_FAST, SwerveConstants.DRIVE_SPEED_SLOW,
-            getPosition()/SetpointConstants.ELEVATOR_L4)
-    }
-
     fun stop() {
         io.setVoltage(0.0)
     }

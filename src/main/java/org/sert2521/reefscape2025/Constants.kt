@@ -21,7 +21,7 @@ object SetpointConstants{
     const val WRIST_ALGAE_LOW = 0.04
     const val WRIST_ALGAE_HIGH = 0.12
 
-    const val ELEVATOR_STOW = 0.02
+    const val ELEVATOR_STOW = 0.01
     const val ELEVATOR_L2 = 0.15
     const val ELEVATOR_L3 = 0.345
     const val ELEVATOR_L4 = 0.67-0.01
