@@ -4,6 +4,7 @@ import edu.wpi.first.cameraserver.CameraServer
 import edu.wpi.first.hal.FRCNetComm.tInstances
 import edu.wpi.first.hal.FRCNetComm.tResourceType
 import edu.wpi.first.hal.HAL
+import edu.wpi.first.wpilibj.RobotBase
 import edu.wpi.first.wpilibj.Threads
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
@@ -60,10 +61,12 @@ object Robot : LoggedRobot()
         // Report the use of the Kotlin Language for "FRC Usage Report" statistics.
         // Please retain this line so that Kotlin's growing use by teams is seen by FRC/WPI.
         HAL.report(tResourceType.kResourceType_Language, tInstances.kLanguage_Kotlin, 0, WPILibVersion.Version)
-        // Access the RobotContainer object so that it is initialized. This will perform all our
+        HAL.report(tResourceType.kResourceType_LoggingFramework, tInstances.kFramework_AdvantageKit)
+        // Access the objects so that it is initialized. This will perform all our
         // button bindings, and put our autonomous chooser on the dashboard.
         Autos
         Drivetrain
+        Input
 
         when (MetaConstants.currentMode) {
             MetaConstants.Mode.REAL -> {
@@ -104,17 +107,17 @@ object Robot : LoggedRobot()
     override fun robotPeriodic()
     {
         // Switch thread to high priority to improve loop timing
-        Threads.setCurrentThreadPriority(true, 99);
+        Threads.setCurrentThreadPriority(true, 99)
 
         // Runs the Scheduler. This is responsible for polling buttons, adding
         // newly-scheduled commands, running already-scheduled commands, removing
         // finished or interrupted commands, and running subsystem periodic() methods.
         // This must be called from the robot's periodic block in order for anything in
         // the Command-based framework to work.
-        CommandScheduler.getInstance().run();
+        CommandScheduler.getInstance().run()
 
         // Return to normal thread priority
-        Threads.setCurrentThreadPriority(false, 10);
+        Threads.setCurrentThreadPriority(false, 10)
     }
 
     override fun disabledInit()

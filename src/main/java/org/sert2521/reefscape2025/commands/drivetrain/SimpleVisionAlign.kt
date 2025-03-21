@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.wpilibj2.command.Command
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
@@ -15,7 +16,7 @@ import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import kotlin.math.*
 
-class SimpleVisionAlign(val alignLeft:Boolean) : ReadJoysticks() {
+class SimpleVisionAlign(val alignLeft:Boolean) : Command() {
     private val drivePID = ProfiledPIDController(SwerveConstants.VISION_ALIGN_DRIVE_P, SwerveConstants.VISION_ALIGN_DRIVE_I, SwerveConstants.VISION_ALIGN_DRIVE_D, SwerveConstants.visionAlignProfile)
     private val anglePID = PIDController(SwerveConstants.VISION_ALIGN_ROT_P, SwerveConstants.VISION_ALIGN_ROT_I, SwerveConstants.VISION_ALIGN_ROT_D)
 
@@ -75,7 +76,7 @@ class SimpleVisionAlign(val alignLeft:Boolean) : ReadJoysticks() {
         Logger.recordOutput("Align Setpoint",
             Pose2d(targetPose.x+cos(angle)*drivePID.setpoint.position, targetPose.y+sin(angle)*drivePID.setpoint.position, Rotation2d(anglePID.setpoint)))
         accelLimitedChassisSpeeds =
-            accelLimitChassisSpeeds(
+            AccelLimiterUtil.accelLimitChassisSpeeds(
                 ChassisSpeeds(driveResult*cos(angle),driveResult*sin(angle), angleResult),
                 MathUtil.interpolate(
                     SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,

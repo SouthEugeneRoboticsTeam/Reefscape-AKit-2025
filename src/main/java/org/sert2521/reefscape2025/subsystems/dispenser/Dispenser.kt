@@ -45,6 +45,9 @@ object Dispenser : SubsystemBase() {
             currentBeambreakFunctionality = Pair(currentBeambreakFunctionality.first, dispenserBeambreakFunctionNT.get())
             defaultCommand = beambreakFunctionalToCommand[currentBeambreakFunctionality]
         })
+
+        Logger.registerDashboardInput(rampBeambreakFunctionalNT)
+        Logger.registerDashboardInput(dispenserBeambreakFunctionNT)
     }
 
     override fun periodic() {
