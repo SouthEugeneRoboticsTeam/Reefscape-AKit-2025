@@ -14,6 +14,7 @@ import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.NT4Publisher
 import org.littletonrobotics.junction.wpilog.WPILOGReader
 import org.littletonrobotics.junction.wpilog.WPILOGWriter
+import org.sert2521.reefscape2025.MetaConstants.gender
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_STOW
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
@@ -87,7 +88,9 @@ object Robot : LoggedRobot()
         //Logger.registerURCL(URCL.startExternal());
 
         // Start AdvantageKit logger
-        Logger.start();
+        Logger.start()
+
+        Logger.recordOutput("Gender", gender)
 
         CameraServer.startAutomaticCapture()
     }

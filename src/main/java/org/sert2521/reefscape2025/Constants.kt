@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.RobotBase
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.random.Random
 
 object SetpointConstants{
     const val WRIST_INIT = 0.28
@@ -197,4 +198,13 @@ object MetaConstants{
     val atEvent = false
     private val simMode = Mode.REPLAY
     val currentMode = if (RobotBase.isReal()) Mode.REAL else simMode
+
+    enum class Gender{
+        MASCULINE,
+        FEMININE,
+        NONBINARY,
+        DOESNT_CARE
+    }
+
+    val gender = Gender.entries[Random.nextInt().mod(4)]
 }

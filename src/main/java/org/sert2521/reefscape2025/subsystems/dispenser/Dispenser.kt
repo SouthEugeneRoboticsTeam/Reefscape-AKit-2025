@@ -30,7 +30,7 @@ object Dispenser : SubsystemBase() {
     private val beambreakFunctionalToCommand = mapOf<Pair<Boolean, Boolean>, Command>(
         Pair(true, true) to idleCommand(),
         Pair(true, false) to idleDispenserBeambreakNonfunctional(),
-        Pair(false, true) to idleCommand(),
+        Pair(false, true) to idleRampBeambreakNonfunctional(),
         Pair(false, false) to run{ setVoltage(DISPENSER_STOP_VOLTAGE) }
     )
 
@@ -116,7 +116,7 @@ object Dispenser : SubsystemBase() {
     fun idleRampBeambreakNonfunctional():Command{
         return run{
             if (getBlocked()){
-                setMotor(DISPENSER_INTAKE_SPEED)
+                setMotor(DISPENSER_RECENTER_SPEED_FORWARD)
             } else {
                 stop()
             }

@@ -122,8 +122,8 @@ open class ReadJoysticks : Command() {
         return ChassisSpeeds(lastX, lastY, curvedChassisSpeeds.omegaRadiansPerSecond)
     }
 
-    fun readChassisSpeeds(fieldChassisSpeeds: ChassisSpeeds,
-                          accelLimit: Double, rotOffset:Rotation2d):ChassisSpeeds{
+    fun accelLimitChassisSpeeds(fieldChassisSpeeds: ChassisSpeeds,
+                                accelLimit: Double, rotOffset:Rotation2d):ChassisSpeeds{
         /**
          * Same as [readJoysticks] but has the speeds passed in through ChassisSpeeds.
          * Outputs calculated ChassisSpeeds once the acceleration limit has been calculated
