@@ -33,9 +33,9 @@ object SetpointConstants{
     //algae low 0.226
 
 
-    const val DISPENSER_INTAKE_SPEED = 0.5
-    const val DISPENSER_OUTTAKE_SPEED = 0.3
-    const val DISPENSER_OUTTAKE_L4 = 0.3
+    const val DISPENSER_INTAKE_SPEED = 0.43
+    const val DISPENSER_OUTTAKE_SPEED = 0.2
+    const val DISPENSER_OUTTAKE_L4 = 0.287
     const val DISPENSER_OUTTAKE_SLOW_SPEED = 0.2
     const val DISPENSER_STOP_VOLTAGE = -0.01
     const val DISPENSER_RECENTER_SPEED_FORWARD = 0.1
@@ -114,7 +114,7 @@ object VisionTargetPositions {
     private const val CX = 4.49
     private const val CY = 4.03
     private const val HD = PI/3
-    private const val RADIUS = 1.255
+    private const val RADIUS = 1.25
     private const val SHIFT = 0.16
 
     val layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded)

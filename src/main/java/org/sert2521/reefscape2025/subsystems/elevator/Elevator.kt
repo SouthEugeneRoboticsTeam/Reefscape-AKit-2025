@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers
+import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_PROFILE
@@ -66,8 +67,6 @@ object Elevator : SubsystemBase() {
             },
             {
                 currentState = profile.calculate(0.02, currentState, goal)
-                Logger.recordOutput("Elevator/Reference Position", currentState.position)
-                Logger.recordOutput("Elevator/Reference Velocity", currentState.velocity)
 
                 io.setReference(currentState.position, currentState.velocity)
 
@@ -82,7 +81,6 @@ object Elevator : SubsystemBase() {
     fun setElevatorSafeCommand(goalMeters: Double):Command{
         return Commands.waitUntil{!Dispenser.getBlocked()}
             .andThen(Elevator.setElevatorCommand(goalMeters))
-            .until{Dispenser.getBlocked()}
     }
 
     private fun holdElevatorCommand():Command{
@@ -97,8 +95,6 @@ object Elevator : SubsystemBase() {
 
             Logger.recordOutput("Elevator/At Setpoint",
                 MathUtil.isNear(currentState.position, getPosition(), 0.05))
-            Logger.recordOutput("Elevator/Reference Position", currentState.position)
-            Logger.recordOutput("Elevator/Reference Velocity", currentState.velocity)
         }
     }
 }

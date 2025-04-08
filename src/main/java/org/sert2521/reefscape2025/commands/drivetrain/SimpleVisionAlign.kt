@@ -7,8 +7,6 @@ import edu.wpi.first.math.filter.Debouncer
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
@@ -38,13 +36,10 @@ class SimpleVisionAlign(val alignLeft:Boolean) : ReadJoysticks() {
         drivePID.setTolerance(0.03)
         anglePID.setTolerance(0.02)
         addRequirements(Drivetrain)
-
-        SmartDashboard.putData("Drive PID", drivePID)
-        SmartDashboard.putData("Angle PID", anglePID)
     }
 
     override fun initialize() {
-        targetPose = Drivetrain.getNearestTarget(alignLeft)
+        targetPose = Drivetrain.getNearestTargetReef(alignLeft)
         xError = Drivetrain.getPose().x - targetPose.x
         yError = Drivetrain.getPose().y - targetPose.y
         val test = cos(Drivetrain.getPose().rotation.radians)*hypot(Drivetrain.getChassisSpeeds().vxMetersPerSecond, Drivetrain.getChassisSpeeds().vyMetersPerSecond)
@@ -60,7 +55,6 @@ class SimpleVisionAlign(val alignLeft:Boolean) : ReadJoysticks() {
         angle = atan2(yError, xError)
 
         driveResult = drivePID.calculate(hypot(xError, yError), 0.0)
-        Logger.recordOutput("Drive PID result", driveResult)
         if (drivePID.atGoal()){
             driveResult = 0.0
         }
@@ -72,8 +66,6 @@ class SimpleVisionAlign(val alignLeft:Boolean) : ReadJoysticks() {
             angleResult = 0.0
         }
 
-        Logger.recordOutput("Align Setpoint",
-            Pose2d(targetPose.x+cos(angle)*drivePID.setpoint.position, targetPose.y+sin(angle)*drivePID.setpoint.position, Rotation2d(anglePID.setpoint)))
         accelLimitedChassisSpeeds =
             accelLimitChassisSpeeds(
                 ChassisSpeeds(driveResult*cos(angle),driveResult*sin(angle), angleResult),
@@ -88,8 +80,6 @@ class SimpleVisionAlign(val alignLeft:Boolean) : ReadJoysticks() {
     }
 
     override fun isFinished(): Boolean {
-        Logger.recordOutput("drivePID at goal", drivePID.atGoal())
-        Logger.recordOutput("drivePID error", drivePID.positionError)
         return false
     }
 

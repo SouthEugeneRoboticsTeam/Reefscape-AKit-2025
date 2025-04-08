@@ -64,6 +64,7 @@ object Robot : LoggedRobot()
         // button bindings, and put our autonomous chooser on the dashboard.
         Autos
         Drivetrain
+        Input
 
         when (MetaConstants.currentMode) {
             MetaConstants.Mode.REAL -> {
@@ -93,6 +94,8 @@ object Robot : LoggedRobot()
         Logger.recordOutput("Gender", gender)
 
         CameraServer.startAutomaticCapture()
+
+        VisionTargetPositions
     }
 
     override fun disabledExit() {

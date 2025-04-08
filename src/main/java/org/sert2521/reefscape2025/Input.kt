@@ -73,7 +73,7 @@ object Input {
     private val simpleVisionAlignLeft = driverController.x()
     private val simpleVisionAlignRight = driverController.b()
     private val stopJoystickFieldOrientation = Trigger{ driverController.leftTriggerAxis>0.3 }
-    private val slowMode = Trigger{ driverController.rightTriggerAxis>0.3 }
+    private val alignRotationStation = driverController.a()
 
     // Wrist:
     private val wristIntakeCoral = JoystickButton(gunnerController, 12)
@@ -120,10 +120,9 @@ object Input {
         algaeRemoveLow.onTrue(AlgaeAutoRemoveLow())
         algaeRemoveHigh.onTrue(AlgaeAutoRemoveHigh())
 
-        stopJoystickFieldOrientation.whileTrue(JoystickDrive(false)
-            .andThen(Dispenser.outtakeCommand()))
-        simpleVisionAlignLeft.whileTrue(SimpleVisionAlign(true).andThen(Dispenser.outtakeCommand()))
-        simpleVisionAlignRight.whileTrue(SimpleVisionAlign(false).andThen(Dispenser.outtakeCommand()))
+        stopJoystickFieldOrientation.whileTrue(JoystickDrive(false))
+        simpleVisionAlignLeft.whileTrue(SimpleVisionAlign(true))
+        simpleVisionAlignRight.whileTrue(SimpleVisionAlign(false))
 
         /* Wrist */
         wristStow.onTrue(Wrist.initWristCommand())
@@ -146,7 +145,7 @@ object Input {
 
 
         /* Ground Intake */
-        wristCoralOuttakeDriver.whileTrue(GroundIntake.outtakeCoralCommand())
+        wristCoralOuttakeDriver.onTrue(GroundIntake.outtakeCoralCommand())
 
         /* Elevator */
         elevatorStow.onTrue(Elevator.setElevatorSafeCommand(ELEVATOR_STOW))

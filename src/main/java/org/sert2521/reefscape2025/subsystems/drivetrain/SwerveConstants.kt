@@ -89,6 +89,10 @@ object SwerveConstants {
     const val VISION_ALIGN_ROT_I = 0.0
     const val VISION_ALIGN_ROT_D = 0.47
 
+    const val STATION_ALIGN_ROT_P = 8.0
+    const val STATION_ALIGN_ROT_I = 0.0
+    const val STATION_ALIGN_ROT_D = 0.47
+
     val visionAlignProfile = TrapezoidProfile.Constraints(4.0, 2.5)
 
     const val TURN_ABS_ENCODER_CONVERSION_POSITION = 2 * PI
