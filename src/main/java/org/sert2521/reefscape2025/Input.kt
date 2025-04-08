@@ -188,14 +188,14 @@ object Input {
         val elevatorLimit = MathUtil.interpolate(
             SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
             Elevator.getPosition()/SetpointConstants.ELEVATOR_L4)
-        return MathUtil.interpolate(elevatorLimit, elevatorLimit, driverController.rightTriggerAxis)
+        return elevatorLimit
     }
 
     fun getDeccelLimit():Double{
         val elevatorLimit = MathUtil.interpolate(
             SwerveConstants.DRIVE_DECCEL_FAST, SwerveConstants.DRIVE_DECCEL_SLOW,
             Elevator.getPosition()/SetpointConstants.ELEVATOR_L4)
-        return MathUtil.interpolate(elevatorLimit, elevatorLimit, driverController.rightTriggerAxis)
+        return elevatorLimit
     }
 
     fun getSpeedLimit():Double{

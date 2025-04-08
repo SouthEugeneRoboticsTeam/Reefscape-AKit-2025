@@ -1,25 +1,25 @@
 package org.sert2521.reefscape2025.commands.drivetrain
 
-import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
+import edu.wpi.first.wpilibj2.command.Command
 import org.sert2521.reefscape2025.Input
-import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
-import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
-import org.sert2521.reefscape2025.subsystems.elevator.Elevator
-import kotlin.math.*
 
-class JoystickDrive(private val fieldOriented:Boolean = true) : ReadJoysticks() {
+class JoystickDrive(private val fieldOriented:Boolean = true): Command() {
 
     private var joystickAccelLimited = ChassisSpeeds()
 
     // Requirements are already passed through the ReadJoysticks class
 
+    init{
+        addRequirements(Drivetrain)
+    }
+
     override fun execute() {
         if (fieldOriented) {
-            joystickAccelLimited = readJoysticks(
-                Input.getAccelLimit(), super.inputRotOffset(),
+            joystickAccelLimited = AccelLimiterUtil.readJoysticks(
+                Input.getAccelLimit(), AccelLimiterUtil.inputRotOffset(),
                 Input.getDeccelLimit(), Input.getSpeedLimit())
 
             if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0){
@@ -30,7 +30,7 @@ class JoystickDrive(private val fieldOriented:Boolean = true) : ReadJoysticks() 
             )
         }
         else {
-            joystickAccelLimited = readJoysticks(Input.getAccelLimit(), Rotation2d(),
+            joystickAccelLimited = AccelLimiterUtil.readJoysticks(Input.getAccelLimit(), Rotation2d(),
                 Input.getDeccelLimit(), Input.getSpeedLimit(), false)
 
             if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0){

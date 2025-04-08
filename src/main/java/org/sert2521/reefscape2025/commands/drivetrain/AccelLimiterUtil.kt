@@ -3,7 +3,6 @@ package org.sert2521.reefscape2025.commands.drivetrain
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.kinematics.ChassisSpeeds
-import edu.wpi.first.wpilibj2.command.Command
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.ConfigConstants
 import org.sert2521.reefscape2025.Input
@@ -11,7 +10,7 @@ import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 import kotlin.math.*
 
-open class ReadJoysticks : Command() {
+object AccelLimiterUtil {
     /*
     This math just works, trust.
     It's a two dimensional slew rate limiter with a changing rate based on the
@@ -42,6 +41,8 @@ open class ReadJoysticks : Command() {
     private var x = 0.0
     private var y = 0.0
 
+    private var lastChassisSpeeds = ChassisSpeeds()
+
     private var angle = 0.0
     private var sqrMagnitude = 0.0
 
@@ -53,10 +54,6 @@ open class ReadJoysticks : Command() {
     private var magFraction = 0.0
 
     private var appliedAccelLimit = 0.0
-
-    init{
-        addRequirements(Drivetrain)
-    }
 
     // Oh man I bet this could be optimized but I'm eeeepy...
     fun readJoysticks(accelLimit:Double, rotOffset: Rotation2d,
@@ -105,7 +102,7 @@ open class ReadJoysticks : Command() {
 
         // Total magnitude of change since last cycle
         // NOTE: NOT change of total magnitude: it is magnitude of change in 2D coordinates
-        magChange = sqrt((lastX - curvedChassisSpeeds.vxMetersPerSecond).pow(2) + (lastY-curvedChassisSpeeds.vyMetersPerSecond).pow(2))
+        magChange = sqrt((lastChassisSpeeds.vxMetersPerSecond - curvedChassisSpeeds.vxMetersPerSecond).pow(2) + (lastChassisSpeeds.vyMetersPerSecond-curvedChassisSpeeds.vyMetersPerSecond).pow(2))
 
         // The fraction of the change in magnitude that should be applied
         magFraction = 1.0
@@ -116,10 +113,11 @@ open class ReadJoysticks : Command() {
             magFraction = (appliedAccelLimit/50.0)/magChange
         }
 
-        lastX = MathUtil.interpolate(lastX, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
-        lastY = MathUtil.interpolate(lastY, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vxMetersPerSecond, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
+        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vyMetersPerSecond, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastChassisSpeeds.omegaRadiansPerSecond = curvedChassisSpeeds.omegaRadiansPerSecond
 
-        return ChassisSpeeds(lastX, lastY, curvedChassisSpeeds.omegaRadiansPerSecond)
+        return lastChassisSpeeds
     }
 
     fun accelLimitChassisSpeeds(fieldChassisSpeeds: ChassisSpeeds,
@@ -136,7 +134,7 @@ open class ReadJoysticks : Command() {
 
         // Total magnitude of change since last cycle
         // NOTE: NOT change of total magnitude: it is magnitude of change in 2D coordinates
-        magChange = sqrt((lastX - curvedChassisSpeeds.vxMetersPerSecond).pow(2) + (lastY-curvedChassisSpeeds.vyMetersPerSecond).pow(2))
+        magChange = sqrt((lastChassisSpeeds.vxMetersPerSecond - curvedChassisSpeeds.vxMetersPerSecond).pow(2) + (lastChassisSpeeds.vyMetersPerSecond-curvedChassisSpeeds.vyMetersPerSecond).pow(2))
 
         // The fraction of the change in magnitude that should be applied
         magFraction = 1.0
@@ -150,11 +148,12 @@ open class ReadJoysticks : Command() {
             Logger.recordOutput("Accel Limited", false)
         }
 
-        lastX = MathUtil.interpolate(lastX, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
-        lastY = MathUtil.interpolate(lastY, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vxMetersPerSecond, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
+        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vyMetersPerSecond, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastChassisSpeeds.omegaRadiansPerSecond = fieldChassisSpeeds.omegaRadiansPerSecond
 
         // X and Y are swapped because Y is left in robot coordinates and X is up
         // It's the other way around in controller coordinates
-        return ChassisSpeeds(lastX, lastY, fieldChassisSpeeds.omegaRadiansPerSecond)
+        return lastChassisSpeeds
     }
 }
