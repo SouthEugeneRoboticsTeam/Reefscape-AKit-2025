@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_L2
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_L3
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_L4
@@ -172,7 +173,10 @@ object Input {
 
     private var rotationOffset = Rotation2d(0.0)
 
-    fun getJoystickX():Double{ return -driverController.leftX }
+    fun getJoystickX():Double{
+        Logger.recordOutput("Joystick X", -driverController.leftX)
+        return -driverController.leftX
+    }
 
     fun getJoystickY():Double{ return -driverController.leftY }
 

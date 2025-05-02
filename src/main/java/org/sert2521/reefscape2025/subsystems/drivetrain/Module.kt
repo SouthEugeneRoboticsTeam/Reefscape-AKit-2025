@@ -7,8 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState
 import edu.wpi.first.wpilibj.Alert
 import org.littletonrobotics.junction.Logger
 
-class Module(private val index:Int) {
-    private val io = ModuleIOSpark(index)
+class Module(private val io:ModuleIO, private val index:Int) {
     private val inputs = LoggedModuleIOInputs()
     private val indexToCorner = SwerveConstants.indexToCorner
 

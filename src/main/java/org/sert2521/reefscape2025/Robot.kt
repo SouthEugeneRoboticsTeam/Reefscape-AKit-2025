@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Threads
 import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
+import org.ironmaple.simulation.SimulatedArena
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -173,6 +174,12 @@ object Robot : LoggedRobot()
 
     override fun simulationPeriodic()
     {
+        if (MetaConstants.currentMode != MetaConstants.Mode.SIM) return;
 
+        SimulatedArena.getInstance().simulationPeriodic();
+        Logger.recordOutput(
+            "FieldSimulation/Coral", *SimulatedArena.getInstance().getGamePiecesArrayByType("Coral"));
+        Logger.recordOutput(
+            "FieldSimulation/Algae", *SimulatedArena.getInstance().getGamePiecesArrayByType("Algae"));
     }
 }

@@ -21,6 +21,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
+import org.ironmaple.simulation.SimulatedArena
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.VisionTargetPositions
@@ -34,9 +36,21 @@ object Drivetrain : SubsystemBase() {
     @JvmField
     val odometryLock:ReentrantLock = ReentrantLock()
 
+    private val swerveDriveSimulation =
+        if (MetaConstants.currentMode == MetaConstants.Mode.SIM){
+            SwerveDriveSimulation(SwerveConstants.mapleSimConfig,
+                Pose2d(3.0, 3.0, Rotation2d())
+            )
+        } else {
+            null
+        }
 
     private val gyroInputs = LoggedGyroIOInputs()
-    private val gyroIO = GyroIONavX()
+    private val gyroIO = when (MetaConstants.currentMode) {
+        MetaConstants.Mode.REAL -> GyroIONavX()
+        MetaConstants.Mode.SIM -> GyroIOSim(swerveDriveSimulation!!.gyroSimulation)
+        MetaConstants.Mode.REPLAY -> GyroIONavX()
+    }
 
     private val visionInputsLeft = LoggedVisionIOInputs()
     private val visionInputsRight = LoggedVisionIOInputs()
@@ -45,7 +59,13 @@ object Drivetrain : SubsystemBase() {
 
     private var fed = true
 
-    private val modules = arrayOf(Module(0), Module(1), Module(2), Module(3))
+    private val modules =
+        when (MetaConstants.currentMode) {
+            MetaConstants.Mode.REAL -> Array(4){ Module(ModuleIOSpark(it), it) }
+            MetaConstants.Mode.SIM -> Array(4){ Module(ModuleIOSim(swerveDriveSimulation!!.modules[it]), it) }
+            MetaConstants.Mode.REPLAY -> Array(4){ Module(ModuleIOSpark(it), it) }
+        }
+
 
     private val sysId =
         SysIdRoutine(
@@ -85,6 +105,10 @@ object Drivetrain : SubsystemBase() {
         SmartDashboard.putData("Robot Pose", field)
 
         //I'm putting the auto builder somewhere else because this is ridiculous
+
+        if (MetaConstants.currentMode == MetaConstants.Mode.SIM) {
+            SimulatedArena.getInstance().addDriveTrainSimulation(swerveDriveSimulation)
+        }
     }
 
     override fun periodic() {
@@ -165,6 +189,10 @@ object Drivetrain : SubsystemBase() {
         fed = false
         Logger.recordOutput("Odometry/Robot Pose", getPose())
         Logger.recordOutput("Odometry/Robot Rotations", getPose().rotation.rotations)
+
+        if (MetaConstants.currentMode == MetaConstants.Mode.SIM){
+            Logger.recordOutput("FieldSimulation/RobotPosition", swerveDriveSimulation!!.simulatedDriveTrainPose)
+        }
     }
 
     /* === Setters === */
@@ -175,11 +203,14 @@ object Drivetrain : SubsystemBase() {
         val setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds)
         SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, SwerveConstants.MAX_SPEED_MPS)
 
+        Logger.recordOutput("SwerveModuleStates/Setpoints", *setpointStates)
         val optimizedStates = Array(4) { SwerveModuleState() }
 
         for (i in 0..<4){
             optimizedStates[i] = modules[i].runSetpoint(setpointStates[i], withPID)
         }
+
+        Logger.recordOutput("SwerveModuleStates/Optimized Setpoints", *optimizedStates)
 
         fed = true
     }

@@ -11,7 +11,13 @@ import edu.wpi.first.math.numbers.N1
 import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.math.trajectory.TrapezoidProfile
+import edu.wpi.first.units.Units.*
 import org.ejml.simple.SimpleMatrix
+import org.ironmaple.simulation.drivesims.COTS
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
+import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig
+import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig
+import org.sert2521.reefscape2025.PhysicalConstants
 import kotlin.math.PI
 
 object SwerveConstants {
@@ -127,9 +133,33 @@ object SwerveConstants {
     const val WHEEL_COF = 1.54
 
     val driveMotorGearbox: DCMotor = DCMotor.getNEO(1).withReduction(DRIVE_GEAR_RATIO)
+    val turnMotorGearbox: DCMotor = DCMotor.getNEO(1).withReduction(TURN_GEAR_RATIO)
 
     const val FF_RAMP_RATE = 1.0
 
     val LIMELIGHT_STDV = VecBuilder.fill(1.0, 1.0, 1.0E99)
     val LIMELIGHT_STDV_YAW_RESET = VecBuilder.fill(0.7, 0.7, 1.0)
+
+    val mapleSimConfig = DriveTrainSimulationConfig.Default()
+        .withCustomModuleTranslations(moduleTranslations)
+        .withRobotMass(PhysicalConstants.robotMass)
+        .withGyro(COTS.ofNav2X())
+        .withSwerveModule(
+            SwerveModuleSimulationConfig(
+                driveMotorGearbox,
+                turnMotorGearbox,
+                1.0,
+                1.0,
+                Volts.of(DRIVE_KS),
+                Volts.of(0.1),
+                Meters.of(WHEEL_RADIUS_METERS),
+                PhysicalConstants.momentOfInertia,
+                WHEEL_COF
+            )
+        )
+
+    const val DRIVE_SIM_KS = 0.0
+    const val DRIVE_SIM_KV = 0.0
+
+
 }

@@ -107,7 +107,7 @@ object PhysicalConstants {
     const val ELEVATOR_MOTOR_ENCODER_MULTIPLIER = 0.02328333333/2.0
 
     val robotMass = Pounds.of(115.0)
-    val momentOfInertia = Units.KilogramSquareMeters.of(0.0)
+    val momentOfInertia = Units.KilogramSquareMeters.of(0.02)
 }
 
 object VisionTargetPositions {
@@ -196,7 +196,7 @@ object MetaConstants{
     }
 
     val atEvent = false
-    private val simMode = Mode.REPLAY
+    private val simMode = Mode.SIM
     val currentMode = if (RobotBase.isReal()) Mode.REAL else simMode
 
     enum class Gender{
