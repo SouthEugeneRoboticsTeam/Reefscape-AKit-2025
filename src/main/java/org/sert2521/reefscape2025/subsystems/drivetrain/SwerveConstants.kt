@@ -132,8 +132,8 @@ object SwerveConstants {
 
     const val WHEEL_COF = 1.54
 
-    val driveMotorGearbox: DCMotor = DCMotor.getNEO(1).withReduction(DRIVE_GEAR_RATIO)
-    val turnMotorGearbox: DCMotor = DCMotor.getNEO(1).withReduction(TURN_GEAR_RATIO)
+    val driveMotorGearbox: DCMotor = DCMotor.getNEO(1)
+    val turnMotorGearbox: DCMotor = DCMotor.getNEO(1)
 
     const val FF_RAMP_RATE = 1.0
 
@@ -148,18 +148,19 @@ object SwerveConstants {
             SwerveModuleSimulationConfig(
                 driveMotorGearbox,
                 turnMotorGearbox,
-                1.0,
-                1.0,
+                DRIVE_GEAR_RATIO,
+                TURN_GEAR_RATIO,
                 Volts.of(DRIVE_KS),
                 Volts.of(0.1),
                 Meters.of(WHEEL_RADIUS_METERS),
-                PhysicalConstants.momentOfInertia,
+                KilogramSquareMeters.of(0.02),
                 WHEEL_COF
             )
         )
+        .withBumperSize(Inches.of(35.0), Inches.of(35.0))
 
-    const val DRIVE_SIM_KS = 0.0
-    const val DRIVE_SIM_KV = 0.0
+    const val DRIVE_SIM_KS = 0.1
+    const val DRIVE_SIM_KV = 0.135
 
 
 }

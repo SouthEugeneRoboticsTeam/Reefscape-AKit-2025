@@ -114,7 +114,7 @@ object AccelLimiterUtil {
         }
 
         lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vxMetersPerSecond, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
-        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vyMetersPerSecond, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastChassisSpeeds.vyMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vyMetersPerSecond, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
         lastChassisSpeeds.omegaRadiansPerSecond = curvedChassisSpeeds.omegaRadiansPerSecond
 
         return lastChassisSpeeds

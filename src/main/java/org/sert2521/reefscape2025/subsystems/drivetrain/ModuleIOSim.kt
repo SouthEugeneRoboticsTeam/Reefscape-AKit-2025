@@ -22,14 +22,14 @@ import kotlin.math.sign
 class ModuleIOSim(private val moduleSimulation:SwerveModuleSimulation):ModuleIO {
 
     private var driveMotor = moduleSimulation.useGenericMotorControllerForDrive()
-        .withCurrentLimit(Amps.of(SwerveConstants.TURN_CURRENT_LIMIT_TELE.toDouble()))
+        .withCurrentLimit(Amps.of(SwerveConstants.DRIVE_CURRENT_LIMIT_TELE.toDouble()))
     private var turnMotor = moduleSimulation.useGenericControllerForSteer()
         .withCurrentLimit(Amps.of(SwerveConstants.TURN_CURRENT_LIMIT_TELE.toDouble()))
 
     private var driveClosedLoop = false
     private var turnClosedLoop = false
     private val drivePIDController = PIDController(DRIVE_P, 0.0, DRIVE_D)
-    private val turnPIDController = PIDController(TURN_P, 0.0, TURN_D)
+    private val turnPIDController = PIDController(32.0, 0.0, 0.0)
 
     private var driveFFVolts = 0.0
     private var driveAppliedVolts = 0.0

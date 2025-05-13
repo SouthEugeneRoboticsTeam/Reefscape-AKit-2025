@@ -26,7 +26,6 @@ class JoystickDrive(private val fieldOriented:Boolean = true): Command() {
             if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0){
                 Drivetrain.stop()
             }
-            Logger.recordOutput("Input/Joystick Accel Limited", joystickAccelLimited)
             Drivetrain.driveRobotOriented(
                 joystickAccelLimited, false
             )

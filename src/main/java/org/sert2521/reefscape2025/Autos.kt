@@ -18,6 +18,7 @@ import org.sert2521.reefscape2025.subsystems.wrist.Wrist
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
+import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants.DRIVE_GEAR_RATIO
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 import org.sert2521.reefscape2025.subsystems.ramp.Ramp
@@ -84,7 +85,7 @@ object Autos
                     SwerveConstants.WHEEL_RADIUS_METERS,
                     SwerveConstants.MAX_SPEED_MPS,
                     SwerveConstants.WHEEL_COF,
-                    SwerveConstants.driveMotorGearbox,
+                    SwerveConstants.driveMotorGearbox.withReduction(DRIVE_GEAR_RATIO),
                     SwerveConstants.DRIVE_CURRENT_LIMIT_AUTO.toDouble(),
                     1
                 ),

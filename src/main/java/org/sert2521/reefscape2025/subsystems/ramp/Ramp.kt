@@ -3,12 +3,17 @@ package org.sert2521.reefscape2025.subsystems.ramp
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger
+import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.SetpointConstants.RAMP_INTAKE_SPEED
 import org.sert2521.reefscape2025.SetpointConstants.RAMP_RECENTER_SPEED
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
+import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 
 object Ramp : SubsystemBase() {
-    private val io = RampIOSpark()
+    private val io = when (MetaConstants.currentMode){
+        MetaConstants.Mode.SIM -> RampIOSim(Drivetrain.swerveDriveSimulation!!)
+        else -> RampIOSpark()
+    }
     private val ioInputs = LoggedRampIOInputs()
 
     init{

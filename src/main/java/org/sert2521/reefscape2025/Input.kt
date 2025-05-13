@@ -173,10 +173,7 @@ object Input {
 
     private var rotationOffset = Rotation2d(0.0)
 
-    fun getJoystickX():Double{
-        Logger.recordOutput("Joystick X", -driverController.leftX)
-        return -driverController.leftX
-    }
+    fun getJoystickX():Double{ return -driverController.leftX }
 
     fun getJoystickY():Double{ return -driverController.leftY }
 

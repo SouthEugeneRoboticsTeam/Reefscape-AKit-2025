@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import org.ironmaple.simulation.SimulatedArena
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
+import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.VisionTargetPositions
@@ -36,7 +37,7 @@ object Drivetrain : SubsystemBase() {
     @JvmField
     val odometryLock:ReentrantLock = ReentrantLock()
 
-    private val swerveDriveSimulation =
+    val swerveDriveSimulation =
         if (MetaConstants.currentMode == MetaConstants.Mode.SIM){
             SwerveDriveSimulation(SwerveConstants.mapleSimConfig,
                 Pose2d(3.0, 3.0, Rotation2d())
@@ -187,6 +188,9 @@ object Drivetrain : SubsystemBase() {
             driveRobotOriented(ChassisSpeeds())
         }
         fed = false
+
+        Logger.recordOutput("SwerveModuleStates/Measured", *getModuleStates())
+
         Logger.recordOutput("Odometry/Robot Pose", getPose())
         Logger.recordOutput("Odometry/Robot Rotations", getPose().rotation.rotations)
 

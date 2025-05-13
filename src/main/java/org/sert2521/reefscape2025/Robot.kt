@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.util.WPILibVersion
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.CommandScheduler
 import org.ironmaple.simulation.SimulatedArena
+import org.ironmaple.simulation.seasonspecific.reefscape2025.Arena2025Reefscape
 import org.littletonrobotics.junction.LogFileUtil
 import org.littletonrobotics.junction.LoggedRobot
 import org.littletonrobotics.junction.Logger
@@ -169,7 +170,7 @@ object Robot : LoggedRobot()
 
     override fun simulationInit()
     {
-
+        SimulatedArena.getInstance().placeGamePiecesOnField()
     }
 
     override fun simulationPeriodic()
