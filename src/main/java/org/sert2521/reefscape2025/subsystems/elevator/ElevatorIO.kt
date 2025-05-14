@@ -20,8 +20,6 @@ interface ElevatorIO {
 
     fun setVoltage(voltage:Double)
 
-    fun setEncoder(encoderValue:Double)
-
     fun setReference(setpointPosition:Double, setpointVelocity:Double)
 
 }

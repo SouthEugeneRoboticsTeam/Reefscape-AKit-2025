@@ -75,11 +75,6 @@ class ElevatorIOSpark:ElevatorIO {
         rightMotor.setVoltage(voltage)
     }
 
-    override fun setEncoder(encoderValue: Double) {
-        leftMotor.encoder.setPosition(encoderValue)
-        rightMotor.encoder.setPosition(encoderValue)
-    }
-
     override fun setReference(setpointPosition:Double, setpointVelocity:Double) {
         // Feedforward function
         // Didn't feel like we needed the entire ElevatorFeedforward() class
