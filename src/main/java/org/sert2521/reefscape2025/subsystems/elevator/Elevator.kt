@@ -8,12 +8,17 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 import org.littletonrobotics.junction.Logger
+import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_PROFILE
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
 
 object Elevator : SubsystemBase() {
-    private val io = ElevatorIOSpark()
+    private val io = when (MetaConstants.currentMode){
+        MetaConstants.Mode.REAL -> ElevatorIOSpark()
+        MetaConstants.Mode.SIM -> ElevatorIOSim()
+        MetaConstants.Mode.REPLAY -> object:ElevatorIO{}
+    }
     private val ioInputs = LoggedElevatorIOInputs()
 
     private val profile = TrapezoidProfile(ELEVATOR_PROFILE)

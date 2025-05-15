@@ -11,7 +11,7 @@ interface RampIO {
         var currentAmps = 0.0
     }
 
-    fun updateInputs(inputs:RampIOInputs)
+    fun updateInputs(inputs:RampIOInputs){}
 
-    fun setSpeed(speed:Double)
+    fun setSpeed(speed:Double){}
 }

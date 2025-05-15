@@ -13,10 +13,10 @@ interface ElevatorIO {
         var velocityMetersPerSec = 0.0
     }
 
-    fun updateInputs(inputs:ElevatorIOInputs)
+    fun updateInputs(inputs:ElevatorIOInputs){}
 
-    fun setVoltage(voltage:Double)
+    fun setVoltage(voltage:Double){}
 
-    fun setReference(setpointPosition:Double, setpointVelocity:Double)
+    fun setReference(setpointPosition:Double, setpointVelocity:Double){}
 
 }

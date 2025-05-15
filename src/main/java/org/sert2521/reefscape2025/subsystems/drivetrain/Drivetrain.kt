@@ -50,7 +50,7 @@ object Drivetrain : SubsystemBase() {
     private val gyroIO = when (MetaConstants.currentMode) {
         MetaConstants.Mode.REAL -> GyroIONavX()
         MetaConstants.Mode.SIM -> GyroIOSim(swerveDriveSimulation!!.gyroSimulation)
-        MetaConstants.Mode.REPLAY -> GyroIONavX()
+        MetaConstants.Mode.REPLAY -> object:GyroIO{}
     }
 
     private val visionInputsLeft = LoggedVisionIOInputs()
@@ -64,7 +64,7 @@ object Drivetrain : SubsystemBase() {
         when (MetaConstants.currentMode) {
             MetaConstants.Mode.REAL -> Array(4){ Module(ModuleIOSpark(it), it) }
             MetaConstants.Mode.SIM -> Array(4){ Module(ModuleIOSim(swerveDriveSimulation!!.modules[it]), it) }
-            MetaConstants.Mode.REPLAY -> Array(4){ Module(ModuleIOSpark(it), it) }
+            MetaConstants.Mode.REPLAY -> Array(4){ Module(object:ModuleIO{}, it) }
         }
 
 

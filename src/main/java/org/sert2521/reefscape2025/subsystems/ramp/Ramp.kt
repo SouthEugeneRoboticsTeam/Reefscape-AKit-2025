@@ -11,9 +11,11 @@ import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 
 object Ramp : SubsystemBase() {
     private val io = when (MetaConstants.currentMode){
+        MetaConstants.Mode.REAL -> RampIOSpark()
         MetaConstants.Mode.SIM -> RampIOSim(Drivetrain.swerveDriveSimulation!!)
-        else -> RampIOSpark()
+        MetaConstants.Mode.REPLAY -> object:RampIO{}
     }
+
     private val ioInputs = LoggedRampIOInputs()
 
     init{

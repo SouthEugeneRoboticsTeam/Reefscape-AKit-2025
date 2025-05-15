@@ -9,16 +9,17 @@ import org.ironmaple.simulation.drivesims.SwerveDriveSimulation
 import org.ironmaple.simulation.motorsims.MapleMotorSim
 import org.ironmaple.simulation.motorsims.SimMotorConfigs
 import org.ironmaple.simulation.motorsims.SimulatedBattery
+import org.ironmaple.simulation.motorsims.SimulatedMotorController
 
 class RampIOSim(drivetrainSim:SwerveDriveSimulation):RampIO {
-    val motorSimulation = MapleMotorSim(SimMotorConfigs(
+    private val motorSimulation = MapleMotorSim(SimMotorConfigs(
         DCMotor.getNeo550(1),
         8.0/3.0,
         Units.KilogramSquareMeters.of(0.01),
         Units.Volts.of(0.05)
     ))
 
-    val intakeSimulation = IntakeSimulation.InTheFrameIntake(
+    private val intakeSimulation = IntakeSimulation.InTheFrameIntake(
         "Coral",
         drivetrainSim,
         Units.Inches.of(12.6),
@@ -26,11 +27,8 @@ class RampIOSim(drivetrainSim:SwerveDriveSimulation):RampIO {
         1
     )
 
-    val rampRollerMotor = motorSimulation.useSimpleDCMotorController()
+    private val rampRollerMotor = motorSimulation.useSimpleDCMotorController()
         .withCurrentLimit(Units.Amps.of(20.0))
-
-
-    var voltage = 0.0
 
     init{
         intakeSimulation.register()
