@@ -1,17 +1,13 @@
 package org.sert2521.reefscape2025.subsystems.elevator
 
-import com.ctre.phoenix6.hardware.CANrange
 import com.revrobotics.spark.ClosedLoopSlot
 import com.revrobotics.spark.SparkBase
 import com.revrobotics.spark.SparkLowLevel
 import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.SparkBaseConfig
 import com.revrobotics.spark.config.SparkMaxConfig
-import edu.wpi.first.math.trajectory.TrapezoidProfile
-import edu.wpi.first.units.Units
 import org.sert2521.reefscape2025.ElectronicIDs.ELEVATOR_LEFT_ID
 import org.sert2521.reefscape2025.ElectronicIDs.ELEVATOR_RIGHT_ID
-import org.sert2521.reefscape2025.ElectronicIDs.LASER_ID
 import org.sert2521.reefscape2025.PhysicalConstants.ELEVATOR_MOTOR_ENCODER_MULTIPLIER
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_D
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_G
@@ -21,8 +17,6 @@ import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_V
 class ElevatorIOSpark:ElevatorIO {
     private val leftMotor = SparkMax(ELEVATOR_LEFT_ID, SparkLowLevel.MotorType.kBrushless)
     private val rightMotor = SparkMax(ELEVATOR_RIGHT_ID, SparkLowLevel.MotorType.kBrushless)
-
-    private val distanceSensor = CANrange(LASER_ID)
 
     init{
         // Put the spark config into the init, so that java can garbage collect it
@@ -65,9 +59,8 @@ class ElevatorIOSpark:ElevatorIO {
     override fun updateInputs(inputs: ElevatorIO.ElevatorIOInputs) {
         inputs.currentAmps = (leftMotor.outputCurrent + rightMotor.outputCurrent) / 2
         inputs.appliedVolts = (leftMotor.busVoltage * leftMotor.appliedOutput + rightMotor.busVoltage * rightMotor.appliedOutput)/2
-        inputs.motorsVelocity = (leftMotor.encoder.velocity + rightMotor.encoder.velocity) / 2
-        inputs.motorsPosition = (leftMotor.encoder.position + rightMotor.encoder.position) / 2
-        inputs.laserPosition = distanceSensor.distance.value.`in`(Units.Meters)
+        inputs.velocityMetersPerSec = (leftMotor.encoder.velocity + rightMotor.encoder.velocity) / 2
+        inputs.positionMeters = (leftMotor.encoder.position + rightMotor.encoder.position) / 2
     }
 
     override fun setVoltage(voltage: Double) {
