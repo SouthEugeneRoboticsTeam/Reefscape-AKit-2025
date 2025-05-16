@@ -52,7 +52,8 @@ object SetpointConstants{
 }
 
 object ConfigConstants{
-    const val POWER_DEADBAND = 0.0
+    const val POWER_DEADBAND = 0.1
+    const val ROTATION_DEADBAND = 0.1
 }
 
 object ElectronicIDs{
@@ -216,5 +217,13 @@ object ElevatorSimConstants{
     const val CARRIAGE_MASS_KG = 16.3962065
     const val DRUM_RADIUS_METERS = 0.019304
     const val MIN_HEIGHT = 0.0
-    const val MAX_HEIGHT = 0.0
+    const val MAX_HEIGHT = 0.660400
+
+    const val ELEVATOR_SIM_P = 800.0
+    const val ELEVATOR_SIM_I = 0.0
+    const val ELEVATOR_SIM_D = 0.0
+
+    const val ELEVATOR_SIM_S = 0.0
+    const val ELEVATOR_SIM_G = 0.6
+    const val ELEVATOR_SIM_V = 13.6
 }

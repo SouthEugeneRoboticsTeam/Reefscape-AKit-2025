@@ -85,14 +85,14 @@ object AccelLimiterUtil {
             curvedChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 sin(angle) * newMagnitude * maxSpeed,
                 cos(angle) * newMagnitude * maxSpeed,
-                joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
+                MathUtil.applyDeadband(joystickZ(), ConfigConstants.ROTATION_DEADBAND).pow(3) * SwerveConstants.ROT_SPEED,
                 Drivetrain.getPose().rotation.minus(rotOffset)
             )
         } else {
             curvedChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 sin(angle) * newMagnitude * maxSpeed,
                 cos(angle) * newMagnitude * maxSpeed,
-                joystickZ().pow(3) * SwerveConstants.ROT_SPEED,
+                MathUtil.applyDeadband(joystickZ(), ConfigConstants.ROTATION_DEADBAND).pow(3) * SwerveConstants.ROT_SPEED,
                 Rotation2d()
             )
         }

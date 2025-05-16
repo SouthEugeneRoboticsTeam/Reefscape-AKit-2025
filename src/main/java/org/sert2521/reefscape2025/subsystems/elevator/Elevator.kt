@@ -4,6 +4,8 @@ import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.wpilibj.util.Color8Bit
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase
@@ -26,23 +28,28 @@ object Elevator : SubsystemBase() {
     var goal  = TrapezoidProfile.State(0.0, 0.0)
     private var currentState = TrapezoidProfile.State(0.0, 0.0)
 
-    private val mechanism = Mechanism2d(3.0, 3.0)
-    private val mechanismRoot = mechanism.getRoot("Elevator",0.1, 0.1)
-    private val elevatorBase = MechanismLigament2d("Elevator Base", 0.1, 0.0)
-    private val firstStage = MechanismLigament2d("First Stage", 0.2, 0.0)
-    private val secondStage = MechanismLigament2d("Second Stage", 0.3, 0.0)
+    private val mechanism = Mechanism2d(0.901700, 1.0)
+    private val mechanismRoot = mechanism.getRoot("Elevator",0.488950, 0.0)
+    private val firstStage = MechanismLigament2d("First Stage", 1.060526, 90.0, 6.0, Color8Bit(0, 0, 150))
+    private val connector = MechanismLigament2d("Connector", 0.02, 0.0, 0.0, Color8Bit())
+    private val secondStage = MechanismLigament2d("Second Stage", 0.374865, 90.0, 5.0, Color8Bit(150, 0, 0))
 
     init{
         defaultCommand = holdElevatorCommand()
 
-        mechanismRoot.append(elevatorBase)
         mechanismRoot.append(firstStage)
-        mechanismRoot.append(secondStage)
+        mechanismRoot.append(connector)
+        connector.append(secondStage)
+
+        SmartDashboard.putData("Elevator Mechanism", mechanism)
     }
 
     override fun periodic() {
         io.updateInputs(ioInputs)
         Logger.processInputs("Elevator", ioInputs)
+
+        firstStage.length = 1.060526 + ioInputs.positionMeters
+        secondStage.length = 0.374865 + 2 * ioInputs.positionMeters
     }
 
     fun setVoltage(voltage:Double){
