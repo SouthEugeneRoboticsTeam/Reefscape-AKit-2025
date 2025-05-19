@@ -55,8 +55,15 @@ object Drivetrain : SubsystemBase() {
 
     private val visionInputsLeft = LoggedVisionIOInputs()
     private val visionInputsRight = LoggedVisionIOInputs()
-    private val visionIOLeft = VisionIOLimelight("limelight-left")
-    private val visionIORight = VisionIOLimelight("limelight-right")
+
+    private val visionIOLeft = when (MetaConstants.currentMode){
+        MetaConstants.Mode.REAL -> VisionIOLimelight("limelight-left")
+        else -> object:VisionIO{}
+    }
+    private val visionIORight = when (MetaConstants.currentMode){
+        MetaConstants.Mode.REAL -> VisionIOLimelight("limelight-right")
+        else -> object:VisionIO{}
+    }
 
     private val modules =
         when (MetaConstants.currentMode) {

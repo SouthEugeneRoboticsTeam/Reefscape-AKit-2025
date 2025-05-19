@@ -9,9 +9,9 @@ interface VisionIO {
     open class VisionIOInputs{
         var estimatedPosition = Pose2d()
         var timestamp = 0.0
-        var rejectEstimation = false
+        var rejectEstimation = true
         var megatagTwo = false
     }
 
-    fun updateInputs(inputs: VisionIOInputs)
+    fun updateInputs(inputs: VisionIOInputs){}
 }

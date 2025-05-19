@@ -13,13 +13,13 @@ interface WristIO {
         var wristMotorPosition = 0.0
     }
 
-    fun updateInputs(inputs:WristIOInputs)
+    fun updateInputs(inputs:WristIOInputs){}
 
-    fun setVoltage(voltage:Double)
+    fun setVoltage(voltage:Double){}
 
-    fun setReferenceFast(targetPosition:Double)
+    fun setReferenceFast(targetPosition:Double){}
 
-    fun setReferenceSlow(targetPosition:Double)
+    fun setReferenceSlow(targetPosition:Double){}
 
-    fun resetMotorEncoder()
+    fun resetMotorEncoder(){}
 }

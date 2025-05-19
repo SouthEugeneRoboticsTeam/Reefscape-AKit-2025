@@ -3,6 +3,7 @@ package org.sert2521.reefscape2025.subsystems.ground_intake
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger
+import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.SetpointConstants.GROUND_HOLD_ALGAE_SPEED
 import org.sert2521.reefscape2025.SetpointConstants.GROUND_INTAKE_SPEED
@@ -12,7 +13,10 @@ import org.sert2521.reefscape2025.subsystems.wrist.Wrist
 
 object GroundIntake : SubsystemBase() {
 
-    private val io = GroundIntakeIOSpark()
+    private val io = when (MetaConstants.currentMode){
+        MetaConstants.Mode.REAL -> GroundIntakeIOSpark()
+        else -> object:GroundIntakeIO{}
+    }
     private val ioInputs = LoggedGroundIntakeIOInputs()
 
     init {

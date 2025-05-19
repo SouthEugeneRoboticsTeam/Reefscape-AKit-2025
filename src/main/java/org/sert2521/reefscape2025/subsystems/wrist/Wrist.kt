@@ -5,11 +5,15 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger
+import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_INIT
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
 
 object Wrist : SubsystemBase() {
-    private val io = WristIOSpark()
+    private val io = when (MetaConstants.currentMode){
+        MetaConstants.Mode.REAL -> WristIOSpark()
+        else -> object:WristIO{}
+    }
     private val ioInputs = LoggedWristIOInputs()
 
     var goal = WRIST_STOW
@@ -63,15 +67,17 @@ object Wrist : SubsystemBase() {
     }
 
     fun initWristCommand():Command{
-        return runOnce{
-            io.resetMotorEncoder()
-            io.setReferenceFast(WRIST_INIT)
-        }
-            .andThen(Commands.waitUntil{
+        return Commands.sequence(
+            runOnce{
+                io.resetMotorEncoder()
+                io.setReferenceFast(WRIST_INIT)
+            },
+            Commands.waitUntil{
                 MathUtil.isNear(WRIST_INIT, getRotations(), 0.1)
-            })
-            .andThen(Commands.waitSeconds(0.2))
-            .andThen(runOnce{ io.resetMotorEncoder() })
-            .andThen(setWristCommandFast(WRIST_STOW))
+            },
+            Commands.waitSeconds(0.2),
+            runOnce{ io.resetMotorEncoder() },
+            setWristCommandFast(WRIST_STOW)
+        )
     }
 }
