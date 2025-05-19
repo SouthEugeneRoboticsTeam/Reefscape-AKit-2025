@@ -153,7 +153,7 @@ object SwerveConstants {
                 Volts.of(DRIVE_KS),
                 Volts.of(0.1),
                 Meters.of(WHEEL_RADIUS_METERS),
-                KilogramSquareMeters.of(0.02),
+                KilogramSquareMeters.of(0.001),
                 WHEEL_COF
             )
         )

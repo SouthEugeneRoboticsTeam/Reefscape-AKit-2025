@@ -58,14 +58,15 @@ object Drivetrain : SubsystemBase() {
     private val visionIOLeft = VisionIOLimelight("limelight-left")
     private val visionIORight = VisionIOLimelight("limelight-right")
 
-    private var fed = true
-
     private val modules =
         when (MetaConstants.currentMode) {
             MetaConstants.Mode.REAL -> Array(4){ Module(ModuleIOSpark(it), it) }
             MetaConstants.Mode.SIM -> Array(4){ Module(ModuleIOSim(swerveDriveSimulation!!.modules[it]), it) }
             MetaConstants.Mode.REPLAY -> Array(4){ Module(object:ModuleIO{}, it) }
         }
+
+
+    private var fed = true
 
 
     private val sysId =
