@@ -5,7 +5,6 @@ import edu.wpi.first.apriltag.AprilTagFields
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
-import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.Pounds
@@ -95,11 +94,6 @@ object TuningConstants{
     const val WRIST_P_SLOW = 2.0
     const val WRIST_I_SLOW = 0.0
     const val WRIST_D_SLOW = 0.1
-
-    const val WRIST_S = 0.0
-    const val WRIST_V = 0.0
-    const val WRIST_G = 0.0
-    const val WRIST_A = 0.0
 }
 
 object PhysicalConstants {
@@ -211,19 +205,3 @@ object MetaConstants{
     val gender = Gender.entries[Random.nextInt().mod(4)]
 }
 
-object ElevatorSimConstants{
-    val motorGearbox: DCMotor = DCMotor.getNEO(2)
-    const val GEAR_RATIO = 12.0
-    const val CARRIAGE_MASS_KG = 16.3962065
-    const val DRUM_RADIUS_METERS = 0.019304
-    const val MIN_HEIGHT = 0.0
-    const val MAX_HEIGHT = 0.660400
-
-    const val ELEVATOR_SIM_P = 800.0
-    const val ELEVATOR_SIM_I = 0.0
-    const val ELEVATOR_SIM_D = 0.0
-
-    const val ELEVATOR_SIM_S = 0.0
-    const val ELEVATOR_SIM_G = 0.6
-    const val ELEVATOR_SIM_V = 13.6
-}

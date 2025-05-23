@@ -37,7 +37,7 @@ object Drivetrain : SubsystemBase() {
     @JvmField
     val odometryLock:ReentrantLock = ReentrantLock()
 
-    val swerveDriveSimulation =
+    val swerveDriveSimulation = //Doesn't create it in REAL or REPLAY to save objects
         if (MetaConstants.currentMode == MetaConstants.Mode.SIM){
             SwerveDriveSimulation(SwerveConstants.mapleSimConfig,
                 Pose2d(3.0, 3.0, Rotation2d())

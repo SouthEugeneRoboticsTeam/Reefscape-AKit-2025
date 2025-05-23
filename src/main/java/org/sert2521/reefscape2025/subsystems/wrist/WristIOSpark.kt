@@ -74,22 +74,18 @@ class WristIOSpark:WristIO {
     }
 
     override fun setReferenceFast(targetPosition: Double) {
-        val arbFF = WRIST_G * cos(targetPosition)
         wristMotor.closedLoopController.setReference(
             targetPosition,
             SparkBase.ControlType.kPosition,
-            ClosedLoopSlot.kSlot0,
-            arbFF
+            ClosedLoopSlot.kSlot0
         )
     }
 
     override fun setReferenceSlow(targetPosition: Double) {
-        val arbFF = WRIST_G * cos(targetPosition)
         wristMotor.closedLoopController.setReference(
             targetPosition,
             SparkBase.ControlType.kPosition,
-            ClosedLoopSlot.kSlot1,
-            arbFF
+            ClosedLoopSlot.kSlot1
         )
     }
 
