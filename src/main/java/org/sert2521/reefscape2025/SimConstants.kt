@@ -23,11 +23,21 @@ object ElevatorSimConstants{
     const val ELEVATOR_SIM_V = 13.6
 }
 
-object WristConstants{
-    const val motorConfigs = SimMotorConfigs(
+object WristSimConstants{
+    const val GEAR_RATIO_MECH_PER_MOTOR = 3.0/200.0
+
+    val motorConfigs = SimMotorConfigs(
         DCMotor.getNEO(1),
-        3.0/200.0,
+        GEAR_RATIO_MECH_PER_MOTOR,
         Units.KilogramSquareMeters.of(0.295),
         Volts.of(0.1)
-    )
+    ) // Add hard limits, figure out pid stuff
+
+    const val WRIST_P_SIM_FAST = 0.0
+    const val WRIST_I_SIM_FAST = 0.0
+    const val WRIST_D_SIM_FAST = 0.0
+
+    const val WRIST_P_SIM_SLOW = 0.0
+    const val WRIST_I_SIM_SLOW = 0.0
+    const val WRIST_D_SIM_SLOW = 0.0
 }

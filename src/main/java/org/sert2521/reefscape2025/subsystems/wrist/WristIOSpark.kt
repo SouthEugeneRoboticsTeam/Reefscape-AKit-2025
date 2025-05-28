@@ -11,7 +11,6 @@ import org.sert2521.reefscape2025.ElectronicIDs.WRIST_MOTOR_ID
 import org.sert2521.reefscape2025.PhysicalConstants.WRIST_ABS_ENCODER_ZERO
 import org.sert2521.reefscape2025.PhysicalConstants.WRIST_MOTOR_ENCODER_MULTIPLIER
 import org.sert2521.reefscape2025.TuningConstants.WRIST_CURRENT_LIMIT
-import org.sert2521.reefscape2025.TuningConstants.WRIST_G
 import org.sert2521.reefscape2025.TuningConstants.WRIST_P_FAST
 import org.sert2521.reefscape2025.TuningConstants.WRIST_D_FAST
 import org.sert2521.reefscape2025.TuningConstants.WRIST_D_SLOW

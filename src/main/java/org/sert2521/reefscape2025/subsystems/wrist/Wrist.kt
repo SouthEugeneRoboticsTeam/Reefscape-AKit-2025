@@ -1,6 +1,11 @@
 package org.sert2521.reefscape2025.subsystems.wrist
 
 import edu.wpi.first.math.MathUtil
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
+import edu.wpi.first.wpilibj.smartdashboard.MechanismObject2d
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import edu.wpi.first.wpilibj.util.Color8Bit
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,15 +21,28 @@ object Wrist : SubsystemBase() {
     }
     private val ioInputs = LoggedWristIOInputs()
 
+    private val mechanism = Mechanism2d(0.9017, 0.9017)
+    private val root = mechanism.getRoot("Wrist Root", 0.285750, 0.0)
+    private val wristMain = MechanismLigament2d("Wrist Main", 0.0, 100.0, 0.0, Color8Bit())
+    private val wristTop = MechanismLigament2d("Wrist Top", 0.42, 111.612575184 - 100.0)
+    private val wristBottom = MechanismLigament2d("Wrist Bottom", 0.348, 86.8856310843 - 100.0)
+
     var goal = WRIST_STOW
 
     init{
         defaultCommand = holdWristCommand()
+
+        wristMain.append(wristTop)
+        wristMain.append(wristBottom)
+        root.append(wristMain)
     }
 
     override fun periodic(){
         io.updateInputs(ioInputs)
         Logger.processInputs("Wrist/Pivot", ioInputs)
+
+        wristMain.angle = getRotations() * 360
+        SmartDashboard.putData("Wrist Mechanism", mechanism)
     }
 
     fun setVoltage(voltage:Double){

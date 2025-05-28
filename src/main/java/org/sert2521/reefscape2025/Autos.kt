@@ -26,7 +26,7 @@ import kotlin.jvm.optionals.getOrElse
 
 object Autos
 {
-    private var autoChooser:LoggedDashboardChooser<Command>
+    private var autoChooser:LoggedDashboardChooser<String>
 
     val namedCommandList = mapOf<String,Command>(
         "Wrist L1" to Wrist.setWristCommandFast(SetpointConstants.WRIST_L1).asProxy(),
@@ -107,24 +107,35 @@ object Autos
 
         autoChooser = LoggedDashboardChooser("Auto Chooser")
 
-        autoChooser.addDefaultOption("None", Commands.none())
-        autoChooser.addOption("Leave", AutoBuilder.buildAuto("Leave"))
-        autoChooser.addOption("Left 1 L4", AutoBuilder.buildAuto("Left 1 L4"))
+        autoChooser.addDefaultOption("None", "None")
+        autoChooser.addOption("Leave", "Leave")
+        autoChooser.addOption("Left 1 L4", "Left 1 L4")
 
-        autoChooser.addOption("Center L1", AutoBuilder.buildAuto("Center - L1"))
-        autoChooser.addOption("Left L1", AutoBuilder.buildAuto("Left - L1"))
-        autoChooser.addOption("Center L4", AutoBuilder.buildAuto("Center 1 L4"))
-        autoChooser.addOption("Right 3 L4 Test", AutoBuilder.buildAuto("Right 3 L4 Test"))
+        autoChooser.addOption("Center L1", "Center - L1")
+        autoChooser.addOption("Left L1", "Left - L1")
+        autoChooser.addOption("Center L4", "Center 1 L4")
+        autoChooser.addOption("Right 3 L4 Test", "Right 3 L4 Test")
 
-        autoChooser.addOption("Left 3", AutoBuilder.buildAuto("Left 3 L4"))
-        autoChooser.addOption("Left 3 Test", AutoBuilder.buildAuto("Left 3 L4 Test"))
-        autoChooser.addOption("Left Rot Test", AutoBuilder.buildAuto("Test Rot"))
-        autoChooser.addOption("Left Rot Test Slow", AutoBuilder.buildAuto("Test Rot Slow"))
+        autoChooser.addOption("Left 3", "Left 3 L4")
+        autoChooser.addOption("Left 3 Test", "Left 3 L4 Test")
+        autoChooser.addOption("Left Rot Test", "Test Rot")
+        autoChooser.addOption("Left Rot Test Slow", "Test Rot Slow")
     }
 
 
     fun getAutonomousCommand(): Command
     {
-        return autoChooser.get()
+        val chosenAuto = autoChooser.get()
+        try{
+            return if (chosenAuto == "None"){
+                Commands.none()
+            } else {
+                AutoBuilder.buildAuto(chosenAuto) // This is the part where errors may occur
+            }
+        } catch (e:Throwable) {
+            println(e)
+            println("AUTO BUILDING ERROR FOR " + autoChooser.get())
+            return Commands.none()
+        }
     }
 }
