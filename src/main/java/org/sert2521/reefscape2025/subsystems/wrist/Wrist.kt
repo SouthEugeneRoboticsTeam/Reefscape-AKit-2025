@@ -17,15 +17,16 @@ import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
 object Wrist : SubsystemBase() {
     private val io = when (MetaConstants.currentMode){
         MetaConstants.Mode.REAL -> WristIOSpark()
-        else -> object:WristIO{}
+        MetaConstants.Mode.SIM -> WristIOSim()
+        MetaConstants.Mode.REPLAY -> object:WristIO{}
     }
     private val ioInputs = LoggedWristIOInputs()
 
     private val mechanism = Mechanism2d(0.9017, 0.9017)
     private val root = mechanism.getRoot("Wrist Root", 0.285750, 0.0)
     private val wristMain = MechanismLigament2d("Wrist Main", 0.0, 100.0, 0.0, Color8Bit())
-    private val wristTop = MechanismLigament2d("Wrist Top", 0.42, 111.612575184 - 100.0)
-    private val wristBottom = MechanismLigament2d("Wrist Bottom", 0.348, 86.8856310843 - 100.0)
+    private val wristTop = MechanismLigament2d("Wrist Top", 0.42, 100.0 - 111.612575184)
+    private val wristBottom = MechanismLigament2d("Wrist Bottom", 0.348, 100.0 - 86.8856310843)
 
     var goal = WRIST_STOW
 
@@ -41,7 +42,7 @@ object Wrist : SubsystemBase() {
         io.updateInputs(ioInputs)
         Logger.processInputs("Wrist/Pivot", ioInputs)
 
-        wristMain.angle = getRotations() * 360
+        wristMain.angle = -getRotations()*360 + 180
         SmartDashboard.putData("Wrist Mechanism", mechanism)
     }
 

@@ -4,6 +4,7 @@ import com.revrobotics.spark.ClosedLoopSlot
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.units.Units
 import edu.wpi.first.units.Units.*
+import edu.wpi.first.units.measure.Angle
 import org.ironmaple.simulation.motorsims.MapleMotorSim
 import org.sert2521.reefscape2025.WristSimConstants
 import org.sert2521.reefscape2025.WristSimConstants.WRIST_D_SIM_FAST
@@ -22,7 +23,7 @@ class WristIOSim:WristIO {
         .withPIDController(ClosedLoopSlot.kSlot0, WRIST_P_SIM_FAST, WRIST_I_SIM_FAST, WRIST_D_SIM_FAST, 0.0)
         .withPIDController(ClosedLoopSlot.kSlot1, WRIST_P_SIM_SLOW, WRIST_I_SIM_SLOW, WRIST_D_SIM_SLOW, 0.0)
 
-    private val startingPosition = PI/2
+    private val startingPosition = Rotations.of(0.25)
 
     private var closedLoop = true
     private var fast = true
@@ -44,7 +45,7 @@ class WristIOSim:WristIO {
         wristSimulation.update(Seconds.of(0.02))
 
         inputs.wristMotorPosition = wristSimulation.encoderPosition.`in`(Rotations)
-        inputs.wristAbsPosition = wristSimulation.angularPosition.`in`(Rotations) + startingPosition
+        inputs.wristAbsPosition = (wristSimulation.angularPosition + startingPosition).`in`(Rotations)
         inputs.wristCurrentAmps = wristSimulation.supplyCurrent.`in`(Amps)
         inputs.wristAppliedVolts = wristSimulation.appliedVoltage.`in`(Volts)
         inputs.wristVelocityRadPerSec = wristSimulation.velocity.`in`(RadiansPerSecond)
@@ -53,13 +54,13 @@ class WristIOSim:WristIO {
     override fun setReferenceFast(targetPosition: Double) {
         closedLoop = true
         fast = true
-        this.targetPosition = targetPosition - startingPosition
+        this.targetPosition = targetPosition - startingPosition.`in`(Rotations)
     }
 
     override fun setReferenceSlow(targetPosition: Double) {
         closedLoop = true
         fast = false
-        this.targetPosition = targetPosition - startingPosition
+        this.targetPosition = targetPosition - startingPosition.`in`(Rotations)
     }
 
     override fun setVoltage(voltage: Double) {
