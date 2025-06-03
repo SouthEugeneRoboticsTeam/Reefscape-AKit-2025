@@ -1,8 +1,6 @@
-package org.sert2521.reefscape2025.utils
+package org.sert2521.reefscape2025.utils.sim
 
 import com.revrobotics.spark.ClosedLoopSlot
-import com.revrobotics.spark.SparkBase
-import com.revrobotics.spark.SparkClosedLoopController
 import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.units.Units
@@ -11,8 +9,8 @@ import edu.wpi.first.units.measure.Angle
 import edu.wpi.first.units.measure.AngularVelocity
 import edu.wpi.first.units.measure.Current
 import edu.wpi.first.units.measure.Voltage
+import org.ironmaple.simulation.motorsims.SimulatedBattery
 import org.ironmaple.simulation.motorsims.SimulatedMotorController
-import org.ironmaple.simulation.motorsims.SimulatedMotorController.GenericMotorController
 import kotlin.math.abs
 import kotlin.math.withSign
 
@@ -59,7 +57,7 @@ class SimulatedSparkMax(private val model: DCMotor) : SimulatedMotorController {
         return this
     }
 
-    fun withPIDController(slot: ClosedLoopSlot, p:Double, i:Double, d:Double, ff:Double): SimulatedSparkMax{
+    fun withPIDController(slot: ClosedLoopSlot, p:Double, i:Double, d:Double, ff:Double): SimulatedSparkMax {
         when (slot){
             ClosedLoopSlot.kSlot0 -> pidffGainsSlot0 = arrayOf(p, i, d, ff)
             ClosedLoopSlot.kSlot1 -> pidffGainsSlot1 = arrayOf(p, i, d, ff)
@@ -75,7 +73,7 @@ class SimulatedSparkMax(private val model: DCMotor) : SimulatedMotorController {
         controlMode = ControlMode.VOLTAGE
     }
 
-    fun setReference(value:Double, ctrl:ControlMode, slot:ClosedLoopSlot=closedLoopSlot, arbFF:Voltage=Volts.of(0.0)){
+    fun setReference(value:Double, ctrl: ControlMode, slot:ClosedLoopSlot=closedLoopSlot, arbFF:Voltage=Volts.of(0.0)){
         this.controlMode = ctrl
         this.closedLoopSlot = slot
 
@@ -173,11 +171,17 @@ class SimulatedSparkMax(private val model: DCMotor) : SimulatedMotorController {
         val finalRequestedVoltage = when (controlMode) {
             ControlMode.VOLTAGE -> requestedVoltage
             ControlMode.POSITION -> {
-                requestedVoltage + Volts.of(pidController.calculate(encoderAngle.`in`(Rotations), requestedAngle.`in`(Rotations)))
+                requestedVoltage + Volts.of(
+                    pidController.calculate(encoderAngle.`in`(Rotations), requestedAngle.`in`(Rotations))
+                        * SimulatedBattery.getBatteryVoltage().`in`(Volts) // Multiply by battery voltage because PID on spark is in duty cycle
+                )
 
             }
             ControlMode.VELOCITY -> {
-                requestedVoltage + Volts.of(pidController.calculate(encoderVelocity.`in`(RPM), requestedVelocity.`in`(RPM)))
+                requestedVoltage + Volts.of(
+                    pidController.calculate(encoderVelocity.`in`(RPM), requestedVelocity.`in`(RPM))
+                        * SimulatedBattery.getBatteryVoltage().`in`(Volts)
+                )
             }
         }
 

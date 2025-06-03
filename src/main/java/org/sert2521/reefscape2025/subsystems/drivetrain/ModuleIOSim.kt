@@ -4,7 +4,9 @@ import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.units.Units.*
 import edu.wpi.first.units.measure.Angle
+import edu.wpi.first.wpilibj.DutyCycle
 import org.ironmaple.simulation.drivesims.SwerveModuleSimulation
+import org.ironmaple.simulation.motorsims.SimulatedBattery
 import org.sert2521.reefscape2025.subsystems.drivetrain.ModuleIO.ModuleIOInputs
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants.DRIVE_D
 import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants.DRIVE_P
@@ -17,6 +19,7 @@ import java.util.*
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.sign
+import kotlin.time.times
 
 
 class ModuleIOSim(private val moduleSimulation:SwerveModuleSimulation):ModuleIO {
@@ -45,14 +48,14 @@ class ModuleIOSim(private val moduleSimulation:SwerveModuleSimulation):ModuleIO 
             driveAppliedVolts = (driveFFVolts
                     + drivePIDController.calculate(
                 moduleSimulation.driveWheelFinalSpeed.`in`(RadiansPerSecond)
-            ))
+            ) * SimulatedBattery.getBatteryVoltage().`in`(Volts))
         } else {
             drivePIDController.reset()
         }
         if (turnClosedLoop) {
             turnAppliedVolts = turnPIDController.calculate(
                 moduleSimulation.steerAbsoluteFacing.radians
-            )
+            ) * SimulatedBattery.getBatteryVoltage().`in`(Volts)
         } else {
             turnPIDController.reset()
         }
