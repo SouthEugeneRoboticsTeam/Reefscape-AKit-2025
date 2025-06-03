@@ -20,7 +20,7 @@ import kotlin.math.PI
 
 //It was quite the fun exercise to translate this into kotlin
 
-class ModuleIOSpark(module:Int):ModuleIO {
+class ModuleIOSpark(module: Int) : ModuleIO {
     private val zeroRotation = SwerveConstants.moduleZeroRotations[module]
 
     private val driveMotor = SparkMax(SwerveConstants.driveIDs[module], MotorType.kBrushless)
@@ -154,23 +154,29 @@ class ModuleIOSpark(module:Int):ModuleIO {
         ifOk(driveMotor, driveEncoder::getPosition) {
             inputs.drivePositionRad = it
         }
-        ifOk(driveMotor, arrayOf(DoubleSupplier{driveMotor.appliedOutput}, DoubleSupplier{driveMotor.busVoltage})) {
-            inputs.driveAppliedVolts = it[0]*it[1]
+        ifOk(
+            driveMotor,
+            arrayOf(DoubleSupplier { driveMotor.appliedOutput }, DoubleSupplier { driveMotor.busVoltage })
+        ) {
+            inputs.driveAppliedVolts = it[0] * it[1]
         }
         inputs.driveConnected = driveConnectedDebounce.calculate(!SparkUtil.sparkStickyFault)
 
-        SparkUtil.sparkStickyFault=false
+        SparkUtil.sparkStickyFault = false
         ifOk(turnMotor, turnEncoder::getPosition) {
-            inputs.turnPositionMotor=Rotation2d(it).minus(zeroRotation)
+            inputs.turnPositionMotor = Rotation2d(it).minus(zeroRotation)
         }
-        inputs.turnPositionAbsolute=Rotation2d.fromRotations(absEncoder.position.valueAsDouble)
+        inputs.turnPositionAbsolute = Rotation2d.fromRotations(absEncoder.position.valueAsDouble)
         ifOk(turnMotor, turnEncoder::getVelocity) {
             inputs.turnVelocityRadPerSec = it
         }
-        ifOk(turnMotor, arrayOf(DoubleSupplier(turnMotor::getAppliedOutput), DoubleSupplier(turnMotor::getBusVoltage))){
-            inputs.turnAppliedVolts = it[0]*it[1]
+        ifOk(
+            turnMotor,
+            arrayOf(DoubleSupplier(turnMotor::getAppliedOutput), DoubleSupplier(turnMotor::getBusVoltage))
+        ) {
+            inputs.turnAppliedVolts = it[0] * it[1]
         }
-        ifOk(turnMotor, turnMotor::getOutputCurrent){
+        ifOk(turnMotor, turnMotor::getOutputCurrent) {
             inputs.turnCurrentAmps = it
         }
         inputs.turnConnected = turnConnectedDebounce.calculate(!SparkUtil.sparkStickyFault)
@@ -184,7 +190,7 @@ class ModuleIOSpark(module:Int):ModuleIO {
         turnMotor.setVoltage(output)
     }
 
-    override fun setDriveVelocity(velocityRadPerSec: Double, withPID:Boolean) {
+    override fun setDriveVelocity(velocityRadPerSec: Double, withPID: Boolean) {
         val ffVolts = driveFeedforward.calculate(velocityRadPerSec)
         if (withPID) {
             driveController.setReference(
@@ -224,8 +230,12 @@ class ModuleIOSpark(module:Int):ModuleIO {
         /* Not resetting or persisting parameters
            because we want it to go back to default when we lose power
            and also its goofy to save to flash multiple times a match */
-        tryUntilOk(driveMotor, 5){
-            driveMotor.configure(driveConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters)
+        tryUntilOk(driveMotor, 5) {
+            driveMotor.configure(
+                driveConfig,
+                SparkBase.ResetMode.kNoResetSafeParameters,
+                SparkBase.PersistMode.kNoPersistParameters
+            )
         }
     }
 }

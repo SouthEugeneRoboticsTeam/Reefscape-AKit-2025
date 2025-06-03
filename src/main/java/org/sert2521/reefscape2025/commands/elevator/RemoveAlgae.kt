@@ -19,7 +19,7 @@ class RemoveAlgae : Command() {
     }
 
     override fun isFinished(): Boolean {
-        return Elevator.getPosition()<0.15
+        return Elevator.getPosition() < 0.15
     }
 
     override fun end(interrupted: Boolean) {

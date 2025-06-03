@@ -10,7 +10,7 @@ import org.sert2521.reefscape2025.ElectronicIDs.BEAMBREAK_DISPENSER
 import org.sert2521.reefscape2025.ElectronicIDs.BEAMBREAK_RAMP
 import org.sert2521.reefscape2025.ElectronicIDs.DISPENSER_MOTOR_ID
 
-class DispenserIOSpark:DispenserIO {
+class DispenserIOSpark : DispenserIO {
     private val motor = SparkMax(DISPENSER_MOTOR_ID, MotorType.kBrushless)
     private val beambreakDispenser = DigitalInput(BEAMBREAK_DISPENSER)
     private val beambreakRamp = DigitalInput(BEAMBREAK_RAMP)

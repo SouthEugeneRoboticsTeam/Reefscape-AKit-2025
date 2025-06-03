@@ -16,9 +16,18 @@ import org.sert2521.reefscape2025.subsystems.drivetrain.SwerveConstants
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 import kotlin.math.*
 
-class SimpleVisionAlign(val alignLeft:Boolean) : Command() {
-    private val drivePID = ProfiledPIDController(SwerveConstants.VISION_ALIGN_DRIVE_P, SwerveConstants.VISION_ALIGN_DRIVE_I, SwerveConstants.VISION_ALIGN_DRIVE_D, SwerveConstants.visionAlignProfile)
-    private val anglePID = PIDController(SwerveConstants.VISION_ALIGN_ROT_P, SwerveConstants.VISION_ALIGN_ROT_I, SwerveConstants.VISION_ALIGN_ROT_D)
+class SimpleVisionAlign(val alignLeft: Boolean) : Command() {
+    private val drivePID = ProfiledPIDController(
+        SwerveConstants.VISION_ALIGN_DRIVE_P,
+        SwerveConstants.VISION_ALIGN_DRIVE_I,
+        SwerveConstants.VISION_ALIGN_DRIVE_D,
+        SwerveConstants.visionAlignProfile
+    )
+    private val anglePID = PIDController(
+        SwerveConstants.VISION_ALIGN_ROT_P,
+        SwerveConstants.VISION_ALIGN_ROT_I,
+        SwerveConstants.VISION_ALIGN_ROT_D
+    )
 
     private var targetPose = Pose2d()
 
@@ -45,7 +54,10 @@ class SimpleVisionAlign(val alignLeft:Boolean) : Command() {
         targetPose = Drivetrain.getNearestTargetReef(alignLeft)
         xError = Drivetrain.getPose().x - targetPose.x
         yError = Drivetrain.getPose().y - targetPose.y
-        val test = cos(Drivetrain.getPose().rotation.radians)*hypot(Drivetrain.getChassisSpeeds().vxMetersPerSecond, Drivetrain.getChassisSpeeds().vyMetersPerSecond)
+        val test = cos(Drivetrain.getPose().rotation.radians) * hypot(
+            Drivetrain.getChassisSpeeds().vxMetersPerSecond,
+            Drivetrain.getChassisSpeeds().vyMetersPerSecond
+        )
         drivePID.reset(hypot(xError, yError))
         anglePID.reset()
 
@@ -58,20 +70,20 @@ class SimpleVisionAlign(val alignLeft:Boolean) : Command() {
         angle = atan2(yError, xError)
 
         driveResult = drivePID.calculate(hypot(xError, yError), 0.0)
-        if (drivePID.atGoal()){
+        if (drivePID.atGoal()) {
             driveResult = 0.0
         }
 
         driveResult += drivePID.setpoint.velocity * SwerveConstants.VISION_ALIGN_DRIVE_V
         angleResult = anglePID.calculate(Drivetrain.getPose().rotation.radians, targetPose.rotation.radians)
 
-        if (anglePID.atSetpoint()){
+        if (anglePID.atSetpoint()) {
             angleResult = 0.0
         }
 
         accelLimitedChassisSpeeds =
             AccelLimiterUtil.accelLimitChassisSpeeds(
-                ChassisSpeeds(driveResult*cos(angle),driveResult*sin(angle), angleResult),
+                ChassisSpeeds(driveResult * cos(angle), driveResult * sin(angle), angleResult),
                 MathUtil.interpolate(
                     SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
                     Elevator.getPosition() / SetpointConstants.ELEVATOR_L4

@@ -5,13 +5,13 @@ import org.team9432.annotation.Logged
 interface RampIO {
 
     @Logged
-    open class RampIOInputs{
+    open class RampIOInputs {
         var speedRPM = 0.0
         var appliedVolts = 0.0
         var currentAmps = 0.0
     }
 
-    fun updateInputs(inputs:RampIOInputs){}
+    fun updateInputs(inputs: RampIOInputs) {}
 
-    fun setSpeed(speed:Double){}
+    fun setSpeed(speed: Double) {}
 }

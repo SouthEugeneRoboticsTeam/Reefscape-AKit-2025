@@ -7,19 +7,21 @@ import com.revrobotics.spark.config.SparkBaseConfig
 import com.revrobotics.spark.config.SparkMaxConfig
 import org.sert2521.reefscape2025.ElectronicIDs.RAMP_MOTOR_ID
 
-class RampIOSpark:RampIO {
+class RampIOSpark : RampIO {
     private val motor = SparkMax(RAMP_MOTOR_ID, SparkLowLevel.MotorType.kBrushless)
 
-    init{
+    init {
         val config = SparkMaxConfig()
         config
             .inverted(false)
             .smartCurrentLimit(20)
             .idleMode(SparkBaseConfig.IdleMode.kCoast)
 
-        motor.configure(config,
+        motor.configure(
+            config,
             SparkBase.ResetMode.kResetSafeParameters,
-            SparkBase.PersistMode.kPersistParameters)
+            SparkBase.PersistMode.kPersistParameters
+        )
     }
 
     override fun updateInputs(inputs: RampIO.RampIOInputs) {
@@ -28,5 +30,7 @@ class RampIOSpark:RampIO {
         inputs.currentAmps = motor.outputCurrent
     }
 
-    override fun setSpeed(speed: Double) { motor.set(speed) }
+    override fun setSpeed(speed: Double) {
+        motor.set(speed)
+    }
 }

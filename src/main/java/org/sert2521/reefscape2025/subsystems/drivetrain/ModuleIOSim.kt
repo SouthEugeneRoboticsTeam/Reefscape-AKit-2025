@@ -22,7 +22,7 @@ import kotlin.math.sign
 import kotlin.time.times
 
 
-class ModuleIOSim(private val moduleSimulation:SwerveModuleSimulation):ModuleIO {
+class ModuleIOSim(private val moduleSimulation: SwerveModuleSimulation) : ModuleIO {
 
     private var driveMotor = moduleSimulation.useGenericMotorControllerForDrive()
         .withCurrentLimit(Amps.of(SwerveConstants.DRIVE_CURRENT_LIMIT_TELE.toDouble()))
@@ -38,7 +38,7 @@ class ModuleIOSim(private val moduleSimulation:SwerveModuleSimulation):ModuleIO 
     private var driveAppliedVolts = 0.0
     private var turnAppliedVolts = 0.0
 
-    init{
+    init {
         turnPIDController.enableContinuousInput(-PI, PI)
     }
 

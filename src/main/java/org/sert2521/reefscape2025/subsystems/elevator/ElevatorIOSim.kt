@@ -12,7 +12,7 @@ import org.sert2521.reefscape2025.ElevatorSimConstants.ELEVATOR_SIM_P
 import org.sert2521.reefscape2025.ElevatorSimConstants.ELEVATOR_SIM_S
 import org.sert2521.reefscape2025.ElevatorSimConstants.ELEVATOR_SIM_V
 
-class ElevatorIOSim:ElevatorIO {
+class ElevatorIOSim : ElevatorIO {
     private val elevatorSim = ElevatorSim(
         ElevatorSimConstants.motorGearbox,
         ElevatorSimConstants.GEAR_RATIO,
@@ -21,7 +21,7 @@ class ElevatorIOSim:ElevatorIO {
         ElevatorSimConstants.MIN_HEIGHT,
         ElevatorSimConstants.MAX_HEIGHT,
         true,
-        (ElevatorSimConstants.MAX_HEIGHT+ElevatorSimConstants.MIN_HEIGHT)/2
+        (ElevatorSimConstants.MAX_HEIGHT + ElevatorSimConstants.MIN_HEIGHT) / 2
     )
 
     private val pid = PIDController(ELEVATOR_SIM_P, ELEVATOR_SIM_I, ELEVATOR_SIM_D)
@@ -31,7 +31,7 @@ class ElevatorIOSim:ElevatorIO {
     private var closedLoop = true
 
     override fun updateInputs(inputs: ElevatorIO.ElevatorIOInputs) {
-        if (closedLoop){
+        if (closedLoop) {
             inputVoltage = pid.calculate(elevatorSim.positionMeters) + feedforwardInput
         } else {
             pid.calculate(elevatorSim.positionMeters)

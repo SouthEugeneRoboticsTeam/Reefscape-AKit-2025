@@ -7,11 +7,11 @@ import org.team9432.annotation.Logged
 interface GyroIO {
     /* If you're here and have a problem with the gyro, just call software lead */
     @Logged
-    open class GyroIOInputs{
+    open class GyroIOInputs {
         var connected = false
         var yawPosition = Rotation2d()
         var yawVelocityRadPerSec = 0.0
     }
 
-    open fun updateInputs(inputs:GyroIOInputs){}
+    open fun updateInputs(inputs: GyroIOInputs) {}
 }

@@ -5,7 +5,7 @@ import org.team9432.annotation.Logged
 interface WristIO {
 
     @Logged
-    open class WristIOInputs{
+    open class WristIOInputs {
         var wristAppliedVolts = 0.0
         var wristCurrentAmps = 0.0
         var wristVelocityRadPerSec = 0.0
@@ -13,13 +13,13 @@ interface WristIO {
         var wristMotorPosition = 0.0
     }
 
-    fun updateInputs(inputs:WristIOInputs){}
+    fun updateInputs(inputs: WristIOInputs) {}
 
-    fun setVoltage(voltage:Double){}
+    fun setVoltage(voltage: Double) {}
 
-    fun setReferenceFast(targetPosition:Double){}
+    fun setReferenceFast(targetPosition: Double) {}
 
-    fun setReferenceSlow(targetPosition:Double){}
+    fun setReferenceSlow(targetPosition: Double) {}
 
-    fun resetMotorEncoder(){}
+    fun resetMotorEncoder() {}
 }

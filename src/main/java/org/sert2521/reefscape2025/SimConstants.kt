@@ -6,7 +6,7 @@ import edu.wpi.first.units.Units.Volts
 import org.ironmaple.simulation.motorsims.SimMotorConfigs
 
 
-object ElevatorSimConstants{
+object ElevatorSimConstants {
     val motorGearbox: DCMotor = DCMotor.getNEO(2)
     const val GEAR_RATIO = 12.0
     const val CARRIAGE_MASS_KG = 16.3962065
@@ -23,8 +23,8 @@ object ElevatorSimConstants{
     const val ELEVATOR_SIM_V = 13.6
 }
 
-object WristSimConstants{
-    const val GEAR_RATIO_MECH_PER_MOTOR = 3.0/200.0
+object WristSimConstants {
+    const val GEAR_RATIO_MECH_PER_MOTOR = 3.0 / 200.0
 
     val motorConfigs = SimMotorConfigs(
         DCMotor.getNEO(1),

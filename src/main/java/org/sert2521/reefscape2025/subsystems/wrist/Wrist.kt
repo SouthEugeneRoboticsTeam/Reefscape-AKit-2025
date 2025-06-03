@@ -15,10 +15,10 @@ import org.sert2521.reefscape2025.SetpointConstants.WRIST_INIT
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
 
 object Wrist : SubsystemBase() {
-    private val io = when (MetaConstants.currentMode){
+    private val io = when (MetaConstants.currentMode) {
         MetaConstants.Mode.REAL -> WristIOSpark()
         MetaConstants.Mode.SIM -> WristIOSim()
-        MetaConstants.Mode.REPLAY -> object:WristIO{}
+        MetaConstants.Mode.REPLAY -> object : WristIO {}
     }
     private val ioInputs = LoggedWristIOInputs()
 
@@ -30,7 +30,7 @@ object Wrist : SubsystemBase() {
 
     var goal = WRIST_STOW
 
-    init{
+    init {
         defaultCommand = holdWristCommand()
 
         wristMain.append(wristTop)
@@ -38,64 +38,64 @@ object Wrist : SubsystemBase() {
         root.append(wristMain)
     }
 
-    override fun periodic(){
+    override fun periodic() {
         io.updateInputs(ioInputs)
         Logger.processInputs("Wrist/Pivot", ioInputs)
 
-        wristMain.angle = -getRotations()*360 + 180
+        wristMain.angle = -getRotations() * 360 + 180
         SmartDashboard.putData("Wrist Mechanism", mechanism)
     }
 
-    fun setVoltage(voltage:Double){
+    fun setVoltage(voltage: Double) {
         io.setVoltage(voltage)
     }
 
-    fun getRotations():Double{
+    fun getRotations(): Double {
         return ioInputs.wristAbsPosition
     }
 
-    fun setReference(goal:Double){
+    fun setReference(goal: Double) {
         io.setReferenceFast(goal)
     }
 
-    fun stop(){
+    fun stop() {
         io.setVoltage(0.0)
     }
 
-    fun setWristCommandFast(goal:Double): Command {
+    fun setWristCommandFast(goal: Double): Command {
 
-        return runOnce{
+        return runOnce {
             this.goal = goal
             io.setReferenceFast(goal)
-        }.andThen(Commands.waitUntil{
+        }.andThen(Commands.waitUntil {
             MathUtil.isNear(goal, getRotations(), 0.1)
         })
     }
 
-    fun setWristCommandSlow(goal:Double):Command{
-        return runOnce{
+    fun setWristCommandSlow(goal: Double): Command {
+        return runOnce {
             this.goal = goal
             io.setReferenceSlow(goal)
-        }.andThen(Commands.waitUntil{
+        }.andThen(Commands.waitUntil {
             MathUtil.isNear(goal, getRotations(), 0.1)
         })
     }
 
-    private fun holdWristCommand():Command{
+    private fun holdWristCommand(): Command {
         return runOnce {}
     }
 
-    fun initWristCommand():Command{
+    fun initWristCommand(): Command {
         return Commands.sequence(
-            runOnce{
+            runOnce {
                 io.resetMotorEncoder()
                 io.setReferenceFast(WRIST_INIT)
             },
-            Commands.waitUntil{
+            Commands.waitUntil {
                 MathUtil.isNear(WRIST_INIT, getRotations(), 0.1)
             },
             Commands.waitSeconds(0.2),
-            runOnce{ io.resetMotorEncoder() },
+            runOnce { io.resetMotorEncoder() },
             setWristCommandFast(WRIST_STOW)
         )
     }

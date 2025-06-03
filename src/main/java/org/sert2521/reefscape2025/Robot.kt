@@ -35,15 +35,12 @@ import org.sert2521.reefscape2025.subsystems.wrist.Wrist
  * the `Main.kt` file in the project. (If you use the IDE's Rename or Move refactorings when renaming the
  * object or package, it will get changed everywhere.)
  */
-object Robot : LoggedRobot()
-{
+object Robot : LoggedRobot() {
 
     private var autonomousCommand: Command? = null
 
 
-
-    init
-    {
+    init {
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME)
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE)
         Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA)
@@ -59,7 +56,7 @@ object Robot : LoggedRobot()
         // This work can also be done in the inherited `robotInit()` method. But as of the 2025 season the 
         // `robotInit` method's Javadoc encourages using the constructor and the official templates
         // moved initialization code out `robotInit` and into the constructor. We follow suit in Kotlin.
-        
+
         // Report the use of the Kotlin Language for "FRC Usage Report" statistics.
         // Please retain this line so that Kotlin's growing use by teams is seen by FRC/WPI.
         HAL.report(tResourceType.kResourceType_Language, tInstances.kLanguage_Kotlin, 0, WPILibVersion.Version)
@@ -108,8 +105,7 @@ object Robot : LoggedRobot()
     }
 
 
-    override fun robotPeriodic()
-    {
+    override fun robotPeriodic() {
         // Switch thread to high priority to improve loop timing
         Threads.setCurrentThreadPriority(true, 99)
 
@@ -124,63 +120,55 @@ object Robot : LoggedRobot()
         Threads.setCurrentThreadPriority(false, 10)
     }
 
-    override fun disabledInit()
-    {
+    override fun disabledInit() {
 
     }
 
-    override fun disabledPeriodic()
-    {
+    override fun disabledPeriodic() {
 
     }
 
-    override fun autonomousInit()
-    {
+    override fun autonomousInit() {
 
         autonomousCommand = Autos.getAutonomousCommand()
         autonomousCommand?.schedule()
     }
 
-    override fun autonomousPeriodic()
-    {
+    override fun autonomousPeriodic() {
 
     }
 
-    override fun teleopInit()
-    {
+    override fun teleopInit() {
         autonomousCommand?.cancel()
     }
 
     /** This method is called periodically during operator control.  */
-    override fun teleopPeriodic()
-    {
+    override fun teleopPeriodic() {
 
     }
 
-    override fun testInit()
-    {
+    override fun testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll()
     }
 
-    override fun testPeriodic()
-    {
+    override fun testPeriodic() {
 
     }
 
-    override fun simulationInit()
-    {
+    override fun simulationInit() {
         SimulatedArena.getInstance().placeGamePiecesOnField()
     }
 
-    override fun simulationPeriodic()
-    {
+    override fun simulationPeriodic() {
         if (MetaConstants.currentMode != MetaConstants.Mode.SIM) return;
 
         SimulatedArena.getInstance().simulationPeriodic();
         Logger.recordOutput(
-            "FieldSimulation/Coral", *SimulatedArena.getInstance().getGamePiecesArrayByType("Coral"));
+            "FieldSimulation/Coral", *SimulatedArena.getInstance().getGamePiecesArrayByType("Coral")
+        );
         Logger.recordOutput(
-            "FieldSimulation/Algae", *SimulatedArena.getInstance().getGamePiecesArrayByType("Algae"));
+            "FieldSimulation/Algae", *SimulatedArena.getInstance().getGamePiecesArrayByType("Algae")
+        );
     }
 }

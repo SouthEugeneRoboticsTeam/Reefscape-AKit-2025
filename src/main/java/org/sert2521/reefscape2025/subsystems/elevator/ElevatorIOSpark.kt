@@ -14,11 +14,11 @@ import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_G
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_P
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_V
 
-class ElevatorIOSpark:ElevatorIO {
+class ElevatorIOSpark : ElevatorIO {
     private val leftMotor = SparkMax(ELEVATOR_LEFT_ID, SparkLowLevel.MotorType.kBrushless)
     private val rightMotor = SparkMax(ELEVATOR_RIGHT_ID, SparkLowLevel.MotorType.kBrushless)
 
-    init{
+    init {
         // Put the spark config into the init, so that java can garbage collect it
         // It's a small optimization because now it doesn't have to store the value the whole code
         val leftConfig = SparkMaxConfig()
@@ -28,9 +28,9 @@ class ElevatorIOSpark:ElevatorIO {
             .inverted(false)
             .smartCurrentLimit(40)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
-        .encoder // Position and velocity are in m and m/s respectively
+            .encoder // Position and velocity are in m and m/s respectively
             .positionConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER)
-            .velocityConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER/60)
+            .velocityConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER / 60)
 
         leftConfig.closedLoop
             .pidf( // F stands for Feedforward, works like a V gain. The F isn't useful for our purposes
@@ -42,9 +42,9 @@ class ElevatorIOSpark:ElevatorIO {
             .smartCurrentLimit(40)
             .idleMode(SparkBaseConfig.IdleMode.kBrake)
             .inverted(true)
-        .encoder
+            .encoder
             .positionConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER)
-            .velocityConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER/60)
+            .velocityConversionFactor(ELEVATOR_MOTOR_ENCODER_MULTIPLIER / 60)
 
         rightConfig.closedLoop
             .pidf(
@@ -52,13 +52,22 @@ class ElevatorIOSpark:ElevatorIO {
                 ELEVATOR_D, 0.0
             )
 
-        leftMotor.configure(leftConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
-        rightMotor.configure(rightConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
+        leftMotor.configure(
+            leftConfig,
+            SparkBase.ResetMode.kResetSafeParameters,
+            SparkBase.PersistMode.kPersistParameters
+        )
+        rightMotor.configure(
+            rightConfig,
+            SparkBase.ResetMode.kResetSafeParameters,
+            SparkBase.PersistMode.kPersistParameters
+        )
     }
 
     override fun updateInputs(inputs: ElevatorIO.ElevatorIOInputs) {
         inputs.currentAmps = (leftMotor.outputCurrent + rightMotor.outputCurrent) / 2
-        inputs.appliedVolts = (leftMotor.busVoltage * leftMotor.appliedOutput + rightMotor.busVoltage * rightMotor.appliedOutput)/2
+        inputs.appliedVolts =
+            (leftMotor.busVoltage * leftMotor.appliedOutput + rightMotor.busVoltage * rightMotor.appliedOutput) / 2
         inputs.velocityMetersPerSec = (leftMotor.encoder.velocity + rightMotor.encoder.velocity) / 2
         inputs.positionMeters = (leftMotor.encoder.position + rightMotor.encoder.position) / 2
     }
@@ -68,7 +77,7 @@ class ElevatorIOSpark:ElevatorIO {
         rightMotor.setVoltage(voltage)
     }
 
-    override fun setReference(setpointPosition:Double, setpointVelocity:Double) {
+    override fun setReference(setpointPosition: Double, setpointVelocity: Double) {
         // Feedforward function
         // Didn't feel like we needed the entire ElevatorFeedforward() class
         val arbFF = setpointVelocity * ELEVATOR_V + ELEVATOR_G

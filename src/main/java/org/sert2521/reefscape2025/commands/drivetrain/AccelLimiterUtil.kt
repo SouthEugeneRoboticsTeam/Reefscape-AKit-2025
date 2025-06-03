@@ -56,9 +56,11 @@ object AccelLimiterUtil {
     private var appliedAccelLimit = 0.0
 
     // Oh man I bet this could be optimized but I'm eeeepy...
-    fun readJoysticks(accelLimit:Double, rotOffset: Rotation2d,
-                      deccelLimit:Double = accelLimit,
-                      maxSpeed:Double = SwerveConstants.MAX_SPEED_MPS, fieldOriented:Boolean=true):ChassisSpeeds{
+    fun readJoysticks(
+        accelLimit: Double, rotOffset: Rotation2d,
+        deccelLimit: Double = accelLimit,
+        maxSpeed: Double = SwerveConstants.MAX_SPEED_MPS, fieldOriented: Boolean = true
+    ): ChassisSpeeds {
         /**
          * Returns the desired directions as a triplet of X, Y, and Rotation in robot coordinates
          * Should be called periodically.
@@ -66,7 +68,7 @@ object AccelLimiterUtil {
         x = joystickX()
         y = joystickY()
 
-        if (x==0.0 && y==0.0){
+        if (x == 0.0 && y == 0.0) {
             appliedAccelLimit = deccelLimit
         } else {
             appliedAccelLimit = accelLimit
@@ -81,18 +83,20 @@ object AccelLimiterUtil {
         ).pow(3)
 
 
-        if (fieldOriented){
+        if (fieldOriented) {
             curvedChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 sin(angle) * newMagnitude * maxSpeed,
                 cos(angle) * newMagnitude * maxSpeed,
-                MathUtil.applyDeadband(joystickZ(), ConfigConstants.ROTATION_DEADBAND).pow(3) * SwerveConstants.ROT_SPEED,
+                MathUtil.applyDeadband(joystickZ(), ConfigConstants.ROTATION_DEADBAND)
+                    .pow(3) * SwerveConstants.ROT_SPEED,
                 Drivetrain.getPose().rotation.minus(rotOffset)
             )
         } else {
             curvedChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 sin(angle) * newMagnitude * maxSpeed,
                 cos(angle) * newMagnitude * maxSpeed,
-                MathUtil.applyDeadband(joystickZ(), ConfigConstants.ROTATION_DEADBAND).pow(3) * SwerveConstants.ROT_SPEED,
+                MathUtil.applyDeadband(joystickZ(), ConfigConstants.ROTATION_DEADBAND)
+                    .pow(3) * SwerveConstants.ROT_SPEED,
                 Rotation2d()
             )
         }
@@ -102,26 +106,40 @@ object AccelLimiterUtil {
 
         // Total magnitude of change since last cycle
         // NOTE: NOT change of total magnitude: it is magnitude of change in 2D coordinates
-        magChange = sqrt((lastChassisSpeeds.vxMetersPerSecond - curvedChassisSpeeds.vxMetersPerSecond).pow(2) + (lastChassisSpeeds.vyMetersPerSecond-curvedChassisSpeeds.vyMetersPerSecond).pow(2))
+        magChange = sqrt(
+            (lastChassisSpeeds.vxMetersPerSecond - curvedChassisSpeeds.vxMetersPerSecond).pow(2) + (lastChassisSpeeds.vyMetersPerSecond - curvedChassisSpeeds.vyMetersPerSecond).pow(
+                2
+            )
+        )
 
         // The fraction of the change in magnitude that should be applied
         magFraction = 1.0
 
         // Applies maximum magnitude of change of x and y
         // (divide by 50 so that currAccel can be in m/s^2)
-        if (magChange > appliedAccelLimit/50.0){
-            magFraction = (appliedAccelLimit/50.0)/magChange
+        if (magChange > appliedAccelLimit / 50.0) {
+            magFraction = (appliedAccelLimit / 50.0) / magChange
         }
 
-        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vxMetersPerSecond, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
-        lastChassisSpeeds.vyMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vyMetersPerSecond, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(
+            lastChassisSpeeds.vxMetersPerSecond,
+            curvedChassisSpeeds.vxMetersPerSecond,
+            magFraction
+        )
+        lastChassisSpeeds.vyMetersPerSecond = MathUtil.interpolate(
+            lastChassisSpeeds.vyMetersPerSecond,
+            curvedChassisSpeeds.vyMetersPerSecond,
+            magFraction
+        )
         lastChassisSpeeds.omegaRadiansPerSecond = curvedChassisSpeeds.omegaRadiansPerSecond
 
         return lastChassisSpeeds
     }
 
-    fun accelLimitChassisSpeeds(fieldChassisSpeeds: ChassisSpeeds,
-                                accelLimit: Double, rotOffset:Rotation2d):ChassisSpeeds{
+    fun accelLimitChassisSpeeds(
+        fieldChassisSpeeds: ChassisSpeeds,
+        accelLimit: Double, rotOffset: Rotation2d
+    ): ChassisSpeeds {
         /**
          * Same as [readJoysticks] but has the speeds passed in through ChassisSpeeds.
          * Outputs calculated ChassisSpeeds once the acceleration limit has been calculated
@@ -134,22 +152,34 @@ object AccelLimiterUtil {
 
         // Total magnitude of change since last cycle
         // NOTE: NOT change of total magnitude: it is magnitude of change in 2D coordinates
-        magChange = sqrt((lastChassisSpeeds.vxMetersPerSecond - curvedChassisSpeeds.vxMetersPerSecond).pow(2) + (lastChassisSpeeds.vyMetersPerSecond-curvedChassisSpeeds.vyMetersPerSecond).pow(2))
+        magChange = sqrt(
+            (lastChassisSpeeds.vxMetersPerSecond - curvedChassisSpeeds.vxMetersPerSecond).pow(2) + (lastChassisSpeeds.vyMetersPerSecond - curvedChassisSpeeds.vyMetersPerSecond).pow(
+                2
+            )
+        )
 
         // The fraction of the change in magnitude that should be applied
         magFraction = 1.0
 
         // Applies maximum magnitude of change of x and y
         // (divide by 50 so that currAccel can be in m/s^2)
-        if (magChange > accelLimit/50.0){
+        if (magChange > accelLimit / 50.0) {
             Logger.recordOutput("Accel Limited", true)
-            magFraction = (accelLimit/50.0)/magChange
+            magFraction = (accelLimit / 50.0) / magChange
         } else {
             Logger.recordOutput("Accel Limited", false)
         }
 
-        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vxMetersPerSecond, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
-        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vyMetersPerSecond, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(
+            lastChassisSpeeds.vxMetersPerSecond,
+            curvedChassisSpeeds.vxMetersPerSecond,
+            magFraction
+        )
+        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(
+            lastChassisSpeeds.vyMetersPerSecond,
+            curvedChassisSpeeds.vyMetersPerSecond,
+            magFraction
+        )
         lastChassisSpeeds.omegaRadiansPerSecond = fieldChassisSpeeds.omegaRadiansPerSecond
 
         // X and Y are swapped because Y is left in robot coordinates and X is up

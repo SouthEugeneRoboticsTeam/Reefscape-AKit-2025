@@ -16,7 +16,7 @@ object DrivetrainFeedforwardSysId {
     val voltageSamples: MutableList<Double> = LinkedList()
     val timer = Timer()
 
-    fun get():Command{
+    fun get(): Command {
         return Commands.sequence( // Reset data
             Commands.runOnce(
                 {

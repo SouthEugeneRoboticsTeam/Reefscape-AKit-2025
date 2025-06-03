@@ -73,7 +73,7 @@ object Input {
     private val algaeRemoveHigh = driverController.pov(0)
     private val simpleVisionAlignLeft = driverController.x()
     private val simpleVisionAlignRight = driverController.b()
-    private val stopJoystickFieldOrientation = Trigger{ driverController.leftTriggerAxis>0.3 }
+    private val stopJoystickFieldOrientation = Trigger { driverController.leftTriggerAxis > 0.3 }
     private val alignRotationStation = driverController.a()
 
     // Wrist:
@@ -102,7 +102,7 @@ object Input {
     private val increaseSpeed = JoystickButton(gunnerController, 1)
     private val decreaseSpeed = JoystickButton(gunnerController, 2)
 
-    private val intakeRumble = Trigger{ Dispenser.getRampBeambreakBlocked() }
+    private val intakeRumble = Trigger { Dispenser.getRampBeambreakBlocked() }
 
 
     init {
@@ -113,10 +113,12 @@ object Input {
         intakeRumble.onTrue(rumbleBlip())
 
         /* Drivetrain */
-        resetRotOffset.onTrue(runOnce({ rotationOffset=Drivetrain.getPose().rotation }))
-        resetGyroRawYaw.onTrue(runOnce({ Drivetrain.setPose(
-            Pose2d(Drivetrain.getPose().x, Drivetrain.getPose().y, Rotation2d())
-        )}))
+        resetRotOffset.onTrue(runOnce({ rotationOffset = Drivetrain.getPose().rotation }))
+        resetGyroRawYaw.onTrue(runOnce({
+            Drivetrain.setPose(
+                Pose2d(Drivetrain.getPose().x, Drivetrain.getPose().y, Rotation2d())
+            )
+        }))
 
         algaeRemoveLow.onTrue(AlgaeAutoRemoveLow())
         algaeRemoveHigh.onTrue(AlgaeAutoRemoveHigh())
@@ -127,19 +129,31 @@ object Input {
 
         /* Wrist */
         wristStow.onTrue(Wrist.initWristCommand())
-        wristOuttakeCoral.whileTrue(Wrist.setWristCommandSlow(SetpointConstants.WRIST_L1)
-            .andThen(GroundIntake.outtakeCoralCommand()))
+        wristOuttakeCoral.whileTrue(
+            Wrist.setWristCommandSlow(SetpointConstants.WRIST_L1)
+                .andThen(GroundIntake.outtakeCoralCommand())
+        )
             .onFalse(Wrist.setWristCommandFast(SetpointConstants.WRIST_STOW))
-        wristIntakeAlgae.whileTrue(Wrist.setWristCommandFast(SetpointConstants.WRIST_ALGAE_LOW)
-            .andThen(GroundIntake.outtakeCommand()))
-        wristIntakeAlgae.onFalse(Wrist.setWristCommandSlow(SetpointConstants.WRIST_ALGAE_HIGH)
-            .raceWith(GroundIntake.outtakeCommand()).andThen(GroundIntake.holdAlgaeCommand()))
-        wristIntakeCoral.whileTrue(Wrist.setWristCommandFast(SetpointConstants.WRIST_GROUND)
-            .andThen(GroundIntake.intakeCommand()))
-            .onFalse(Wrist.setWristCommandSlow(SetpointConstants.WRIST_STOW)
-                .raceWith(GroundIntake.intakeCommand()))
-        wristOuttakeAlgae.whileTrue(Wrist.setWristCommandFast(SetpointConstants.WRIST_ALGAE_LOW)
-            .alongWith(GroundIntake.intakeCommand()))
+        wristIntakeAlgae.whileTrue(
+            Wrist.setWristCommandFast(SetpointConstants.WRIST_ALGAE_LOW)
+                .andThen(GroundIntake.outtakeCommand())
+        )
+        wristIntakeAlgae.onFalse(
+            Wrist.setWristCommandSlow(SetpointConstants.WRIST_ALGAE_HIGH)
+                .raceWith(GroundIntake.outtakeCommand()).andThen(GroundIntake.holdAlgaeCommand())
+        )
+        wristIntakeCoral.whileTrue(
+            Wrist.setWristCommandFast(SetpointConstants.WRIST_GROUND)
+                .andThen(GroundIntake.intakeCommand())
+        )
+            .onFalse(
+                Wrist.setWristCommandSlow(SetpointConstants.WRIST_STOW)
+                    .raceWith(GroundIntake.intakeCommand())
+            )
+        wristOuttakeAlgae.whileTrue(
+            Wrist.setWristCommandFast(SetpointConstants.WRIST_ALGAE_LOW)
+                .alongWith(GroundIntake.intakeCommand())
+        )
             .onFalse(Wrist.setWristCommandFast(WRIST_STOW))
 
         groundIntakeWhileUp.whileTrue(GroundIntake.intakeCommand())
@@ -173,40 +187,53 @@ object Input {
 
     private var rotationOffset = Rotation2d(0.0)
 
-    fun getJoystickX():Double{ return -driverController.leftX }
+    fun getJoystickX(): Double {
+        return -driverController.leftX
+    }
 
-    fun getJoystickY():Double{ return -driverController.leftY }
+    fun getJoystickY(): Double {
+        return -driverController.leftY
+    }
 
-    fun getJoystickZ():Double { return -driverController.rightX }
+    fun getJoystickZ(): Double {
+        return -driverController.rightX
+    }
 
-    fun getRotOffset(): Rotation2d { return rotationOffset }
+    fun getRotOffset(): Rotation2d {
+        return rotationOffset
+    }
 
-    fun getGyroReset():Boolean{
+    fun getGyroReset(): Boolean {
         return resetGyroVision.asBoolean
     }
 
-    fun getAccelLimit():Double{
+    fun getAccelLimit(): Double {
         val elevatorLimit = MathUtil.interpolate(
             SwerveConstants.DRIVE_ACCEL_FAST, SwerveConstants.DRIVE_ACCEL_SLOW,
-            Elevator.getPosition()/SetpointConstants.ELEVATOR_L4)
+            Elevator.getPosition() / SetpointConstants.ELEVATOR_L4
+        )
         return elevatorLimit
     }
 
-    fun getDeccelLimit():Double{
+    fun getDeccelLimit(): Double {
         val elevatorLimit = MathUtil.interpolate(
             SwerveConstants.DRIVE_DECCEL_FAST, SwerveConstants.DRIVE_DECCEL_SLOW,
-            Elevator.getPosition()/SetpointConstants.ELEVATOR_L4)
+            Elevator.getPosition() / SetpointConstants.ELEVATOR_L4
+        )
         return elevatorLimit
     }
 
-    fun getSpeedLimit():Double{
+    fun getSpeedLimit(): Double {
         val elevatorLimit = MathUtil.interpolate(
             SwerveConstants.DRIVE_SPEED_FAST, SwerveConstants.DRIVE_SPEED_SLOW,
-            Elevator.getPosition()/SetpointConstants.ELEVATOR_L4)
-        return MathUtil.interpolate(elevatorLimit, elevatorLimit/5.0, driverController.rightTriggerAxis)
+            Elevator.getPosition() / SetpointConstants.ELEVATOR_L4
+        )
+        return MathUtil.interpolate(elevatorLimit, elevatorLimit / 5.0, driverController.rightTriggerAxis)
     }
 
-    fun setRumble(amount: Double) { driverController.setRumble(GenericHID.RumbleType.kBothRumble, amount) }
+    fun setRumble(amount: Double) {
+        driverController.setRumble(GenericHID.RumbleType.kBothRumble, amount)
+    }
 
     fun rumbleBlip(): Command {
         return runOnce({ setRumble(0.8) }).andThen(Commands.waitSeconds(0.2))

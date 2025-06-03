@@ -13,9 +13,9 @@ import org.sert2521.reefscape2025.subsystems.wrist.Wrist
 
 object GroundIntake : SubsystemBase() {
 
-    private val io = when (MetaConstants.currentMode){
+    private val io = when (MetaConstants.currentMode) {
         MetaConstants.Mode.REAL -> GroundIntakeIOSpark()
-        else -> object:GroundIntakeIO{}
+        else -> object : GroundIntakeIO {}
     }
     private val ioInputs = LoggedGroundIntakeIOInputs()
 
@@ -30,11 +30,11 @@ object GroundIntake : SubsystemBase() {
     }
 
     //Intake functions
-    fun setVoltage(voltage:Double){
+    fun setVoltage(voltage: Double) {
         io.setIntakeVoltage(voltage)
     }
 
-    fun setMotor(speed:Double){
+    fun setMotor(speed: Double) {
         io.setIntakeMotor(speed)
     }
 
@@ -42,30 +42,30 @@ object GroundIntake : SubsystemBase() {
         io.setIntakeMotor(0.0)
     }
 
-    fun stopCommand():Command {
-        return run{ stop() }
+    fun stopCommand(): Command {
+        return run { stop() }
     }
 
-    fun intakeCommand():Command{
-        return run{
+    fun intakeCommand(): Command {
+        return run {
             setMotor(GROUND_INTAKE_SPEED)
         }
     }
 
-    fun outtakeCommand():Command{
-        return run{
+    fun outtakeCommand(): Command {
+        return run {
             setMotor(GROUND_OUTTAKE_SPEED_ALGAE)
         }
     }
 
-    fun outtakeCoralCommand():Command{
-        return run{
+    fun outtakeCoralCommand(): Command {
+        return run {
             setMotor(GROUND_OUTTAKE_SPEED_CORAL)
         }
     }
 
-    fun holdAlgaeCommand():Command{
-        return run{
+    fun holdAlgaeCommand(): Command {
+        return run {
             setMotor(GROUND_HOLD_ALGAE_SPEED)
         }
     }

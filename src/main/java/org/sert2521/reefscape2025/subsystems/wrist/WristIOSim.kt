@@ -1,8 +1,10 @@
 package org.sert2521.reefscape2025.subsystems.wrist
 
 import com.revrobotics.spark.ClosedLoopSlot
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.units.Units.*
 import org.ironmaple.simulation.motorsims.MapleMotorSim
+import org.ironmaple.simulation.motorsims.SimulatedBattery
 import org.sert2521.reefscape2025.WristSimConstants
 import org.sert2521.reefscape2025.WristSimConstants.WRIST_D_SIM_FAST
 import org.sert2521.reefscape2025.WristSimConstants.WRIST_D_SIM_SLOW
@@ -12,36 +14,43 @@ import org.sert2521.reefscape2025.WristSimConstants.WRIST_P_SIM_FAST
 import org.sert2521.reefscape2025.WristSimConstants.WRIST_P_SIM_SLOW
 import org.sert2521.reefscape2025.utils.sim.SimulatedSparkMax
 
-class WristIOSim:WristIO {
+class WristIOSim : WristIO {
     private val wristSimulation = MapleMotorSim(WristSimConstants.motorConfigs)
-    private val motor = wristSimulation.useMotorController(SimulatedSparkMax(WristSimConstants.motorConfigs.motor)
+    private val motor = wristSimulation.useSimpleDCMotorController()
         .withCurrentLimit(Amps.of(30.0))
-        .withPIDController(ClosedLoopSlot.kSlot0, WRIST_P_SIM_FAST, WRIST_I_SIM_FAST, WRIST_D_SIM_FAST, 0.0)
-        .withPIDController(ClosedLoopSlot.kSlot1, WRIST_P_SIM_SLOW, WRIST_I_SIM_SLOW, WRIST_D_SIM_SLOW, 0.0))
 
     private val startingPosition = Rotations.of(0.25)
 
+    private val pidController = PIDController(WRIST_P_SIM_FAST, WRIST_I_SIM_FAST, WRIST_D_SIM_FAST)
+
     private var closedLoop = true
-    private var fast = true
     private var targetPosition = 0.0
 
     private var requestedVoltage = 0.0
 
     override fun updateInputs(inputs: WristIO.WristIOInputs) {
-        if (closedLoop){
-            if (fast){
-                motor.setReference(targetPosition, SimulatedSparkMax.ControlMode.POSITION, ClosedLoopSlot.kSlot0)
-            } else {
-                motor.setReference(targetPosition, SimulatedSparkMax.ControlMode.POSITION, ClosedLoopSlot.kSlot1)
-            }
+        // Update for PID
+        inputs.wristAbsPosition = (wristSimulation.angularPosition + startingPosition).`in`(Rotations)
+        inputs.wristMotorPosition = inputs.wristAbsPosition
+        inputs.wristCurrentAmps = wristSimulation.supplyCurrent.`in`(Amps)
+        inputs.wristAppliedVolts = wristSimulation.appliedVoltage.`in`(Volts)
+        inputs.wristVelocityRadPerSec = wristSimulation.velocity.`in`(RadiansPerSecond)
+
+        if (closedLoop) {
+            requestedVoltage = pidController.calculate(inputs.wristAbsPosition) *
+                    SimulatedBattery.getBatteryVoltage()
+                        .`in`(Volts) // multiply by battery voltage because pid is in duty cycle
         } else {
-            motor.requestVoltage(Volts.of(requestedVoltage))
+            pidController.calculate(inputs.wristAbsPosition) // Even if we don't use the output, we still need to update pid
         }
+
+        motor.requestVoltage(Volts.of(requestedVoltage))
 
         wristSimulation.update(Seconds.of(0.02))
 
-        inputs.wristMotorPosition = (wristSimulation.angularPosition + startingPosition).`in`(Rotations)
+        //Update again to give back updated inputs
         inputs.wristAbsPosition = (wristSimulation.angularPosition + startingPosition).`in`(Rotations)
+        inputs.wristMotorPosition = inputs.wristAbsPosition
         inputs.wristCurrentAmps = wristSimulation.supplyCurrent.`in`(Amps)
         inputs.wristAppliedVolts = wristSimulation.appliedVoltage.`in`(Volts)
         inputs.wristVelocityRadPerSec = wristSimulation.velocity.`in`(RadiansPerSecond)
@@ -49,14 +58,16 @@ class WristIOSim:WristIO {
 
     override fun setReferenceFast(targetPosition: Double) {
         closedLoop = true
-        fast = true
-        this.targetPosition = targetPosition - startingPosition.`in`(Rotations)
+        this.targetPosition = targetPosition
+
+        pidController.setPID(WRIST_P_SIM_FAST, WRIST_I_SIM_FAST, WRIST_D_SIM_FAST)
     }
 
     override fun setReferenceSlow(targetPosition: Double) {
         closedLoop = true
-        fast = false
-        this.targetPosition = targetPosition - startingPosition.`in`(Rotations)
+        this.targetPosition = targetPosition
+
+        pidController.setPID(WRIST_P_SIM_SLOW, WRIST_I_SIM_SLOW, WRIST_D_SIM_SLOW)
     }
 
     override fun setVoltage(voltage: Double) {

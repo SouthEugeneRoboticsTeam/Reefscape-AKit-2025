@@ -5,7 +5,7 @@ import org.team9432.annotation.Logged
 interface DispenserIO {
 
     @Logged
-    open class DispenserIOInputs{
+    open class DispenserIOInputs {
         var appliedVolts = 0.0
         var currentAmps = 0.0
         var velocityRPM = 0.0
@@ -14,9 +14,9 @@ interface DispenserIO {
         var beambreakRampClear = true
     }
 
-    fun updateInputs(inputs:DispenserIOInputs){}
+    fun updateInputs(inputs: DispenserIOInputs) {}
 
-    fun setMotor(speed:Double){}
+    fun setMotor(speed: Double) {}
 
-    fun setVoltage(voltage:Double){}
+    fun setVoltage(voltage: Double) {}
 }

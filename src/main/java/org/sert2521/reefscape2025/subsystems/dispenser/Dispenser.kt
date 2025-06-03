@@ -23,7 +23,7 @@ object Dispenser : SubsystemBase() {
     private val rampBeambreakFunctionalNT = LoggedNetworkBoolean("Dispenser/Ramp Beambreak Working", true)
     private val dispenserBeambreakFunctionNT = LoggedNetworkBoolean("Dispenser/Dispenser Beambreak Working", true)
 
-    private val rampFunctionalTrigger = Trigger{ rampBeambreakFunctionalNT.get() }
+    private val rampFunctionalTrigger = Trigger { rampBeambreakFunctionalNT.get() }
     private val dispenserFunctionalTrigger = Trigger { dispenserBeambreakFunctionNT.get() }
 
     private var currentBeambreakFunctionality = Pair(true, true)
@@ -31,18 +31,19 @@ object Dispenser : SubsystemBase() {
         Pair(true, true) to idleCommand(),
         Pair(true, false) to idleDispenserBeambreakNonfunctional(),
         Pair(false, true) to idleRampBeambreakNonfunctional(),
-        Pair(false, false) to run{ setVoltage(DISPENSER_STOP_VOLTAGE) }
+        Pair(false, false) to run { setVoltage(DISPENSER_STOP_VOLTAGE) }
     )
 
-    init{
+    init {
         defaultCommand = idleCommand()
 
-        rampFunctionalTrigger.onChange(runOnce{
+        rampFunctionalTrigger.onChange(runOnce {
             currentBeambreakFunctionality = Pair(rampBeambreakFunctionalNT.get(), currentBeambreakFunctionality.second)
             defaultCommand = beambreakFunctionalToCommand[currentBeambreakFunctionality]
         })
-        dispenserFunctionalTrigger.onChange(runOnce{
-            currentBeambreakFunctionality = Pair(currentBeambreakFunctionality.first, dispenserBeambreakFunctionNT.get())
+        dispenserFunctionalTrigger.onChange(runOnce {
+            currentBeambreakFunctionality =
+                Pair(currentBeambreakFunctionality.first, dispenserBeambreakFunctionNT.get())
             defaultCommand = beambreakFunctionalToCommand[currentBeambreakFunctionality]
         })
 
@@ -55,43 +56,43 @@ object Dispenser : SubsystemBase() {
         Logger.processInputs("Dispenser", ioInputs)
     }
 
-    fun setVoltage(voltage:Double){
+    fun setVoltage(voltage: Double) {
         io.setVoltage(voltage)
     }
 
-    fun setMotor(speed:Double){
+    fun setMotor(speed: Double) {
         io.setMotor(speed)
     }
 
-    fun stop(){
+    fun stop() {
         io.setMotor(0.0)
     }
 
-    @AutoLogOutput(key="Dispenser/Dispenser Beambreak")
-    fun getDispenserBeambreakBlocked():Boolean{
+    @AutoLogOutput(key = "Dispenser/Dispenser Beambreak")
+    fun getDispenserBeambreakBlocked(): Boolean {
         return !ioInputs.beambreakDispenserClear
     }
 
-    @AutoLogOutput(key="Dispenser/Ramp Beambreak")
-    fun getRampBeambreakBlocked():Boolean{
+    @AutoLogOutput(key = "Dispenser/Ramp Beambreak")
+    fun getRampBeambreakBlocked(): Boolean {
         return !ioInputs.beambreakRampClear
     }
 
-    fun getBlocked():Boolean{
+    fun getBlocked(): Boolean {
         return (!ioInputs.beambreakRampClear && currentBeambreakFunctionality.first)
                 || (!ioInputs.beambreakDispenserClear && currentBeambreakFunctionality.second)
     }
 
-    fun getVelocity():Double{
+    fun getVelocity(): Double {
         return ioInputs.velocityRPM
     }
 
     /* === Commands === */
 
-    fun idleCommand():Command{
-        return run{
+    fun idleCommand(): Command {
+        return run {
             if (getBlocked()) {
-                if (getRampBeambreakBlocked()){
+                if (getRampBeambreakBlocked()) {
                     setMotor(DISPENSER_INTAKE_SPEED)
                 } else {
                     setMotor(DISPENSER_RECENTER_SPEED_FORWARD)
@@ -102,13 +103,14 @@ object Dispenser : SubsystemBase() {
         }
     }
 
-    fun idleDispenserBeambreakNonfunctional():Command{
-        return run{
-            if (getRampBeambreakBlocked()){
+    fun idleDispenserBeambreakNonfunctional(): Command {
+        return run {
+            if (getRampBeambreakBlocked()) {
                 intakeCommand()
-                    .until{!getRampBeambreakBlocked()}
-                    .andThen(intakeCommand()
-                        .withTimeout(0.4)
+                    .until { !getRampBeambreakBlocked() }
+                    .andThen(
+                        intakeCommand()
+                            .withTimeout(0.4)
                     ).schedule()
             } else {
                 stop()
@@ -116,9 +118,9 @@ object Dispenser : SubsystemBase() {
         }
     }
 
-    fun idleRampBeambreakNonfunctional():Command{
-        return run{
-            if (getBlocked()){
+    fun idleRampBeambreakNonfunctional(): Command {
+        return run {
+            if (getBlocked()) {
                 setMotor(DISPENSER_RECENTER_SPEED_FORWARD)
             } else {
                 stop()
@@ -127,15 +129,15 @@ object Dispenser : SubsystemBase() {
     }
 
 
-    fun intakeCommand():Command{
-        return run{
+    fun intakeCommand(): Command {
+        return run {
             setMotor(DISPENSER_INTAKE_SPEED)
         }
     }
 
-    fun outtakeCommand():Command{
-        return run{
-            if (Elevator.goal.position == SetpointConstants.ELEVATOR_L4){
+    fun outtakeCommand(): Command {
+        return run {
+            if (Elevator.goal.position == SetpointConstants.ELEVATOR_L4) {
                 setMotor(DISPENSER_OUTTAKE_L4)
             } else {
                 setMotor(DISPENSER_OUTTAKE_SPEED)
@@ -143,9 +145,9 @@ object Dispenser : SubsystemBase() {
         }.withTimeout(0.2).andThen(stopCommand().withTimeout(0.4))
     }
 
-    fun outtakeCommandNoWait():Command{
-        return run{
-            if (Elevator.goal.position == SetpointConstants.ELEVATOR_L4){
+    fun outtakeCommandNoWait(): Command {
+        return run {
+            if (Elevator.goal.position == SetpointConstants.ELEVATOR_L4) {
                 setMotor(DISPENSER_OUTTAKE_L4)
             } else {
                 setMotor(DISPENSER_OUTTAKE_SPEED)
@@ -153,20 +155,20 @@ object Dispenser : SubsystemBase() {
         }.withTimeout(0.2)
     }
 
-    fun outtakeSlowCommand():Command{
-        return run{
+    fun outtakeSlowCommand(): Command {
+        return run {
             setMotor(DISPENSER_OUTTAKE_SLOW_SPEED)
         }
     }
 
-    fun stopCommand():Command{
-        return run{
+    fun stopCommand(): Command {
+        return run {
             setMotor(0.0)
         }
     }
 
-    fun recenterCommand():Command{
-        return run{
+    fun recenterCommand(): Command {
+        return run {
             setMotor(DISPENSER_RECENTER_SPEED_BACKWARD)
         }.withTimeout(2.0).until { getBlocked() }
     }

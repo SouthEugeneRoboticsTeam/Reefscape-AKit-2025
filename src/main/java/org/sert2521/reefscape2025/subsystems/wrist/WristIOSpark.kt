@@ -17,7 +17,7 @@ import org.sert2521.reefscape2025.TuningConstants.WRIST_D_SLOW
 import org.sert2521.reefscape2025.TuningConstants.WRIST_P_SLOW
 import kotlin.math.cos
 
-class WristIOSpark:WristIO {
+class WristIOSpark : WristIO {
     private val wristMotor = SparkMax(WRIST_MOTOR_ID, MotorType.kBrushless)
 
 
@@ -34,14 +34,14 @@ class WristIOSpark:WristIO {
 
         wristConfig.absoluteEncoder
             .positionConversionFactor(1.0)
-            .velocityConversionFactor(1.0/60)
+            .velocityConversionFactor(1.0 / 60)
             .zeroOffset(WRIST_ABS_ENCODER_ZERO)
             .zeroCentered(true)
             .inverted(true)
 
         wristConfig.encoder
             .positionConversionFactor(WRIST_MOTOR_ENCODER_MULTIPLIER)
-            .velocityConversionFactor(WRIST_MOTOR_ENCODER_MULTIPLIER/60)
+            .velocityConversionFactor(WRIST_MOTOR_ENCODER_MULTIPLIER / 60)
 
         wristConfig.closedLoop
             .pidf(
@@ -57,10 +57,14 @@ class WristIOSpark:WristIO {
             )
             .feedbackSensor(ClosedLoopConfig.FeedbackSensor.kAbsoluteEncoder)
 
-        wristMotor.configure(wristConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
+        wristMotor.configure(
+            wristConfig,
+            SparkBase.ResetMode.kResetSafeParameters,
+            SparkBase.PersistMode.kPersistParameters
+        )
     }
 
-    override fun setVoltage(voltage:Double) {
+    override fun setVoltage(voltage: Double) {
 //        wristMotor.setVoltage(voltage)
     }
 

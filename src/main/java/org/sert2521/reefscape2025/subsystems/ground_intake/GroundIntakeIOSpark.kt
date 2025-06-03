@@ -7,7 +7,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkMaxConfig
 import org.sert2521.reefscape2025.ElectronicIDs.GROUNDINTAKE_MOTOR_ID
 
-class GroundIntakeIOSpark:GroundIntakeIO {
+class GroundIntakeIOSpark : GroundIntakeIO {
     //Intake
     val intakeMotor = SparkMax(GROUNDINTAKE_MOTOR_ID, MotorType.kBrushless)
     val intakeConfig = SparkMaxConfig()
@@ -20,7 +20,11 @@ class GroundIntakeIOSpark:GroundIntakeIO {
             .smartCurrentLimit(30)
 
         //Configuration
-        intakeMotor.configure(intakeConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kPersistParameters)
+        intakeMotor.configure(
+            intakeConfig,
+            SparkBase.ResetMode.kResetSafeParameters,
+            SparkBase.PersistMode.kPersistParameters
+        )
     }
 
     override fun updateInputs(inputs: GroundIntakeIO.GroundIntakeIOInputs) {

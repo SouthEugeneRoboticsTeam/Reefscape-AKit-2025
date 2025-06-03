@@ -9,7 +9,7 @@ import org.team9432.annotation.Logged
 interface ModuleIO {
 
     @Logged
-    open class ModuleIOInputs{
+    open class ModuleIOInputs {
         var driveConnected = false
         var drivePositionRad = 0.0
         var driveVelocityRadPerSec = 0.0
@@ -24,17 +24,17 @@ interface ModuleIO {
         var turnCurrentAmps = 0.0
     }
 
-    fun updateInputs(inputs:ModuleIOInputs){}
+    fun updateInputs(inputs: ModuleIOInputs) {}
 
-    fun setDriveOpenLoop(output:Double){}
+    fun setDriveOpenLoop(output: Double) {}
 
-    fun setTurnOpenLoop(output:Double){}
+    fun setTurnOpenLoop(output: Double) {}
 
-    fun setDriveVelocity(velocityRadPerSec:Double, withPID:Boolean = true){}
+    fun setDriveVelocity(velocityRadPerSec: Double, withPID: Boolean = true) {}
 
-    fun setTurnPosition(rotation:Rotation2d){}
+    fun setTurnPosition(rotation: Rotation2d) {}
 
-    fun updateTurnEncoder(rotation:Rotation2d){}
+    fun updateTurnEncoder(rotation: Rotation2d) {}
 
-    fun setCurrentLimit(limit:Int){}
+    fun setCurrentLimit(limit: Int) {}
 }

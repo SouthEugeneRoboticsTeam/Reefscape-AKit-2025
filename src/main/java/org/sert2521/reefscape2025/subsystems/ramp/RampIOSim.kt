@@ -11,13 +11,15 @@ import org.ironmaple.simulation.motorsims.SimMotorConfigs
 import org.ironmaple.simulation.motorsims.SimulatedBattery
 import org.ironmaple.simulation.motorsims.SimulatedMotorController
 
-class RampIOSim(drivetrainSim:SwerveDriveSimulation):RampIO {
-    private val motorSimulation = MapleMotorSim(SimMotorConfigs(
-        DCMotor.getNeo550(1),
-        8.0/3.0,
-        Units.KilogramSquareMeters.of(0.01),
-        Units.Volts.of(0.05)
-    ))
+class RampIOSim(drivetrainSim: SwerveDriveSimulation) : RampIO {
+    private val motorSimulation = MapleMotorSim(
+        SimMotorConfigs(
+            DCMotor.getNeo550(1),
+            8.0 / 3.0,
+            Units.KilogramSquareMeters.of(0.01),
+            Units.Volts.of(0.05)
+        )
+    )
 
     private val intakeSimulation = IntakeSimulation.InTheFrameIntake(
         "Coral",
@@ -30,7 +32,7 @@ class RampIOSim(drivetrainSim:SwerveDriveSimulation):RampIO {
     private val rampRollerMotor = motorSimulation.useSimpleDCMotorController()
         .withCurrentLimit(Units.Amps.of(20.0))
 
-    init{
+    init {
         intakeSimulation.register()
     }
 
@@ -41,7 +43,7 @@ class RampIOSim(drivetrainSim:SwerveDriveSimulation):RampIO {
         inputs.currentAmps = motorSimulation.supplyCurrent.`in`(Units.Amps)
         inputs.appliedVolts = rampRollerMotor.appliedVoltage.`in`(Units.Volts)
 
-        if (inputs.speedRPM > 200.0){
+        if (inputs.speedRPM > 200.0) {
             intakeSimulation.startIntake()
         } else {
             intakeSimulation.stopIntake()
@@ -49,6 +51,6 @@ class RampIOSim(drivetrainSim:SwerveDriveSimulation):RampIO {
     }
 
     override fun setSpeed(speed: Double) {
-        rampRollerMotor.requestVoltage(SimulatedBattery.getBatteryVoltage()*speed)
+        rampRollerMotor.requestVoltage(SimulatedBattery.getBatteryVoltage() * speed)
     }
 }

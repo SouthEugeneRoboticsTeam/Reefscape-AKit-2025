@@ -6,12 +6,12 @@ import org.team9432.annotation.Logged
 interface VisionIO {
 
     @Logged
-    open class VisionIOInputs{
+    open class VisionIOInputs {
         var estimatedPosition = Pose2d()
         var timestamp = 0.0
         var rejectEstimation = true
         var megatagTwo = false
     }
 
-    fun updateInputs(inputs: VisionIOInputs){}
+    fun updateInputs(inputs: VisionIOInputs) {}
 }

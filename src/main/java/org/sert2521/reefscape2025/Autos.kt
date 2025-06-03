@@ -24,11 +24,10 @@ import org.sert2521.reefscape2025.subsystems.ground_intake.GroundIntake
 import org.sert2521.reefscape2025.subsystems.ramp.Ramp
 import kotlin.jvm.optionals.getOrElse
 
-object Autos
-{
-    private var autoChooser:LoggedDashboardChooser<String>
+object Autos {
+    private var autoChooser: LoggedDashboardChooser<String>
 
-    val namedCommandList = mapOf<String,Command>(
+    val namedCommandList = mapOf<String, Command>(
         "Wrist L1" to Wrist.setWristCommandFast(SetpointConstants.WRIST_L1).asProxy(),
         "Wrist Ground" to Wrist.setWristCommandFast(SetpointConstants.WRIST_GROUND).asProxy(),
         "Wrist Stow" to Wrist.setWristCommandFast(SetpointConstants.WRIST_STOW).asProxy(),
@@ -54,10 +53,10 @@ object Autos
         "Wait L2-4 Post-Outtake" to Commands.none(),
         "Wait Human Player" to Commands.waitSeconds(1.0),
         "Wait Dispenser" to Commands.waitSeconds(2.0)
-            .andThen(Commands.waitUntil{!Dispenser.getBlocked()}),
+            .andThen(Commands.waitUntil { !Dispenser.getBlocked() }),
 
         "Ramp Intake" to Ramp.intakeCommand()
-            .until{Dispenser.getBlocked()},
+            .until { Dispenser.getBlocked() },
 
         "Stop Drivetrain" to Drivetrain.stopCommand().asProxy(),
 
@@ -66,7 +65,7 @@ object Autos
         "Remove Algae Low" to AlgaeAutoRemoveLow().asProxy()
     )
 
-    init{
+    init {
         NamedCommands.registerCommands(namedCommandList)
 
         AutoBuilder.configure(
@@ -91,7 +90,7 @@ object Autos
                 ),
                 *SwerveConstants.moduleTranslations
             ),
-            {DriverStation.getAlliance().getOrElse { DriverStation.Alliance.Blue } == DriverStation.Alliance.Red},
+            { DriverStation.getAlliance().getOrElse { DriverStation.Alliance.Blue } == DriverStation.Alliance.Red },
             Drivetrain
         )
         //Pathfinding.setPathfinder(LocalADStarAK())
@@ -123,16 +122,15 @@ object Autos
     }
 
 
-    fun getAutonomousCommand(): Command
-    {
+    fun getAutonomousCommand(): Command {
         val chosenAuto = autoChooser.get()
-        try{
-            return if (chosenAuto == "None"){
+        try {
+            return if (chosenAuto == "None") {
                 Commands.none()
             } else {
                 AutoBuilder.buildAuto(chosenAuto) // This is the part where errors may occur
             }
-        } catch (e:Throwable) {
+        } catch (e: Throwable) {
             println(e)
             println("AUTO BUILDING ERROR FOR " + autoChooser.get())
             return Commands.none()

@@ -26,7 +26,7 @@ class SimulatedSparkMax(private val model: DCMotor) : SimulatedMotorController {
     private var positionConversionFactor = 1.0
     private var velocityConversionFactor = 1.0
 
-    enum class ControlMode{
+    enum class ControlMode {
         VOLTAGE,
         POSITION,
         VELOCITY
@@ -57,8 +57,8 @@ class SimulatedSparkMax(private val model: DCMotor) : SimulatedMotorController {
         return this
     }
 
-    fun withPIDController(slot: ClosedLoopSlot, p:Double, i:Double, d:Double, ff:Double): SimulatedSparkMax {
-        when (slot){
+    fun withPIDController(slot: ClosedLoopSlot, p: Double, i: Double, d: Double, ff: Double): SimulatedSparkMax {
+        when (slot) {
             ClosedLoopSlot.kSlot0 -> pidffGainsSlot0 = arrayOf(p, i, d, ff)
             ClosedLoopSlot.kSlot1 -> pidffGainsSlot1 = arrayOf(p, i, d, ff)
             ClosedLoopSlot.kSlot2 -> pidffGainsSlot2 = arrayOf(p, i, d, ff)
@@ -73,20 +73,27 @@ class SimulatedSparkMax(private val model: DCMotor) : SimulatedMotorController {
         controlMode = ControlMode.VOLTAGE
     }
 
-    fun setReference(value:Double, ctrl: ControlMode, slot:ClosedLoopSlot=closedLoopSlot, arbFF:Voltage=Volts.of(0.0)){
+    fun setReference(
+        value: Double,
+        ctrl: ControlMode,
+        slot: ClosedLoopSlot = closedLoopSlot,
+        arbFF: Voltage = Volts.of(0.0)
+    ) {
         this.controlMode = ctrl
         this.closedLoopSlot = slot
 
-        when (controlMode){
+        when (controlMode) {
             ControlMode.VOLTAGE -> {
                 requestedVoltage = Volts.of(value).plus(arbFF)
             }
+
             ControlMode.POSITION -> {
-                requestedAngle = Rotations.of(value/positionConversionFactor)
+                requestedAngle = Rotations.of(value / positionConversionFactor)
                 requestedVoltage = arbFF
             }
+
             ControlMode.VELOCITY -> {
-                requestedVelocity = RPM.of(value/velocityConversionFactor)
+                requestedVelocity = RPM.of(value / velocityConversionFactor)
                 requestedVoltage = arbFF
             }
         }
@@ -149,19 +156,22 @@ class SimulatedSparkMax(private val model: DCMotor) : SimulatedMotorController {
         encoderAngle: Angle,
         encoderVelocity: AngularVelocity
     ): Voltage {
-        when (closedLoopSlot){
+        when (closedLoopSlot) {
             ClosedLoopSlot.kSlot0 -> {
                 pidController.setPID(pidffGainsSlot0[0], pidffGainsSlot0[1], pidffGainsSlot0[2])
                 ffGain = pidffGainsSlot0[3]
             }
+
             ClosedLoopSlot.kSlot1 -> {
                 pidController.setPID(pidffGainsSlot1[0], pidffGainsSlot1[1], pidffGainsSlot1[2])
                 ffGain = pidffGainsSlot1[3]
             }
+
             ClosedLoopSlot.kSlot2 -> {
                 pidController.setPID(pidffGainsSlot2[0], pidffGainsSlot2[1], pidffGainsSlot2[2])
                 ffGain = pidffGainsSlot2[3]
             }
+
             ClosedLoopSlot.kSlot3 -> {
                 pidController.setPID(pidffGainsSlot3[0], pidffGainsSlot3[1], pidffGainsSlot3[2])
                 ffGain = pidffGainsSlot3[3]
@@ -173,14 +183,16 @@ class SimulatedSparkMax(private val model: DCMotor) : SimulatedMotorController {
             ControlMode.POSITION -> {
                 requestedVoltage + Volts.of(
                     pidController.calculate(encoderAngle.`in`(Rotations), requestedAngle.`in`(Rotations))
-                        * SimulatedBattery.getBatteryVoltage().`in`(Volts) // Multiply by battery voltage because PID on spark is in duty cycle
+                            * SimulatedBattery.getBatteryVoltage()
+                        .`in`(Volts) // Multiply by battery voltage because PID on spark is in duty cycle
                 )
 
             }
+
             ControlMode.VELOCITY -> {
                 requestedVoltage + Volts.of(
                     pidController.calculate(encoderVelocity.`in`(RPM), requestedVelocity.`in`(RPM))
-                        * SimulatedBattery.getBatteryVoltage().`in`(Volts)
+                            * SimulatedBattery.getBatteryVoltage().`in`(Volts)
                 )
             }
         }

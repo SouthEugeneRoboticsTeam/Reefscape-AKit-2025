@@ -7,7 +7,7 @@ import org.sert2521.reefscape2025.Robot
 import org.sert2521.reefscape2025.utils.LimelightHelpers
 
 
-class VisionIOLimelight(private val name:String): VisionIO {
+class VisionIOLimelight(private val name: String) : VisionIO {
 
     override fun updateInputs(inputs: VisionIO.VisionIOInputs) {
         val useMegaTag2 = false//set to false to use MegaTag1
@@ -18,12 +18,12 @@ class VisionIOLimelight(private val name:String): VisionIO {
         Especially given that I have NEVER seen the gyro be disconnected
          */
 
-        if(!useMegaTag2) {
+        if (!useMegaTag2) {
             val mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(name)
 
-            if (mt1 == null){
+            if (mt1 == null) {
                 doRejectUpdate = true
-            } else if(mt1.tagCount == 1 && mt1.rawFiducials.size == 1) {
+            } else if (mt1.tagCount == 1 && mt1.rawFiducials.size == 1) {
                 if (mt1.rawFiducials[0].ambiguity > .7) {
                     doRejectUpdate = true
                 }
@@ -48,9 +48,17 @@ class VisionIOLimelight(private val name:String): VisionIO {
             }
         } else {
             /* NOTE: This block of code will very nearly always be the one that we use */
-            LimelightHelpers.SetRobotOrientation(name, Drivetrain.getPose().rotation.degrees, Drivetrain.getGyroRateDegrees(), 0.0, 0.0, 0.0, 0.0)
-            val mt2:LimelightHelpers.PoseEstimate? = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name)
-            if(Drivetrain.getGyroRateDegrees() > 100) { /* if our angular velocity is greater than 100 degrees per second, ignore vision updates */
+            LimelightHelpers.SetRobotOrientation(
+                name,
+                Drivetrain.getPose().rotation.degrees,
+                Drivetrain.getGyroRateDegrees(),
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            )
+            val mt2: LimelightHelpers.PoseEstimate? = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(name)
+            if (Drivetrain.getGyroRateDegrees() > 100) { /* if our angular velocity is greater than 100 degrees per second, ignore vision updates */
                 doRejectUpdate = true
             }
 

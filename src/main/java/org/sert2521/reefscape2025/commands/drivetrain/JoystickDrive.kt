@@ -7,13 +7,13 @@ import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.Input
 import org.sert2521.reefscape2025.subsystems.drivetrain.Drivetrain
 
-class JoystickDrive(private val fieldOriented:Boolean = true): Command() {
+class JoystickDrive(private val fieldOriented: Boolean = true) : Command() {
 
     private var joystickAccelLimited = ChassisSpeeds()
 
     // Requirements are already passed through the ReadJoysticks class
 
-    init{
+    init {
         addRequirements(Drivetrain)
     }
 
@@ -21,20 +21,22 @@ class JoystickDrive(private val fieldOriented:Boolean = true): Command() {
         if (fieldOriented) {
             joystickAccelLimited = AccelLimiterUtil.readJoysticks(
                 Input.getAccelLimit(), AccelLimiterUtil.inputRotOffset(),
-                Input.getDeccelLimit(), Input.getSpeedLimit())
+                Input.getDeccelLimit(), Input.getSpeedLimit()
+            )
 
-            if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0){
+            if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0) {
                 Drivetrain.stop()
             }
             Drivetrain.driveRobotOriented(
                 joystickAccelLimited, false
             )
-        }
-        else {
-            joystickAccelLimited = AccelLimiterUtil.readJoysticks(Input.getAccelLimit(), Rotation2d(),
-                Input.getDeccelLimit(), Input.getSpeedLimit(), false)
+        } else {
+            joystickAccelLimited = AccelLimiterUtil.readJoysticks(
+                Input.getAccelLimit(), Rotation2d(),
+                Input.getDeccelLimit(), Input.getSpeedLimit(), false
+            )
 
-            if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0){
+            if (joystickAccelLimited.vxMetersPerSecond == 0.0 && joystickAccelLimited.vyMetersPerSecond == 0.0 && joystickAccelLimited.omegaRadiansPerSecond == 0.0) {
                 Drivetrain.stop()
             }
 
