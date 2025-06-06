@@ -1,6 +1,9 @@
 package org.sert2521.reefscape2025.subsystems.wrist
 
 import edu.wpi.first.math.MathUtil
+import edu.wpi.first.math.geometry.Pose3d
+import edu.wpi.first.math.geometry.Rotation3d
+import edu.wpi.first.math.util.Units
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d
 import edu.wpi.first.wpilibj.smartdashboard.MechanismObject2d
@@ -10,9 +13,12 @@ import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.Commands
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d
 import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_INIT
 import org.sert2521.reefscape2025.SetpointConstants.WRIST_STOW
+import kotlin.math.PI
 
 object Wrist : SubsystemBase() {
     private val io = when (MetaConstants.currentMode) {
@@ -22,11 +28,13 @@ object Wrist : SubsystemBase() {
     }
     private val ioInputs = LoggedWristIOInputs()
 
-    private val mechanism = Mechanism2d(0.9017, 0.9017)
-    private val root = mechanism.getRoot("Wrist Root", 0.285750, 0.0)
-    private val wristMain = MechanismLigament2d("Wrist Main", 0.0, 100.0, 0.0, Color8Bit())
-    private val wristTop = MechanismLigament2d("Wrist Top", 0.42, 100.0 - 111.612575184)
-    private val wristBottom = MechanismLigament2d("Wrist Bottom", 0.348, 100.0 - 86.8856310843)
+    private val mechanism = LoggedMechanism2d(0.0, 0.0, Color8Bit("#FF0000"))
+    private val root = mechanism.getRoot("Wrist Root", -0.285750, 0.247650)
+    private val wristMain = LoggedMechanismLigament2d("Wrist Main", 0.0, 100.0, 0.0, Color8Bit())
+    private val wristTop = LoggedMechanismLigament2d("Wrist Top", 0.42, 100.0 - 111.612575184 - 11.4592, 4.0, Color8Bit("#00D000"))
+    private val wristBottom = LoggedMechanismLigament2d("Wrist Bottom", 0.348, 100.0 - 86.8856310843 - 11.4592, 4.0,
+        Color8Bit("#00D000")
+    )
 
     var goal = WRIST_STOW
 
@@ -43,7 +51,10 @@ object Wrist : SubsystemBase() {
         Logger.processInputs("Wrist/Pivot", ioInputs)
 
         wristMain.angle = -getRotations() * 360 + 180
-        SmartDashboard.putData("Wrist Mechanism", mechanism)
+
+        val wristPose = Pose3d(-0.285750, 0.0, 0.247650, Rotation3d(0.0, getRotations() * 2 * PI + 0.42 + 0.2, 0.0))
+        Logger.recordOutput("Mechanism2d/Wrist", mechanism)
+        Logger.recordOutput("Mechanism3d/Wrist", wristPose)
     }
 
     fun setVoltage(voltage: Double) {

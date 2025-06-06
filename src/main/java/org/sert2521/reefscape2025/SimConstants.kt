@@ -28,16 +28,16 @@ object WristSimConstants {
 
     val motorConfigs = SimMotorConfigs(
         DCMotor.getNEO(1),
-        GEAR_RATIO_MECH_PER_MOTOR,
+        1/GEAR_RATIO_MECH_PER_MOTOR,
         Units.KilogramSquareMeters.of(0.295),
         Volts.of(0.1)
     ) // Add hard limits, figure out pid stuff
 
-    const val WRIST_P_SIM_FAST = 0.0
+    const val WRIST_P_SIM_FAST = 7.0
     const val WRIST_I_SIM_FAST = 0.0
-    const val WRIST_D_SIM_FAST = 0.0
+    const val WRIST_D_SIM_FAST = 0.2
 
-    const val WRIST_P_SIM_SLOW = 0.0
+    const val WRIST_P_SIM_SLOW = 2.0
     const val WRIST_I_SIM_SLOW = 0.0
-    const val WRIST_D_SIM_SLOW = 0.0
+    const val WRIST_D_SIM_SLOW = 0.1
 }
