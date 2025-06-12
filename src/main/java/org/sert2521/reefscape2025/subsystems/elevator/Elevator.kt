@@ -14,6 +14,7 @@ import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.TuningConstants.ELEVATOR_PROFILE
 import org.sert2521.reefscape2025.subsystems.dispenser.Dispenser
+import kotlin.math.E
 
 object Elevator : SubsystemBase() {
     private val io = when (MetaConstants.currentMode) {
@@ -21,6 +22,13 @@ object Elevator : SubsystemBase() {
         MetaConstants.Mode.SIM -> ElevatorIOSim()
         MetaConstants.Mode.REPLAY -> object : ElevatorIO {}
     }
+
+    private val telemetry = when(MetaConstants.currentMode) {
+        MetaConstants.Mode.REAL -> ElevatorTelemetry(mechanism2dEnabled = false, mechanism3dEnabled = false)
+        MetaConstants.Mode.SIM -> ElevatorTelemetry(mechanism2dEnabled = true, mechanism3dEnabled = true)
+        MetaConstants.Mode.REPLAY -> ElevatorTelemetry(mechanism2dEnabled = true, mechanism3dEnabled = true)
+    }
+
     private val ioInputs = LoggedElevatorIOInputs()
 
     private val profile = TrapezoidProfile(ELEVATOR_PROFILE)
@@ -28,28 +36,15 @@ object Elevator : SubsystemBase() {
     var goal = TrapezoidProfile.State(0.0, 0.0)
     private var currentState = TrapezoidProfile.State(0.0, 0.0)
 
-    private val mechanism = Mechanism2d(0.901700, 1.0)
-    private val mechanismRoot = mechanism.getRoot("Elevator", 0.488950, 0.0)
-    private val firstStage = MechanismLigament2d("First Stage", 1.060526, 90.0, 6.0, Color8Bit(0, 0, 150))
-    private val connector = MechanismLigament2d("Connector", 0.02, 0.0, 0.0, Color8Bit())
-    private val secondStage = MechanismLigament2d("Second Stage", 0.374865, 90.0, 5.0, Color8Bit(150, 0, 0))
-
     init {
         defaultCommand = holdElevatorCommand()
-
-        mechanismRoot.append(firstStage)
-        mechanismRoot.append(connector)
-        connector.append(secondStage)
-
-        SmartDashboard.putData("Elevator Mechanism", mechanism)
     }
 
     override fun periodic() {
         io.updateInputs(ioInputs)
         Logger.processInputs("Elevator", ioInputs)
 
-        firstStage.length = 1.060526 + ioInputs.positionMeters
-        secondStage.length = 0.374865 + 2 * ioInputs.positionMeters
+        telemetry.update()
     }
 
     fun setVoltage(voltage: Double) {

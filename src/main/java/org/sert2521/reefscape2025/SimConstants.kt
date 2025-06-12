@@ -2,6 +2,7 @@ package org.sert2521.reefscape2025
 
 import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.units.Units
+import edu.wpi.first.units.Units.KilogramSquareMeters
 import edu.wpi.first.units.Units.Volts
 import org.ironmaple.simulation.motorsims.SimMotorConfigs
 
@@ -40,4 +41,16 @@ object WristSimConstants {
     const val WRIST_P_SIM_SLOW = 2.0
     const val WRIST_I_SIM_SLOW = 0.0
     const val WRIST_D_SIM_SLOW = 0.1
+}
+
+object GroundIntakeSimConstants{
+    const val GEAR_RATIO = 1.0
+    val loadMOI = KilogramSquareMeters.of(0.1)
+
+    val motorConfigs = SimMotorConfigs(
+        DCMotor.getNEO(1),
+        GEAR_RATIO,
+        loadMOI,
+        Volts.of(0.1)
+    )
 }
