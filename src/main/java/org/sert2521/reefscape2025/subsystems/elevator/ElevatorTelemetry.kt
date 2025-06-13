@@ -21,11 +21,6 @@ class ElevatorTelemetry(private val mechanism2dEnabled: Boolean, private val mec
     private val firstStage2dStartLength = 1.060526
     private val secondStage2dStartLength = 0.374865
 
-    private val stages3dStartX = 0.0
-    private val fisrtStage3dStartY = 0.0
-    private val secondStage3dStartY = 0.0
-    private val stages3dStartZ = 0.0
-
     init {
         if (mechanism2dEnabled) {
             mechanism = LoggedMechanism2d(0.0, 0.0)
@@ -62,9 +57,16 @@ class ElevatorTelemetry(private val mechanism2dEnabled: Boolean, private val mec
             Logger.recordOutput("Mechanism2d/Elevator", mechanism)
         }
 
+//        if (mechanism3dEnabled){
+//            firstStagePose = Pose3d(stages3dStartX, fisrtStage3dStartY + Elevator.getPosition(), stages3dStartZ, Rotation3d.kZero)
+//            secondStagePose = Pose3d(stages3dStartX, secondStage3dStartY + 2 * Elevator.getPosition(), stages3dStartZ, Rotation3d.kZero)
+//        }
+
         if (mechanism3dEnabled){
-            firstStagePose = Pose3d(stages3dStartX, fisrtStage3dStartY + Elevator.getPosition(), stages3dStartZ, Rotation3d.kZero)
-            secondStagePose = Pose3d(stages3dStartX, secondStage3dStartY + 2 * Elevator.getPosition(), stages3dStartZ, Rotation3d.kZero)
+            firstStagePose = Pose3d(0.0, 0.0, Elevator.getPosition(), Rotation3d.kZero)
+            secondStagePose = Pose3d(0.0, 0.0, 2*Elevator.getPosition(), Rotation3d.kZero)
+
+            Logger.recordOutput("Mechanism3d/Elevator", firstStagePose, secondStagePose)
         }
     }
 

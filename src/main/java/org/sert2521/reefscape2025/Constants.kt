@@ -51,8 +51,8 @@ object SetpointConstants {
 }
 
 object ConfigConstants {
-    const val POWER_DEADBAND = 0.1
-    const val ROTATION_DEADBAND = 0.1
+    const val POWER_DEADBAND = 0.2
+    const val ROTATION_DEADBAND = 0.2
 }
 
 object ElectronicIDs {

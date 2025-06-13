@@ -31,8 +31,8 @@ class ModuleIOSim(private val moduleSimulation: SwerveModuleSimulation) : Module
 
     private var driveClosedLoop = false
     private var turnClosedLoop = false
-    private val drivePIDController = PIDController(DRIVE_P, 0.0, DRIVE_D)
-    private val turnPIDController = PIDController(32.0, 0.0, 0.0)
+    private val drivePIDController = PIDController(DRIVE_P, 0.0, 0.0)
+    private val turnPIDController = PIDController(1.0, 0.0, 0.0)
 
     private var driveFFVolts = 0.0
     private var driveAppliedVolts = 0.0
@@ -48,14 +48,14 @@ class ModuleIOSim(private val moduleSimulation: SwerveModuleSimulation) : Module
             driveAppliedVolts = (driveFFVolts
                     + drivePIDController.calculate(
                 moduleSimulation.driveWheelFinalSpeed.`in`(RadiansPerSecond)
-            ) * SimulatedBattery.getBatteryVoltage().`in`(Volts))
+            ) * 12.0)
         } else {
             drivePIDController.reset()
         }
         if (turnClosedLoop) {
             turnAppliedVolts = turnPIDController.calculate(
                 moduleSimulation.steerAbsoluteFacing.radians
-            ) * SimulatedBattery.getBatteryVoltage().`in`(Volts)
+            ) * 12.0
         } else {
             turnPIDController.reset()
         }

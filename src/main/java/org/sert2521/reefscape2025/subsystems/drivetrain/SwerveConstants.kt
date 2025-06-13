@@ -158,7 +158,7 @@ object SwerveConstants {
         )
         .withBumperSize(Inches.of(35.0), Inches.of(35.0))
 
-    const val DRIVE_SIM_KS = 0.1
+    const val DRIVE_SIM_KS = 0.09
     const val DRIVE_SIM_KV = 0.135
 
 
