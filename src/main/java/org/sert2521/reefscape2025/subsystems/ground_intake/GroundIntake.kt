@@ -15,7 +15,8 @@ object GroundIntake : SubsystemBase() {
 
     private val io = when (MetaConstants.currentMode) {
         MetaConstants.Mode.REAL -> GroundIntakeIOSpark()
-        else -> object : GroundIntakeIO {}
+        MetaConstants.Mode.SIM -> GroundIntakeIOSim()
+        MetaConstants.Mode.REPLAY -> object : GroundIntakeIO {}
     }
     private val ioInputs = LoggedGroundIntakeIOInputs()
 
@@ -27,11 +28,6 @@ object GroundIntake : SubsystemBase() {
     override fun periodic() {
         io.updateInputs(ioInputs)
         Logger.processInputs("Wrist/Rollers", ioInputs)
-    }
-
-    //Intake functions
-    fun setVoltage(voltage: Double) {
-        io.setIntakeVoltage(voltage)
     }
 
     fun setMotor(speed: Double) {

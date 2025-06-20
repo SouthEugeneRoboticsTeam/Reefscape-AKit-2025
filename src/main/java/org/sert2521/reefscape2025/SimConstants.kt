@@ -45,12 +45,12 @@ object WristSimConstants {
 
 object GroundIntakeSimConstants{
     const val GEAR_RATIO = 1.0
-    val loadMOI = KilogramSquareMeters.of(0.1)
+    val loadMOI = KilogramSquareMeters.of(0.0001)
 
     val motorConfigs = SimMotorConfigs(
         DCMotor.getNEO(1),
         GEAR_RATIO,
         loadMOI,
-        Volts.of(0.1)
+        Volts.of(0.3)
     )
 }
