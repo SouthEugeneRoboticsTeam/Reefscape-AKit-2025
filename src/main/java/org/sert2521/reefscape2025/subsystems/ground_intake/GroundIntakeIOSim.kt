@@ -59,14 +59,16 @@ class GroundIntakeIOSim: GroundIntakeIO {
         if (MathUtil.isNear(SetpointConstants.WRIST_L1, Wrist.getRotations(), 0.1)
             && inputs.intakeVelocityRPM < -1000.0){
             if (intakeGamepieceSimulation.obtainGamePieceFromIntake()){
-                ReefscapeCoralOnFly(
+                SimulatedArena.getInstance().addGamePieceProjectile(
+                    ReefscapeCoralOnFly(
                     Drivetrain.swerveDriveSimulation!!.simulatedDriveTrainPose.translation,
-                    Translation2d(-0.255899, 0.0),
+                    Translation2d(0.0, -0.6),
                     Drivetrain.swerveDriveSimulation.driveTrainSimulatedChassisSpeedsFieldRelative,
-                    Rotation2d.k180deg,
+                    Rotation2d.kCW_90deg+Drivetrain.swerveDriveSimulation.simulatedDriveTrainPose.rotation,
                     Meters.of(0.635499),
-                    MetersPerSecond.of(0.25),
-                    Rotations.of(Wrist.getRotations())
+                    MetersPerSecond.of(0.0),
+                    Degrees.of(0.0)
+                    )
                 )
             }
         }

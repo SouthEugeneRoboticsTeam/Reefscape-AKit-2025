@@ -344,7 +344,11 @@ object Drivetrain : SubsystemBase() {
     }
 
     fun getPose(): Pose2d {
-        return poseEstimator.estimatedPosition
+        return if (MetaConstants.currentMode == MetaConstants.Mode.SIM){
+            swerveDriveSimulation!!.simulatedDriveTrainPose
+        } else {
+            poseEstimator.estimatedPosition
+        }
     }
 
     fun getRotation(): Rotation2d {

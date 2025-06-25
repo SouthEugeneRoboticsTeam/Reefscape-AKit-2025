@@ -52,6 +52,7 @@ class SimpleVisionAlign(val alignLeft: Boolean) : Command() {
 
     override fun initialize() {
         targetPose = Drivetrain.getNearestTargetReef(alignLeft)
+        Logger.recordOutput("Target Pose", targetPose)
         xError = Drivetrain.getPose().x - targetPose.x
         yError = Drivetrain.getPose().y - targetPose.y
         val test = cos(Drivetrain.getPose().rotation.radians) * hypot(

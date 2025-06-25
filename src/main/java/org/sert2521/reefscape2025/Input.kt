@@ -99,10 +99,9 @@ object Input {
     private val dispenserReset = JoystickButton(gunnerController, 14)
     private val rampIntake = JoystickButton(gunnerController, 13)
 
-    private val increaseSpeed = JoystickButton(gunnerController, 1)
-    private val decreaseSpeed = JoystickButton(gunnerController, 2)
-
     private val intakeRumble = Trigger { Dispenser.getRampBeambreakBlocked() }
+
+
 
 
     init {
