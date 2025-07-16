@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj2.command.Commands.runOnce
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.JoystickButton
 import edu.wpi.first.wpilibj2.command.button.Trigger
+import org.ironmaple.simulation.SimulatedArena
+import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly
+import org.ironmaple.simulation.seasonspecific.reefscape2025.ReefscapeCoralOnFly.CoralStationsSide
 import org.littletonrobotics.junction.Logger
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_L2
 import org.sert2521.reefscape2025.SetpointConstants.ELEVATOR_L3
@@ -83,8 +86,7 @@ object Input {
     private val wristOuttakeAlgae = JoystickButton(gunnerController, 16)
     private val wristStow = JoystickButton(gunnerController, 3)
 
-    // Wrist Rollers:
-    private val wristCoralOuttakeDriver = driverController.leftBumper()
+    private val humanPlayerCoralDrop = driverController.rightBumper()
 
     // Elevator:
     private val elevatorStow = JoystickButton(gunnerController, 8)
@@ -158,8 +160,7 @@ object Input {
         groundIntakeWhileUp.whileTrue(GroundIntake.intakeCommand())
 
 
-        /* Ground Intake */
-        wristCoralOuttakeDriver.onTrue(GroundIntake.outtakeCoralCommand())
+        humanPlayerCoralDrop.onTrue(runOnce({SimulatedArena.getInstance().addGamePieceProjectile(ReefscapeCoralOnFly.DropFromCoralStation(CoralStationsSide.LEFT_STATION, DriverStation.Alliance.Blue, false))}))
 
         /* Elevator */
         elevatorStow.onTrue(Elevator.setElevatorSafeCommand(ELEVATOR_STOW))

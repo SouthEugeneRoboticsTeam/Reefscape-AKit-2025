@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger
 import org.littletonrobotics.junction.AutoLogOutput
 import org.littletonrobotics.junction.Logger
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean
+import org.sert2521.reefscape2025.MetaConstants
 import org.sert2521.reefscape2025.SetpointConstants
 import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_INTAKE_SPEED
 import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_OUTTAKE_L4
@@ -17,7 +18,11 @@ import org.sert2521.reefscape2025.SetpointConstants.DISPENSER_STOP_VOLTAGE
 import org.sert2521.reefscape2025.subsystems.elevator.Elevator
 
 object Dispenser : SubsystemBase() {
-    private val io = DispenserIOSpark()
+    private val io = when (MetaConstants.currentMode) {
+        MetaConstants.Mode.REAL -> DispenserIOSpark()
+        MetaConstants.Mode.SIM -> DispenserIOSim()
+        MetaConstants.Mode.REPLAY -> object : DispenserIO {}
+    }
     private val ioInputs = LoggedDispenserIOInputs()
 
     private val rampBeambreakFunctionalNT = LoggedNetworkBoolean("Dispenser/Ramp Beambreak Working", true)

@@ -15,13 +15,13 @@ class RampIOSim(drivetrainSim: SwerveDriveSimulation) : RampIO {
     private val motorSimulation = MapleMotorSim(
         SimMotorConfigs(
             DCMotor.getNeo550(1),
-            8.0 / 3.0,
-            Units.KilogramSquareMeters.of(0.01),
-            Units.Volts.of(0.05)
+            8.0/3.0,
+            Units.KilogramSquareMeters.of(0.001),
+            Units.Volts.of(2.0)
         )
     )
 
-    private val intakeSimulation = IntakeSimulation.InTheFrameIntake(
+    val intakeSimulation = IntakeSimulation.InTheFrameIntake(
         "Coral",
         drivetrainSim,
         Units.Inches.of(12.6),
@@ -43,7 +43,7 @@ class RampIOSim(drivetrainSim: SwerveDriveSimulation) : RampIO {
         inputs.currentAmps = motorSimulation.supplyCurrent.`in`(Units.Amps)
         inputs.appliedVolts = rampRollerMotor.appliedVoltage.`in`(Units.Volts)
 
-        if (inputs.speedRPM > 200.0) {
+        if (inputs.speedRPM > 15.0) {
             intakeSimulation.startIntake()
         } else {
             intakeSimulation.stopIntake()
