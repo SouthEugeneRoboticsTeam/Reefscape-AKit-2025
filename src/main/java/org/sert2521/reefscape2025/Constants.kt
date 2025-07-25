@@ -14,6 +14,11 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
 
+object DemoEditableConstants {
+    const val DRIVE_SPEED = 1.0
+    const val ROTATION_SPEEC = 3.0
+}
+
 object SetpointConstants{
     const val WRIST_INIT = 0.28
     const val WRIST_STOW = 0.23

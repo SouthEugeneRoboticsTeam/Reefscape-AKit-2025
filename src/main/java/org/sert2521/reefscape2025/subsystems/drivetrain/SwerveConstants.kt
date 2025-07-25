@@ -12,6 +12,7 @@ import edu.wpi.first.math.numbers.N3
 import edu.wpi.first.math.system.plant.DCMotor
 import edu.wpi.first.math.trajectory.TrapezoidProfile
 import org.ejml.simple.SimpleMatrix
+import org.sert2521.reefscape2025.DemoEditableConstants
 import kotlin.math.PI
 
 object SwerveConstants {
@@ -106,9 +107,9 @@ object SwerveConstants {
     const val MAX_SPEED_MPS = 4.571
 
     //As opposed to the max speed, this is the speed you actually want the drivetrain to go at
-    const val DRIVE_SPEED_FAST = 4.0
-    const val DRIVE_SPEED_SLOW = 0.5
-    const val ROT_SPEED = 5.0
+    const val DRIVE_SPEED_FAST = DemoEditableConstants.DRIVE_SPEED
+    const val DRIVE_SPEED_SLOW = DemoEditableConstants.DRIVE_SPEED
+    const val ROT_SPEED = DemoEditableConstants.ROTATION_SPEEC
 
     const val DRIVE_ACCEL_FAST = 20.0
     const val DRIVE_DECCEL_FAST = 25.0
