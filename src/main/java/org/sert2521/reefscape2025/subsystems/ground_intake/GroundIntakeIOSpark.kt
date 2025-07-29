@@ -5,11 +5,11 @@ import com.revrobotics.spark.SparkLowLevel.MotorType
 import com.revrobotics.spark.SparkMax
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode
 import com.revrobotics.spark.config.SparkMaxConfig
-import org.sert2521.reefscape2025.ElectronicIDs.GROUNDINTAKE_MOTOR_ID
+import org.sert2521.reefscape2025.ElectronicIDs.GROUND_INTAKE_MOTOR_ID
 
 class GroundIntakeIOSpark:GroundIntakeIO {
     //Intake
-    val intakeMotor = SparkMax(GROUNDINTAKE_MOTOR_ID, MotorType.kBrushless)
+    val intakeMotor = SparkMax(GROUND_INTAKE_MOTOR_ID, MotorType.kBrushless)
     val intakeConfig = SparkMaxConfig()
 
     init {

@@ -69,7 +69,7 @@ object ElectronicIDs{
     const val ELEVATOR_LEFT_ID = 13
     const val ELEVATOR_RIGHT_ID = 14
 
-    const val GROUNDINTAKE_MOTOR_ID = 17
+    const val GROUND_INTAKE_MOTOR_ID = 17
     const val WRIST_MOTOR_ID = 16
     const val WRIST_ABS_ENCODER = 18
 
