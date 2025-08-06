@@ -96,6 +96,8 @@ object AccelLimiterUtil {
                 Rotation2d()
             )
         }
+
+        Logger.recordOutput("curved", curvedChassisSpeeds)
         // X and Y are swapped because Y is left in robot coordinates and X is up
         // It's the other way around in controller coordinates
 
@@ -109,12 +111,12 @@ object AccelLimiterUtil {
 
         // Applies maximum magnitude of change of x and y
         // (divide by 50 so that currAccel can be in m/s^2)
-        if (magChange > appliedAccelLimit/50.0){
-            magFraction = (appliedAccelLimit/50.0)/magChange
+        if (magChange > appliedAccelLimit){
+            magFraction = (appliedAccelLimit)/magChange
         }
 
         lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vxMetersPerSecond, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
-        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vyMetersPerSecond, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastChassisSpeeds.vyMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vyMetersPerSecond, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
         lastChassisSpeeds.omegaRadiansPerSecond = curvedChassisSpeeds.omegaRadiansPerSecond
 
         return lastChassisSpeeds
@@ -141,15 +143,15 @@ object AccelLimiterUtil {
 
         // Applies maximum magnitude of change of x and y
         // (divide by 50 so that currAccel can be in m/s^2)
-        if (magChange > accelLimit/50.0){
+        if (magChange > accelLimit){
             Logger.recordOutput("Accel Limited", true)
-            magFraction = (accelLimit/50.0)/magChange
+            magFraction = (accelLimit)/magChange
         } else {
             Logger.recordOutput("Accel Limited", false)
         }
 
         lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vxMetersPerSecond, curvedChassisSpeeds.vxMetersPerSecond, magFraction)
-        lastChassisSpeeds.vxMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vyMetersPerSecond, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
+        lastChassisSpeeds.vyMetersPerSecond = MathUtil.interpolate(lastChassisSpeeds.vyMetersPerSecond, curvedChassisSpeeds.vyMetersPerSecond, magFraction)
         lastChassisSpeeds.omegaRadiansPerSecond = fieldChassisSpeeds.omegaRadiansPerSecond
 
         // X and Y are swapped because Y is left in robot coordinates and X is up

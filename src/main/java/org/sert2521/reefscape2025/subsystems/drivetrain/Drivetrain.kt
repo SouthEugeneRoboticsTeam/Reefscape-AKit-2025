@@ -109,8 +109,8 @@ object Drivetrain : SubsystemBase() {
         if (DriverStation.isDisabled()){
             Logger.recordOutput("SwerveModuleStates/Setpoints", *Array(4){SwerveModuleState()})
             Logger.recordOutput("SwerveModuleStates/Optimized Setpoints", *Array(4){SwerveModuleState()})
+            Logger.recordOutput("SwerveModuleStates/Real", *Array(4){SwerveModuleState()})
         }
-
         val modulePositions = Array(4){modules[it].getPosition()}
 
 
@@ -180,6 +180,9 @@ object Drivetrain : SubsystemBase() {
         for (i in 0..<4){
             optimizedStates[i] = modules[i].runSetpoint(setpointStates[i], withPID)
         }
+
+        Logger.recordOutput("SwerveModuleStates/Optimized Setpoints", *optimizedStates)
+        Logger.recordOutput("SwerveModuleStates/Real", *getModuleStates())
 
         fed = true
     }
